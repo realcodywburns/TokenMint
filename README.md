@@ -7,22 +7,20 @@ What is the process like?
 
 1. Preparation
 
-Decide which account you wish all your free money to go to & ensure you have multiple backups of that account.
+Decide which Ethereum address you want your new tokens to go to & ensure you have multiple backups of that account.
 Decide the maximum amount of ETC you are willing to make from your scam (your Number of tokens). Ensure that account has 0.01 ETC or 0.01 ETH for gas, otherwise you will not be able to move your tokens.
 
 2. Launch a token
 
-Make your ERC223 token. Any wallet or exchange that supports the ERC20 standard can support ERC223 tokens. ERC223 simply contains a fix to a bug that prevents 
+Make your ERC223 token. Any wallet or exchange that supports the ERC20 standard can support ERC223 tokens. ERC223 simply contains a fix to a bug that prevents tokens from being lost if they are sent to the token address. More information on ERC223 tokn standard can be [found here.](https://www.reddit.com/r/ethereum/comments/60ql37/attention_be_careful_using_ethereum_tokens/) 
 
-You will enter the Token name, Actual number of tokens, Token symbol for trading on markets, and the number of decimal places.
-That's it! load your wallet and move on the crowd sale! (Now is a good time to go test drive a new lambo, your doing great.)
+You will enter the Token name, Actual number of tokens, Token symbol for trading on markets, and the number of decimal places that you would like to use and voila! Load your wallet and move on the crowd sale! 
 
 3. Crowdfunding
 
-THIS IS WHERE THE REAL MAGIC HAPPENS!
-You will unlock your account, enter the price per token, and the fundraising goal.
+You will unlock your account, enter the price per token, and your fundraising goal.
 
-Use at your own risk US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.
+* Use at your own risk * US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.
 
 Even though you may not live in the USA. Through international treaties, that doesnt matter if you are still soliciting to its citizens. Your conuntry most likely has similar laws you are violiating such as anti-spamming and reporting rules.
 
