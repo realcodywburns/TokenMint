@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tab, Row, Col } from 'react-bootstrap';
+import { Nav, NavItem, Tab, Row, Col } from 'react-bootstrap';
 
 const Information = React.createClass({
 
@@ -43,7 +43,7 @@ const Information = React.createClass({
               </Tab.Pane>
               <Tab.Pane eventKey="crowd">
                 <ul>
-                  <li class="strong">THIS IS WHERE THE REAL MAGIC HAPPENS!</strong> </li>
+                  <li><strong>THIS IS WHERE THE REAL MAGIC HAPPENS!</strong> </li>
                   <li> Set a price per token and a funding goal (make sure that you leave your self a ton of tokens so you can be rich)  </li>
                   <li> You will unlock your account, enter the <u>Price per token</u>, and the <u>funding goal</u>.</li>
                   <li> Start the ICO and pump, Pump, PUMP IT UP!!!!!</li>
