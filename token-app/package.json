@@ -2,6 +2,10 @@
   "name": "token-app",
   "version": "0.1.0",
   "private": true,
+  "author": "Ethereum Classic",
+  "version": "0.1.0",
+  "description": "Token Mint - Ethereum Classic",
+  "homepage" : "http://ethereumclassic.github.io/TokenMint",
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "^15.5.4",
@@ -12,7 +16,7 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7"
+    "react-scripts": "1.0.7",
   },
   "scripts": {
     "start": "react-scripts start",
