@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab, Grid, Row, Col } from 'react-bootstrap';
 import CreateToken from './tokens/create';
+import Information from './tokens/info';
 
 const Header = ({ logo }) => (
     <div className="App-header">
@@ -20,7 +21,9 @@ const Render = ({...props}) => (
         <Row>
             <Col xs={12}>
                 <Tabs defaultActiveKey={2} id="tokenTabs">
-                    <Tab eventKey={1} title="Getting Started">Educational material and such</Tab>
+                    <Tab eventKey={1} title="Getting Started">
+                        <Information />
+                    </Tab>
                     <Tab eventKey={2} title="Create a Token">
                         <CreateToken />
                     </Tab>
