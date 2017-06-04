@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
-import logo from './img/logo.png';
-import './TokenApp.css';
+import { Provider } from 'react-redux'
+import { store } from './store/store.js';
+import Main from './components/main';
 
 class TokenApp extends Component {
   render() {
     return (
-      <div className="TokenApp">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Token Mint</h2>
-        </div>
-        <p className="App-intro">
-          Hello
-        </p>
-      </div>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
   }
 }
 
 export default TokenApp;
+
