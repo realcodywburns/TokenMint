@@ -5,7 +5,7 @@ This is simple to use token and ICO generator created for use with the Ethereum 
 
 What is the process like?
 
-- 1. Preparation
+1. Preparation
 
 Decide which account you wish all your free money to go to & ensure you have multiple backups of that account.
 Decide the maximum amount of ETC you are willing to make from your scam (your Number of tokens). Ensure that account has 0.01 ETC for gas.
@@ -16,16 +16,13 @@ Do a roadshow! This means spam everyones slack, wechat, telegram and twitter rel
 Make your magicERC20 token. The code is open to review so you wont be blamed for the 10's of thousands that get lost due to a bug that could be fixed with using the simple fix in EIP223
 You will enter the Token name, Actual number of tokens, Token symbol for trading on markets, and the decimal places.
 That's it! load your wallet and move on the crowd sale! (Now is a good time to go test drive a new lambo, your doing great.)
-- 3. Crowdfunding
+
+3. Crowdfunding
 
 THIS IS WHERE THE REAL MAGIC HAPPENS!
-Set a price per token and a funding goal (make sure that you leave your self a ton of tokens so you can be rich)
-You will unlock your account, enter the Price per token, and the funding goal.
-Start the ICO and pump, Pump, PUMP IT UP!!!!!
-Be sure to post how much money you are making everywher to bring the ICO machine more users
-- More Information
+You will unlock your account, enter the price per token, and the fundraising goal.
 
-*Use at your own risk* US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.
+Use at your own risk US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.
 
 Even though you may not live in the USA. Through international treaties, that doesnt matter if you are still soliciting to its citizens. Your conuntry most likely has similar laws you are violiating such as anti-spamming and reporting rules.
 
