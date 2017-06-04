@@ -8,13 +8,13 @@ What is the process like?
 1. Preparation
 
 Decide which account you wish all your free money to go to & ensure you have multiple backups of that account.
-Decide the maximum amount of ETC you are willing to make from your scam (your Number of tokens). Ensure that account has 0.01 ETC for gas.
-Start thinking of a name! The less vowels the better. Be sure to use j's, z's, and as many q's as you can . this is an important step
-Do a roadshow! This means spam everyones slack, wechat, telegram and twitter relentlessly. Email people on lists you bought on the darknet or scraped from slack. Post an ANN on btctal. Really make everyone think that your product needs a token somehow instead of just using bitcoin or ether.
-- 2. Launch a token
+Decide the maximum amount of ETC you are willing to make from your scam (your Number of tokens). Ensure that account has 0.01 ETC or 0.01 ETH for gas, otherwise you will not be able to move your tokens.
 
-Make your magicERC20 token. The code is open to review so you wont be blamed for the 10's of thousands that get lost due to a bug that could be fixed with using the simple fix in EIP223
-You will enter the Token name, Actual number of tokens, Token symbol for trading on markets, and the decimal places.
+2. Launch a token
+
+Make your ERC223 token. Any wallet or exchange that supports the ERC20 standard can support ERC223 tokens. ERC223 simply contains a fix to a bug that prevents 
+
+You will enter the Token name, Actual number of tokens, Token symbol for trading on markets, and the number of decimal places.
 That's it! load your wallet and move on the crowd sale! (Now is a good time to go test drive a new lambo, your doing great.)
 
 3. Crowdfunding
@@ -27,7 +27,8 @@ Use at your own risk US financial regulations are very strict on how funds can a
 Even though you may not live in the USA. Through international treaties, that doesnt matter if you are still soliciting to its citizens. Your conuntry most likely has similar laws you are violiating such as anti-spamming and reporting rules.
 
 [Crowdfunding in the USA: Jobs act Title III](https://www.sec.gov/news/pressrelease/2015-249.html)
-What is a security: the Howey Test
+
+[What is a security: the Howey Test](http://securities-law-blog.com/2014/11/25/what-is-a-security-the-howey-test-and-reves-test/)
 
 ## Getting Started
 
