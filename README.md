@@ -16,11 +16,11 @@ Make your ERC223 token. Any wallet or exchange that supports the ERC20 standard 
 
 You will enter the Token name, Actual number of tokens, Token symbol for trading on markets, and the number of decimal places that you would like to use and voila! Load your wallet and move on the crowd sale! 
 
-3. Crowdfunding
+3. Crowdfunding - * Use at your own Risk *
 
 You will unlock your account, enter the price per token, and your fundraising goal.
 
-* Use at your own risk * US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.
+US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.
 
 Even though you may not live in the USA. Through international treaties, that doesnt matter if you are still soliciting to its citizens. Your conuntry most likely has similar laws you are violiating such as anti-spamming and reporting rules.
 
