@@ -26,7 +26,7 @@ Use at your own risk US financial regulations are very strict on how funds can a
 
 Even though you may not live in the USA. Through international treaties, that doesnt matter if you are still soliciting to its citizens. Your conuntry most likely has similar laws you are violiating such as anti-spamming and reporting rules.
 
-Crowdfunding in the USA: Jobs act Title III
+[Crowdfunding in the USA: Jobs act Title III](https://www.sec.gov/news/pressrelease/2015-249.html)
 What is a security: the Howey Test
 
 ## Getting Started
