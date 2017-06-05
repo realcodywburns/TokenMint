@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "author": "Ethereum Classic",
-  "version": "0.1.0",
   "description": "Token Mint - Ethereum Classic",
-  "homepage" : "http://ethereumclassic.github.io/TokenMint",
+  "homepage": "http://elaineo.github.io/TokenMint",
   "dependencies": {
     "immutable": "^3.8.1",
     "react": "^15.5.4",
@@ -16,11 +15,14 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.7",
+    "gh-pages": "^1.0.0",
+    "react-scripts": "1.0.7"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
