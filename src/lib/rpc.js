@@ -31,7 +31,7 @@ export class rpc {
         });
     }
 
-    getTransactionData(addr, callback) {
+    getTransactionData(addr) {
         const reqObj = getTransactionObj(addr);
 
         batchPost(reqObj).then(function(resp) {
