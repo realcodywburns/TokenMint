@@ -3,10 +3,12 @@ import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { gotoScreen } from './screenActions';
 import screenReducers from './screenReducers';
+import walletReducers from './walletReducers';
 
 const stateTransformer = (state) => ({
     //tokens: state.tokens.toJS(),
     screen: state.screen.toJS(),
+    wallet: state.wallet.toJS(),
 });
 
 const logger = createLogger({
@@ -15,6 +17,7 @@ const logger = createLogger({
 
 const reducers = {
     screen: screenReducers,
+    wallet: walletReducers,
 };
 
 
