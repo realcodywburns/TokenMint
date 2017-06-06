@@ -6,19 +6,22 @@ import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'r
 const CreateToken = React.createClass({
   getInitialState() {
     return {
-      value: ''
+      symbol: 'POOP',
+      decimals: 8
     };
   },
 
-  getValidationState() {
-    const length = this.state.value.length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
+  initToken() {
+
   },
 
-  handleChange(e) {
-    this.setState({ value: e.target.value });
+  getRequiredValidation(key) {
+    if (this.state.key) return 'success';
+    else return 'warning';
+  },
+
+  handleChange(e, key) {
+    this.setState({ key: e.target.value });
   },
 
   render() {
@@ -26,58 +29,54 @@ const CreateToken = React.createClass({
       <Form>
         <FormGroup
           controlId="token"
-          validationState={this.getValidationState()}
+          validationState={this.getRequiredValidation('token')}
         >
           <ControlLabel>Token Name</ControlLabel>
           <FormControl
             type="text"
-            value={this.state.value}
+            value={this.state.token}
             placeholder="Scamcoin"
-            onChange={this.handleChange}
+            onChange={(e) => this.handleChange(e,'token')}
           />
           <FormControl.Feedback />
-          <HelpBlock>Required.</HelpBlock>
         </FormGroup>
 
         <FormGroup
           controlId="totalSupply"
-          validationState={this.getValidationState()}
+          validationState={this.getRequiredValidation('totalSupply')}
         >
           <ControlLabel>Total Supply</ControlLabel>
           <FormControl
             type="number"
-            value={this.state.value}
+            value={this.state.totalSupply}
             placeholder="1000000"
-            onChange={this.handleChange}
+            onChange={(e) => this.handleChange(e, 'totalSupply')}
           />
           <FormControl.Feedback />
-          <HelpBlock>Required.</HelpBlock>
         </FormGroup>
 
         <FormGroup
           controlId="symbol"
-          validationState={this.getValidationState()}
         >
           <ControlLabel>Token Symbol (optional)</ControlLabel>
           <FormControl
             type="text"
-            value={this.state.value}
+            value={this.state.symbol}
             placeholder="POOP"
-            onChange={this.handleChange}
+            onChange={(e) => this.handleChange(e, 'symbol')}
           />
           <FormControl.Feedback />
         </FormGroup>
 
         <FormGroup
           controlId="decimals"
-          validationState={this.getValidationState()}
         >
           <ControlLabel>Decimal Places (optional)</ControlLabel>
           <FormControl
             type="number"
-            value={this.state.value}
+            value={this.state.decimals}
             placeholder="8"
-            onChange={this.handleChange}
+            onChange={(e) => this.handleChange(e, 'decimals')}
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -85,7 +84,7 @@ const CreateToken = React.createClass({
         <FormGroup>
           <Button 
             bsStyle="primary"
-            onClick={this.initTokn} >
+            onClick={this.initToken} >
             LET'S DO THIS
           </Button>
         </FormGroup>
