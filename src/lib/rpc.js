@@ -5,7 +5,7 @@ const headers = {
     'Content-Type': 'application/json',
 };
 
-export class rpc {
+export class RpcApi {
     constructor() {
         this.dataId = 1;
     }
@@ -32,22 +32,24 @@ export class rpc {
     }
 
     getTransactionData(addr) {
-        const reqObj = getTransactionObj(addr);
+        const reqObj = this.getTransactionObj(addr);
+        return new Promise((resolve, reject) => {
 
-        batchPost(reqObj).then(function(resp) {
-            console.log(resp)
-            if (resp.data) {
-                // check for any errors in batch
-                for (const d in resp.data) {
-                    if (d.error) {
-                        reject(d.error);
+            this.batchPost(reqObj).then(function(resp) {
+                console.log(resp)
+                if (resp) {
+                    // check for any errors in batch
+                    for (const d in resp) {
+                        if (d.error) {
+                            reject(d.error);
+                        }
                     }
+                    resolve(resp);
+                } else {
+                    reject(new Error(`Unknown JSON RPC response: ${resp}`));
                 }
-                resolve(resp.data);
-            } else {
-                reject(new Error(`Unknown JSON RPC response: ${json}`));
-            }
-        }).catch((error) => reject(error));
+            }).catch((error) => reject(error));
+        });
     }
 
     jsonPost(name, params, headers) {
@@ -90,5 +92,5 @@ export class rpc {
     }
 }
 
-
+export const rpc = new RpcApi();
 export default rpc;
