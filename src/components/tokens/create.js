@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Tab, Row, Col } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+// import { FieldGroup } from 'elements/form';
+import { createToken } from '../../store/tokenActions';
 
-const CreateToken = React.createClass({
+const CreateTokenForm = React.createClass({
   getInitialState() {
     return {
       symbol: 'POOP',
@@ -11,17 +13,17 @@ const CreateToken = React.createClass({
     };
   },
 
-  initToken() {
-
-  },
-
   getRequiredValidation(key) {
     if (this.state.key) return 'success';
     else return 'warning';
   },
 
-  handleChange(e, key) {
-    this.setState({ key: e.target.value });
+  handleChange(e) {
+    this.setState({ [e.target.id]: e.target.value });
+  },
+
+  initToken() {
+    this.props.initToken(this.state, this.props.wallet)
   },
 
   render() {
@@ -36,7 +38,7 @@ const CreateToken = React.createClass({
             type="text"
             value={this.state.token}
             placeholder="Scamcoin"
-            onChange={(e) => this.handleChange(e,'token')}
+            onChange={this.handleChange}
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -50,7 +52,7 @@ const CreateToken = React.createClass({
             type="number"
             value={this.state.totalSupply}
             placeholder="1000000"
-            onChange={(e) => this.handleChange(e, 'totalSupply')}
+            onChange={this.handleChange}
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -63,7 +65,7 @@ const CreateToken = React.createClass({
             type="text"
             value={this.state.symbol}
             placeholder="POOP"
-            onChange={(e) => this.handleChange(e, 'symbol')}
+            onChange={this.handleChange}
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -76,7 +78,7 @@ const CreateToken = React.createClass({
             type="number"
             value={this.state.decimals}
             placeholder="8"
-            onChange={(e) => this.handleChange(e, 'decimals')}
+            onChange={this.handleChange}
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -95,6 +97,18 @@ const CreateToken = React.createClass({
 });
 
 
-
+const CreateToken = connect(
+  (state, ownProps) => {
+    return {
+      wallet: state.wallet.get('wallet')
+    }
+  },
+  (dispatch, ownProps) => ({
+    initToken: (data, wallet) => {
+        console.log(wallet)
+        createToken(data, wallet);
+    }
+  })
+)(CreateTokenForm)
 
 export default CreateToken;
