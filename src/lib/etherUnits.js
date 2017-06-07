@@ -28,28 +28,28 @@ const unitMap = {
 };
 export function getValueOfUnit(unit) {
     unit = unit ? unit.toLowerCase() : 'ether';
-    var unitValue = this.unitMap[unit];
+    var unitValue = unitMap[unit];
     if (unitValue === undefined) {
-        throw new Error(JSON.stringify(this.unitMap, null, 2));
+        throw new Error(JSON.stringify(unitMap, null, 2));
     }
     return new BigNumber(unitValue, 10);
 }
 export function fiatToWei(number, pricePerEther) {
-    var returnValue = new BigNumber(String(number)).div(pricePerEther).times(this.getValueOfUnit('ether')).round(0);
+    var returnValue = new BigNumber(String(number)).div(pricePerEther).times(getValueOfUnit('ether')).round(0);
     return returnValue.toString(10);
 }
 
 export function toFiat(number, unit, multi) {
-    var returnValue = new BigNumber(this.toEther(number, unit)).times(multi).round(5);
+    var returnValue = new BigNumber(toEther(number, unit)).times(multi).round(5);
     return returnValue.toString(10);
 }
 
 export function toEther(number, unit) {
-    var returnValue = new BigNumber(this.toWei(number, unit)).div(this.getValueOfUnit('ether'));
+    var returnValue = new BigNumber(toWei(number, unit)).div(getValueOfUnit('ether'));
     return returnValue.toString(10);
 }
 
 export function toWei(number, unit) {
-    var returnValue = new BigNumber(String(number)).times(this.getValueOfUnit(unit));
+    var returnValue = new BigNumber(String(number)).times(getValueOfUnit(unit));
     return returnValue.toString(10);
 }

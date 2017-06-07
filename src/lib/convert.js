@@ -14,7 +14,7 @@ export function hexToAscii(hex) {
 export function sanitizeHex(hex) {
     hex = hex.substring(0, 2) == '0x' ? hex.substring(2) : hex;
     if (hex == "") return "";
-    return '0x' + this.padLeftEven(hex);
+    return '0x' + padLeftEven(hex);
 }
 
 export function padLeftEven(hex) {
@@ -27,7 +27,7 @@ export function decimalToHex(dec) {
 }
 
 export function hexToDecimal(hex) {
-    return new BigNumber(this.sanitizeHex(hex)).toString();
+    return new BigNumber(sanitizeHex(hex)).toString();
 }
 
 export function contractOutToArray(hex) {
@@ -54,7 +54,7 @@ export function padLeft(n, width, z) {
 }
 export function getDataObj(to, func, arrVals) {
     var val="";
-    for(var i=0;i<arrVals.length;i++) val+=this.padLeft(arrVals[i],64);
+    for(var i=0;i<arrVals.length;i++) val+=padLeft(arrVals[i],64);
     return {to: to, data: func+val};
 }
 export function getFunctionSignature (name) {
