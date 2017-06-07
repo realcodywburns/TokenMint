@@ -4,7 +4,7 @@
   "private": true,
   "author": "Ethereum Classic",
   "description": "Token Mint - Ethereum Classic",
-  "homepage": "http://elaineo.github.io/TokenMint",
+  "homepage": "http://ethereumproject.github.io/TokenMint",
   "dependencies": {
     "bignumber.js": "^4.0.2",
     "ethereumjs-tx": "^1.3.1",
