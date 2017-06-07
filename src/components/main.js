@@ -8,7 +8,7 @@ import OpenWallet from './wallet/open';
 
 const Header = ({ logo }) => (
     <div className="App-header">
-      <img src="/img/logo.png" alt="logo" />
+      <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo" />
       <h2>Token Mint</h2>
     </div>
 );

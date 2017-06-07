@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import { generateTokenTransaction } from '../../store/tokenActions';
-import CreateTxModal from '../transaction/createModal';
+import { CreateTxModal } from '../transaction/createModal';
 
 class CreateTokenForm extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class CreateTokenForm extends React.Component {
     this.state = {
       symbol: 'POOP',
       decimals: 8,
-      modalShow: true, 
+      modalShow: false, 
     };
   }
 
@@ -26,7 +26,6 @@ class CreateTokenForm extends React.Component {
   }
 
   initToken() {
-    console.log(this.state)
     const data = {
       token: this.state.token,
       symbol: this.state.symbol,
@@ -107,7 +106,7 @@ class CreateTokenForm extends React.Component {
           </Button>
         </FormGroup>
 
-        <CreateTxModal show={this.state.modalShow} onHide={modalClose} />
+        <CreateTxModal show={this.state.modalShow} close={modalClose} />
       </Form>
     );
   }
