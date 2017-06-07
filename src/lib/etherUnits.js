@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-export const etherUnits = function() {}
-etherUnits.unitMap = {
+const unitMap = {
     'wei': '1',
     'kwei': '1000',
     'ada': '1000',
@@ -27,7 +26,7 @@ etherUnits.unitMap = {
     'gether': '1000000000000000000000000000',
     'tether': '1000000000000000000000000000000'
 };
-etherUnits.getValueOfUnit = function(unit) {
+export function getValueOfUnit(unit) {
     unit = unit ? unit.toLowerCase() : 'ether';
     var unitValue = this.unitMap[unit];
     if (unitValue === undefined) {
@@ -35,22 +34,22 @@ etherUnits.getValueOfUnit = function(unit) {
     }
     return new BigNumber(unitValue, 10);
 }
-etherUnits.fiatToWei = function(number, pricePerEther) {
+export function fiatToWei(number, pricePerEther) {
     var returnValue = new BigNumber(String(number)).div(pricePerEther).times(this.getValueOfUnit('ether')).round(0);
     return returnValue.toString(10);
 }
 
-etherUnits.toFiat = function(number, unit, multi) {
+export function toFiat(number, unit, multi) {
     var returnValue = new BigNumber(this.toEther(number, unit)).times(multi).round(5);
     return returnValue.toString(10);
 }
 
-etherUnits.toEther = function(number, unit) {
+export function toEther(number, unit) {
     var returnValue = new BigNumber(this.toWei(number, unit)).div(this.getValueOfUnit('ether'));
     return returnValue.toString(10);
 }
 
-etherUnits.toWei = function(number, unit) {
+export function toWei(number, unit) {
     var returnValue = new BigNumber(String(number)).times(this.getValueOfUnit(unit));
     return returnValue.toString(10);
 }

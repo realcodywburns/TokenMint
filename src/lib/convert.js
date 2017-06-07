@@ -1,15 +1,6 @@
 import ethUtil from 'ethereumjs-util';
+import BigNumber from 'bignumber.js';
 
-export function urlGet(name) {
-    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search)) return this.stripTags(decodeURIComponent(name[1]));
-}
-export function stripTags(str) {
-    var SCRIPT_REGEX = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
-    while (SCRIPT_REGEX.test(str)) {
-        str = str.replace(SCRIPT_REGEX, "");
-    }
-    return str;
-}
 export function getRandomBytes(num) {
     return ethUtil.crypto.randomBytes(num);
 }
