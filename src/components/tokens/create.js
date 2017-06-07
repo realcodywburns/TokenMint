@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Tab, Row, Col } from 'react-bootstrap';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 // import { FieldGroup } from 'elements/form';
-import { createToken } from '../../store/tokenActions';
+import { generateTokenTransaction } from '../../store/tokenActions';
 
 const CreateTokenForm = React.createClass({
   getInitialState() {
@@ -104,12 +104,20 @@ const CreateToken = connect(
     }
   },
   (dispatch, ownProps) => ({
-    initToken: (data, wallet) => new Promise((resolve, reject) => {
-        dispatch(createToken(data, wallet))
-            .then((response) => {
-              resolve(response);
-            });
-    })
+    initToken: (data, wallet) => {
+      const confirmTx = (tx) => {
+        console.log(tx);
+      }
+      const resolver = (resolve, f) => (x) => {
+          f.apply(x);
+          resolve(x);
+      };
+      return new Promise((resolve, reject) => {
+        dispatch(
+          generateTokenTransaction( data, wallet )
+        ).then(resolver(confirmTx, resolve));
+      })
+    }
   })
 )(CreateTokenForm)
 
