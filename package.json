@@ -6,6 +6,7 @@
   "description": "Token Mint - Ethereum Classic",
   "homepage": "http://elaineo.github.io/TokenMint",
   "dependencies": {
+    "bignumber.js": "^4.0.2",
     "ethereumjs-util": "^5.1.2",
     "immutable": "^3.8.1",
     "react": "^15.5.4",
