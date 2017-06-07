@@ -104,10 +104,12 @@ const CreateToken = connect(
     }
   },
   (dispatch, ownProps) => ({
-    initToken: (data, wallet) => {
-        console.log(wallet)
-        createToken(data, wallet);
-    }
+    initToken: (data, wallet) => new Promise((resolve, reject) => {
+        dispatch(createToken(data, wallet))
+            .then((response) => {
+              resolve(response);
+            });
+    })
   })
 )(CreateTokenForm)
 
