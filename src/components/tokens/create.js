@@ -12,7 +12,7 @@ class CreateTokenForm extends React.Component {
     this.state = {
       symbol: 'POOP',
       decimals: 8,
-      modalShow: false, 
+      modalShow: true, 
     };
   }
 

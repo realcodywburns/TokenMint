@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Nav, NavItem, Tab, Row, Col } from 'react-bootstrap';
 
-const Information = React.createClass({
+class RenderInfo extends React.Component {
 
   render() {
     return (
@@ -26,11 +26,12 @@ const Information = React.createClass({
           </Col>
           <Col sm={8}>
             <Tab.Content animation>
-       <Tab.Pane eventKey="Token Browser and Manager for Ethereum Classic (ETC) and Ethereum (ETH)">
-      <ul>
-      <li>This is simple to use token and ICO generator created for use with the Ethereum blockchains ETC & ETH. The purpose of this generator is to make it simple for users to create their own token and crowdsale using smart contracts. Tokens are effectively a virtual currency created and secured on top of the Ethereum blockchain. An ICO is an Intial Coin Offering. At a designated price, users can offer their tokens at a set price in either ETC or ETH. This can be useful for raising funds in a crowdsale. Tokens can be used in a variety of ways, user rewards, rebates, virtual currencies, or as a voting mechanism with a Decentralized Autonomous Organization (DAO).</li>
-      <li>What is the process like?</li>
-      </ul>
+             <Tab.Pane eventKey="Token Browser and Manager for Ethereum Classic (ETC) and Ethereum (ETH)">
+            <ul>
+            <li>This is simple to use token and ICO generator created for use with the Ethereum blockchains ETC & ETH. The purpose of this generator is to make it simple for users to create their own token and crowdsale using smart contracts. Tokens are effectively a virtual currency created and secured on top of the Ethereum blockchain. An ICO is an Intial Coin Offering. At a designated price, users can offer their tokens at a set price in either ETC or ETH. This can be useful for raising funds in a crowdsale. Tokens can be used in a variety of ways, user rewards, rebates, virtual currencies, or as a voting mechanism with a Decentralized Autonomous Organization (DAO).</li>
+            <li>What is the process like?</li>
+            </ul>
+            </Tab.Pane>
               <Tab.Pane eventKey="Preparation">
                 <ul>
                   <li> Decide which Ethereum address you want your new tokens to go to & ensure you have multiple backups of that account. </li>
@@ -52,8 +53,8 @@ const Information = React.createClass({
               </Tab.Pane>
               <Tab.Pane eventKey="References for the Legal Use of Initial Coin Offerings">
                 <ul>
-                    <li><a href="https://www.sec.gov/news/pressrelease/2015-249.html" target="_blank">Crowdfunding in the USA: Jobs act Title III</a></li>
-                    <li><a href="http://securities-law-blog.com/2014/11/25/what-is-a-security-the-howey-test-and-reves-test/" target="_blank">What is a security: the Howey Test</a></li>
+                    <li><a href="https://www.sec.gov/news/pressrelease/2015-249.html" rel="noopener noreferrer" target="_blank">Crowdfunding in the USA: Jobs act Title III</a></li>
+                    <li><a href="http://securities-law-blog.com/2014/11/25/what-is-a-security-the-howey-test-and-reves-test/" rel="noopener noreferrer" target="_blank">What is a security: the Howey Test</a></li>
                 </ul>
               </Tab.Pane>
             </Tab.Content>
@@ -62,6 +63,14 @@ const Information = React.createClass({
       </Tab.Container>
     );
   }
-});
+};
+
+const Information = connect(
+  (state, ownProps) => {
+    return {}
+  },
+  (dispatch, ownProps) => ({
+  })
+)(RenderInfo)
 
 export default Information;

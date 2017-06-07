@@ -1,30 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-//import { openWallet } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
 
-const WalletForm = React.createClass({
-  getInitialState() {
-    console.log(this.props)
-    return {
-      privKey: null
+class WalletForm extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.openWallet = this.openWallet.bind(this);
+    this.getRequiredValidation = this.getRequiredValidation.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      privKey: '',
     };
-  },
+  }
 
   openWallet() {
     this.props.openWallet(this.state.privKey);
-  },
+  }
 
   getRequiredValidation(key) {
     if (this.state.key) return 'success';
     else return 'warning';
-  },
+  }
 
   handleChange(e, key) {
     this.setState({ [e.target.id]: e.target.value });
-  },
+  }
 
   render() {
     return (
@@ -38,7 +40,7 @@ const WalletForm = React.createClass({
             componentClass="textarea"
             value={this.state.privKey}
             placeholder="Private Key"
-            onChange={(e) => this.handleChange(e,'privKey')}
+            onChange={this.handleChange}
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -54,10 +56,11 @@ const WalletForm = React.createClass({
       </Form>
     );
   }
-});
+}
 
 const OpenWallet = connect(
   (state, ownProps) => {
+    return {};
   },
   (dispatch, ownProps) => ({
     openWallet: (key) => {

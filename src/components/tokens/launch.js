@@ -3,19 +3,21 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 
-const LaunchIco = React.createClass({
-  getInitialState() {
-    return {
+class RenderLaunch extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
       value: ''
     };
-  },
+  }
 
   getValidationState() {
-  },
+  }
 
   handleChange(e) {
-    this.setState({ value: e.target.value });
-  },
+    this.setState({ [e.target.id]: e.target.value });
+  }
 
   render() {
     return (
@@ -70,9 +72,15 @@ const LaunchIco = React.createClass({
       </Grid>
     );
   }
-});
+};
 
 
-
+const LaunchIco = connect(
+  (state, ownProps) => {
+    return {}
+  },
+  (dispatch, ownProps) => ({
+  })
+)(RenderLaunch)
 
 export default LaunchIco;
