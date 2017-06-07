@@ -1,5 +1,6 @@
 import ethUtil from 'ethereumjs-util';
 import BigNumber from 'bignumber.js';
+import ethAbi from './etherABI';
 
 export function getRandomBytes(num) {
     return ethUtil.crypto.randomBytes(num);
@@ -60,3 +61,17 @@ export function getDataObj(to, func, arrVals) {
 export function getFunctionSignature (name) {
     return ethUtil.sha3(name).toString('hex').slice(0, 8);
 };
+
+export function functionToData(func, inputs) {
+    const types = [];
+    const values = [];
+    func.get('inputs').forEach((input) => {
+        types.push(input.get('type'));
+        values.push(inputs[input.get('name')]);
+    });
+    const data = Buffer.concat([
+        ethAbi.methodID(func.get('name'), types),
+        ethAbi.rawEncode(types, values)]
+    ).toString('hex');
+    return `0x${data}`;
+}
