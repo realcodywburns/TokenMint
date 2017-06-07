@@ -5,26 +5,27 @@ import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootst
 // import { FieldGroup } from 'elements/form';
 import { generateTokenTransaction } from '../../store/tokenActions';
 
-const CreateTokenForm = React.createClass({
-  getInitialState() {
-    return {
+class CreateTokenForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       symbol: 'POOP',
       decimals: 8
     };
-  },
+  }
 
   getRequiredValidation(key) {
     if (this.state.key) return 'success';
     else return 'warning';
-  },
+  }
 
   handleChange(e) {
     this.setState({ [e.target.id]: e.target.value });
-  },
+  }
 
   initToken() {
     this.props.initToken(this.state, this.props.wallet)
-  },
+  }
 
   render() {
     return (
@@ -94,7 +95,7 @@ const CreateTokenForm = React.createClass({
       </Form>
     );
   }
-});
+};
 
 
 const CreateToken = connect(
