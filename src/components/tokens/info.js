@@ -26,6 +26,11 @@ const Information = React.createClass({
           </Col>
           <Col sm={8}>
             <Tab.Content animation>
+       <Tab.Pane eventKey="Token Browser and Manager for Ethereum Classic (ETC) and Ethereum (ETH)">
+      <ul>
+      <li>This is simple to use token and ICO generator created for use with the Ethereum blockchains ETC & ETH. The purpose of this generator is to make it simple for users to create their own token and crowdsale using smart contracts. Tokens are effectively a virtual currency created and secured on top of the Ethereum blockchain. An ICO is an Intial Coin Offering. At a designated price, users can offer their tokens at a set price in either ETC or ETH. This can be useful for raising funds in a crowdsale. Tokens can be used in a variety of ways, user rewards, rebates, virtual currencies, or as a voting mechanism with a Decentralized Autonomous Organization (DAO).</li>
+      <li>What is the process like?</li>
+      </ul>
               <Tab.Pane eventKey="Preparation">
                 <ul>
                   <li> Decide which Ethereum address you want your new tokens to go to & ensure you have multiple backups of that account. </li>
