@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tab, Row, Col } from 'react-bootstrap';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-// import { FieldGroup } from 'elements/form';
 import { generateTokenTransaction } from '../../store/tokenActions';
+import CreateTxModal from '../transaction/createModal';
 
 class CreateTokenForm extends React.Component {
   constructor(props) {
     super(props);
+    this.initToken = this.initToken.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
       symbol: 'POOP',
-      decimals: 8
+      decimals: 8,
+      modalShow: false, 
     };
   }
 
@@ -24,10 +26,23 @@ class CreateTokenForm extends React.Component {
   }
 
   initToken() {
-    this.props.initToken(this.state, this.props.wallet)
+    console.log(this.state)
+    const data = {
+      token: this.state.token,
+      symbol: this.state.symbol,
+      totalSupply: this.state.totalSupply,
+      decimals: this.state.decimals,
+    }
+    this.props.initToken(data, this.props.wallet)
+      .then((result) => {
+        console.log(result);
+        this.setState({ modalShow: true});
+      })
   }
 
   render() {
+    let modalClose = () => this.setState({ modalShow: false });
+
     return (
       <Form>
         <FormGroup
@@ -92,6 +107,7 @@ class CreateTokenForm extends React.Component {
           </Button>
         </FormGroup>
 
+        <CreateTxModal show={this.state.modalShow} onHide={modalClose} />
       </Form>
     );
   }
