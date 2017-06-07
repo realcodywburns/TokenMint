@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { Wallet } from '../../lib/wallet';
+import { openWallet } from '../../store/walletActions';
 
 class WalletForm extends React.Component {
 
@@ -64,12 +64,7 @@ const OpenWallet = connect(
   },
   (dispatch, ownProps) => ({
     openWallet: (key) => {
-      const wallet = new Wallet(key);
-        console.log(wallet)
-        dispatch({
-            type: 'WALLET/OPEN',
-            wallet: wallet,
-        });
+      dispatch(openWallet(key));
     }
   })
 )(WalletForm)
