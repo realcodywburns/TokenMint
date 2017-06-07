@@ -17,7 +17,7 @@ export class RpcApi {
     *
     * @returns {Promise}
     */
-    call(name, params, headers) {
+    call(name, params) {
         return new Promise((resolve, reject) => {
             this.jsonPost(name, params, headers).then((json) => {
                 if (json.result) {
@@ -66,7 +66,7 @@ export class RpcApi {
         }).then((response) => response.json());
     }
 
-    batchPost(data, headers) {
+    batchPost(data) {
         return fetch(ServerApi, {
             method: 'POST',
             headers: headers,

@@ -3,7 +3,7 @@ import ethUtil from 'ethereumjs-util';
 // TODO: error messages
 
 export const Wallet = function(priv) {
-    this.privKey = priv.length == 32 ? priv : Buffer(priv, 'hex')
+    this.privKey = priv.length === 32 ? priv : Buffer(priv, 'hex')
 }
 Wallet.generate = function(icapDirect) {
     if (icapDirect) {
@@ -259,7 +259,7 @@ Wallet.walletRequirePass = function(ethjson) {
     else if (jsonArr.Crypto != null || jsonArr.crypto != null) return true
     else if (jsonArr.hash != null && jsonArr.locked) return true;
     else if (jsonArr.hash != null && !jsonArr.locked) return false;
-    else if (jsonArr.publisher == "MyEtherWallet" && !jsonArr.encrypted) return false;
+    else if (jsonArr.publisher === "MyEtherWallet" && !jsonArr.encrypted) return false;
     else
     throw new Error("error"); //globalFuncs.errorMsgs[2];
 }
@@ -268,7 +268,7 @@ Wallet.getWalletFromPrivKeyFile = function(strjson, password) {
     if (jsonArr.encseed != null) return Wallet.fromEthSale(strjson, password);
     else if (jsonArr.Crypto != null || jsonArr.crypto != null) return Wallet.fromV3(strjson, password, true);
     else if (jsonArr.hash != null) return Wallet.fromMyEtherWallet(strjson, password);
-    else if (jsonArr.publisher == "MyEtherWallet") return Wallet.fromMyEtherWalletV2(strjson);
+    else if (jsonArr.publisher === "MyEtherWallet") return Wallet.fromMyEtherWalletV2(strjson);
     else
     throw new Error("error"); //globalFuncs.errorMsgs[2];
 }

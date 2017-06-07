@@ -12,13 +12,13 @@ export function hexToAscii(hex) {
 }
 
 export function sanitizeHex(hex) {
-    hex = hex.substring(0, 2) == '0x' ? hex.substring(2) : hex;
-    if (hex == "") return "";
+    hex = hex.substring(0, 2) === '0x' ? hex.substring(2) : hex;
+    if (hex === "") return "";
     return '0x' + padLeftEven(hex);
 }
 
 export function padLeftEven(hex) {
-    hex = hex.length % 2 != 0 ? '0' + hex : hex;
+    hex = hex.length % 2 !== 0 ? '0' + hex : hex;
     return hex;
 }
 
@@ -34,7 +34,7 @@ export function contractOutToArray(hex) {
     hex = hex.replace('0x', '').match(/.{64}/g);
     for(var i=0;i<hex.length;i++){
         hex[i] = hex[i].replace(/^0+/, '');
-        hex[i] = hex[i] == "" ? "0" : hex[i]; 
+        hex[i] = hex[i] === "" ? "0" : hex[i]; 
     }
     return hex;
 }
@@ -44,7 +44,7 @@ export function getNakedAddress(address) {
 }
 
 export function getDeterministicContractAddress(address, nonce) {
-    address = address.substring(0, 2) == '0x' ? address : '0x' + address;
+    address = address.substring(0, 2) === '0x' ? address : '0x' + address;
     return '0x' + ethUtil.sha3(ethUtil.rlp.encode([address, nonce])).slice(12).toString('hex');
 }
 export function padLeft(n, width, z) {
