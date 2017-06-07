@@ -1,5 +1,5 @@
 import ethUtil from 'ethereumjs-util';
-import ethTx from 'ethereumjs-tx';
+import ethTx from './etherTx';
 import { isNumeric, validateHexString } from './validate';
 import { sanitizeHex, decimalToHex } from './convert';
 import { toWei } from './etherUnits';
