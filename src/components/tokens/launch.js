@@ -5,6 +5,7 @@ import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react
 import { LaunchICOModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
+import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
 import { hexToDecimal } from '../../lib/convert';
 
@@ -124,6 +125,7 @@ class LaunchForm extends React.Component {
             <Col sm={8}>{this.props.token.get("initialSupply")}</Col>
           </Row>
         </Row>}
+        <hr />
         {this.props.token && <Form>
           <FormGroup
             controlId="price"
@@ -201,7 +203,30 @@ const LaunchIco = connect(
             generateIcoTransaction( data, wallet )
           ).then((result) => resolve(result))
         })
-      },    
+      },
+      sendTransaction: (tx, data, address) => {
+        const afterTx = (txhash) => {
+          console.log(txhash)
+          const ico = {
+              saleTx: txhash,
+              owner: address,
+              fundingGoal: data.fundingGoal,
+              etherPrice: data.price,
+          };
+          dispatch(gotoTab('buy', ico));
+          dispatch(createIco(ico));
+        };
+
+        const resolver = (resolve, f) => (x) => {
+          f.apply(x);
+          resolve(x);
+        };
+
+        return new Promise((resolve, reject) => {
+          dispatch(sendTransaction( tx ))
+            .then(resolver(afterTx, resolve));
+        });
+      },      
       gotoToken: () => 
         dispatch(gotoTab('token'))
   })
