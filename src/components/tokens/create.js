@@ -4,7 +4,9 @@ import { Panel, Form, FormGroup, ControlLabel, FormControl, Button } from 'react
 import { generateTokenTransaction, estimateTokenGas } from '../../store/tokenActions';
 import { CreateTxModal } from '../transaction/createModal';
 import OpenWallet from '../wallet/open';
+import { hexToDecimal } from '../../lib/convert';
 
+const DefaultGas = "0x11a7a7";
 
 class CreateTokenForm extends React.Component {
   constructor(props) {
@@ -12,11 +14,13 @@ class CreateTokenForm extends React.Component {
     this.initToken = this.initToken.bind(this);
     this.estimateGas = this.estimateGas.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.changeGas = this.changeGas.bind(this);
     this.state = {
       symbol: 'POOP',
       decimals: 8,
       modalShow: false, 
       showTx: false,
+      gas: DefaultGas,
       tx: {},
     };
   }
@@ -30,6 +34,10 @@ class CreateTokenForm extends React.Component {
     this.setState({ [e.target.id]: e.target.value });
   }
 
+  changeGas(e) {
+    this.setState({ gas: e.target.value })
+  }
+
   estimateGas() {
     const data = {
       token: this.state.token,
@@ -39,29 +47,27 @@ class CreateTokenForm extends React.Component {
     }
     this.props.estimateGas(data, this.props.wallet)
       .then((result) => { 
-        //const tx = JSON.parse(result);
-        console.log(result)
         this.setState({ modalShow: true, 
-                        showTx: true,
-                        //tx
+                        showTx: false
                       });
+        this.setState({ gas: result || DefaultGas});
       })
   }
 
   initToken() {
+    console.log(this.state)
     const data = {
       token: this.state.token,
       symbol: this.state.symbol,
       totalSupply: this.state.totalSupply,
       decimals: this.state.decimals,
+      gasLimit: this.state.gas,
     }
     this.props.initToken(data, this.props.wallet)
       .then((result) => { 
-        //const tx = JSON.parse(result);
-        console.log(result)
         this.setState({ modalShow: true, 
                         showTx: true,
-                        //tx
+                        tx: result
                       });
       })
   }
@@ -144,6 +150,9 @@ class CreateTokenForm extends React.Component {
           showTx={this.state.showTx}
           rawTx={this.state.tx.rawTx}
           signedTx={this.state.tx.signedTx}
+          gas={hexToDecimal(this.state.gas || DefaultGas)}
+          changeGas={this.changeGas}
+          onGenerate={this.initToken}
           />
       </div>
     );
@@ -159,36 +168,16 @@ const CreateToken = connect(
   },
   (dispatch, ownProps) => ({
     estimateGas: (data, wallet) => {
-      const confirmTx = (tx) => {
-        console.log(tx)
-        return tx;
-      }
-      const resolver = (resolve, f) => (x) => {
-          return f.apply(x);
-          //resolve(x);
-      };
-
       return new Promise((resolve, reject) => {
         dispatch(estimateTokenGas( data, wallet ))
-        .then((result) => resolve(result))
+        .then((result) => resolve(result));
       })      
     },
     initToken: (data, wallet) => {
-      const confirmTx = (tx) => {
-        console.log(tx)
-        return tx;
-      }
-      const resolver = (resolve, f) => (x) => {
-          return f.apply(x);
-          //resolve(x);
-      };
       return new Promise((resolve, reject) => {
         dispatch(
           generateTokenTransaction( data, wallet )
-        ).then(resolver(confirmTx, resolve))
-         .catch((error) => {
-            resolve({ _error: (error.message || JSON.stringify(error)) });
-         })
+        ).then((result) => resolve(result))
       })
     }
   })
