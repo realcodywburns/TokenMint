@@ -42,9 +42,6 @@ const Render = ({...props}) => (
                     <Tab eventKey={"wallet"} title="Wallet Manager">
                         <OpenWallet />
                     </Tab>
-                    <Tab eventKey={"exchange"} title="Exchange">
-                        <h1> Token Market coming soon... </h1>
-                    </Tab>
                 </Tabs>
             </Col>
         </Row>
