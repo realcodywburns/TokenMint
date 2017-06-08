@@ -1,7 +1,8 @@
 import Immutable from 'immutable';
 
 const initial = Immutable.fromJS({
-    token:null
+    token:null,
+    ico: null,
 });
 
 const initToken = Immutable.fromJS({
@@ -13,6 +14,12 @@ const initToken = Immutable.fromJS({
     decimals: 8,
     symbol: null,
     tokenTx: null,
+});
+
+const initIco = Immutable.fromJS({
+    beneficiary: null,
+    fundingGoal: null,
+    etherPrice: null,
     saleTx: null,
 });
 
@@ -26,6 +33,20 @@ function onTokenCreate(state, action) {
                 decimals: t.decimals,
                 symbol: t.symbol,
                 tokenTx: t.tokenTx,
+            })
+        );
+    }
+    return state;
+}
+
+function onIcoCreate(state, action) {
+    if (action.type === 'TOKEN/ICO') {
+        const t = action.ico;
+        return state.set('ico', initIco.merge({
+                beneficiary: t.owner,
+                fundingGoal: t.fundingGoal,
+                etherPrice: t.etherPrice,
+                saleTx: t.saleTx,
             })
         );
     }
