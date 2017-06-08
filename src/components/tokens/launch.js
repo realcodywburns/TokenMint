@@ -59,7 +59,7 @@ class LaunchForm extends React.Component {
 
   initIco() {
     const data = {
-      etherPrice: this.state.price,
+      price: this.state.price,
       fundingGoal: this.state.fundingGoal,
       gasLimit: this.state.gas,
     }
@@ -172,7 +172,7 @@ class LaunchForm extends React.Component {
           signedTx={this.state.tx.signedTx}
           gas={hexToDecimal(this.state.gas || DefaultGas)}
           changeGas={this.handleChange}
-          onGenerate={this.initToken}
+          onGenerate={this.initIco}
           submitTx={this.submitTx}
           />
       </Grid>

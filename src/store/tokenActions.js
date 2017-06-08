@@ -160,7 +160,6 @@ export function generateTokenTransaction(token, wallet) {
 
 export function generateIcoTransaction(ico, wallet) {
     const addr = wallet.getAddressString();
-    console.log(ico)
     const data = functionToData(CreateSaleFunc, 
             { fundingGoal: ico.fundingGoal,
                 etherCostOfEachToken: ico.price });
