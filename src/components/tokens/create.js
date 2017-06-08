@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { generateTokenTransaction, estimateTokenGas } from '../../store/tokenActions';
+import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
-import { CreateTxModal } from '../transaction/createModal';
+import { gotoTab } from '../../store/tabActions';
+import { CreateTxModal } from '../transaction/modals';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
 
@@ -14,6 +15,7 @@ class CreateTokenForm extends React.Component {
     super(props);
     this.initToken = this.initToken.bind(this);
     this.estimateGas = this.estimateGas.bind(this);
+    this.submitTx = this.submitTx.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.changeGas = this.changeGas.bind(this);
     this.state = {
@@ -73,8 +75,13 @@ class CreateTokenForm extends React.Component {
   }
 
   submitTx() {
-    this.props.sendTransaction(this.state.tx.signedTx)
-      .then((result) => console.log(result))
+    this.props.sendTransaction(
+        this.state.tx.signedTx, 
+        this.state,
+        this.props.wallet.getAddressString()
+        ).then((result) => {
+          this.setState({ modalShow: false, showTx: false })
+      })
   }
 
   render() {
@@ -186,12 +193,30 @@ const CreateToken = connect(
         ).then((result) => resolve(result))
       })
     },
-    sendTransaction: (tx) => {
+    sendTransaction: (tx, data, address) => {
+      const afterTx = (txhash) => {
+        console.log(txhash)
+        const token = {
+            owner: address,
+            initialSupply: data.totalSupply,
+            name: data.token,
+            decimals: data.decimals,
+            symbol: data.symbol,
+            tokenTx: txhash,
+        };
+        dispatch(gotoTab('ico', token));
+        dispatch(createToken(token));
+      };
+
+      const resolver = (resolve, f) => (x) => {
+        f.apply(x);
+        resolve(x);
+      };
+
       return new Promise((resolve, reject) => {
-        dispatch(
-          sendTransaction( tx )
-        ).then((result) => resolve(result))
-      })
+        dispatch(sendTransaction( tx ))
+          .then(resolver(afterTx, resolve));
+      });
     }
   })
 )(CreateTokenForm)
