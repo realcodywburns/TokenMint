@@ -8,6 +8,6 @@ export function openWallet(key) {
             type: 'WALLET/OPEN',
             wallet: wallet,
         });
-        dispatch(getTransactionData(wallet.getAddressString()));
+        dispatch(getTransactionData(wallet.getAddressString()));        
     };
 }

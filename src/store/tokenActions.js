@@ -1,43 +1,74 @@
+import Immutable from 'immutable';
 import { rpc } from '../lib/rpc';
-import BigNumber from 'bignumber.js';
 import { generateTx } from '../lib/transaction';
+import { getTransactionData } from './transactionActions';
+import { functionToData } from '../lib/convert';
+
 
 const IcoMachineAddress = "0x26c243b8a4a460a9bb20f3afcf127fa7dd764cfa";
 
-const InitTx = {
-                to: IcoMachineAddress,
-                value: 0,
-                unit: "ether",
-                gasLimit: null,
-                gasPrice: null,
-                nonce: null,
-                data: '0x',
-            };
+const CreateTokenFunc = Immutable.fromJS({
+    name:'createToken',
+    inputs:[{ name:'initialSupply', type:'uint256' },
+            { name:'tokenName', type:'string' },
+            { name:'decimals', type:'uint8' },
+            { name:'symbol', type:'string' }]
+    });
+
+const initialTx = {
+    to: IcoMachineAddress,
+    value: 0,
+    unit: "ether",
+    gasLimit: null,
+    gasPrice: null,
+    nonce: null,
+    data: '0x',
+};
+
+export function estimateTokenGas(token, wallet) {
+    return (dispatch) => {
+        const data = functionToData(CreateTokenFunc, 
+            { initialSupply: token.totalSupply || 0, 
+            tokenName: token.token || "elaine", 
+            decimals: token.decimals,
+            symbol: token.symbol });
+        return rpc.call("eth_estimateGas", [{
+            from: wallet.getAddressString(),
+            to: IcoMachineAddress,
+            data: data,
+        }]).then((result) => {
+            if (result.result) return result;
+        });
+    }
+}
 
 export function generateTokenTransaction(token, wallet) {
     const addr = wallet.getAddressString();
-    const tx = InitTx;
+    const tx = initialTx;
     tx.from = addr;
-    return (dispatch, getState) => rpc.getTransactionData(addr).then((result) => {
-            tx.balance = new BigNumber(result[0].result).toString();
-            tx.gasPrice = result[1].result;
-            tx.nonce = result[2].result;
-            const data = {
-                from: tx.from,
-                data: tx.data
+                
+    return (dispatch, getState) => {
+
+
+
+        return rpc.call("eth_estimateGas", [{}]).then((result) => {
+            tx.gasLimit = result;
+            const transaction = getState().transaction;
+            if (!transaction.get('busy')) {
+                tx.gasPrice = transaction.get('data').get('gasPrice');
+                tx.nonce = transaction.get('data').get('nonce');
             }
-            rpc.call("eth_estimateGas", [data]).then((result) => {
-                tx.gasLimit = result;    
-                generateTx(tx, wallet.getPrivateKey()).then((rawTx) => {
-                    dispatch({
-                        type: 'TRANSACTION/GENERATE',
-                        tx: rawTx
-                    });
-                    console.log(rawTx)
-                    return rawTx;
+            return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+                dispatch({
+                    type: 'TRANSACTION/GENERATE',
+                    raw: result.rawTx,
+                    signed: result.signedTx,
                 });
-            })
-        });
+                console.log(result)
+                return result;
+            });
+        })
+    }
 }
 
 export function sendTransaction(tx) {
