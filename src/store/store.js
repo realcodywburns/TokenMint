@@ -1,16 +1,16 @@
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import { gotoScreen } from './screenActions';
-import screenReducers from './screenReducers';
+import { gotoTab } from './tabActions';
 import walletReducers from './walletReducers';
 import transactionReducers from './transactionReducers';
+import tabReducers from './tabReducers';
 
 const stateTransformer = (state) => ({
     //tokens: state.tokens.toJS(),
-    screen: state.screen.toJS(),
     wallet: state.wallet.toJS(),
     transaction: state.transaction.toJS(),
+    tab: state.tab.toJS(),
 });
 
 const logger = createLogger({
@@ -18,9 +18,9 @@ const logger = createLogger({
 });
 
 const reducers = {
-    screen: screenReducers,
     wallet: walletReducers,
     transaction: transactionReducers,
+    tab: tabReducers,
 };
 
 
@@ -35,5 +35,5 @@ export const store = createStore(
 export function start() {
     console.log("start store")
     // store.dispatch(loadTokenList());
-    store.dispatch(gotoScreen('home'));
+    store.dispatch(gotoTab('start'));
 }

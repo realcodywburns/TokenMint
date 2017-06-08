@@ -1,16 +1,16 @@
 import Immutable from 'immutable';
 
 const initial = Immutable.fromJS({
-    screen: null,
-    item: null,
+    id: 'wallet',
+    params: null,
 });
 
 
 function onOpen(state, action) {
-    if (action.type === 'SCREEN/OPEN') {
+    if (action.type === 'TAB/OPEN') {
         return state
-            .set('screen', action.screen)
-            .set('item', action.item);
+            .set('id', action.id)
+            .set('params', action.params);
     }
     return state;
 }
