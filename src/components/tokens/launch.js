@@ -1,15 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import OpenWallet from '../wallet/open';
+import { gotoTab } from '../../store/tabActions';
 
-class RenderLaunch extends React.Component {
+class LaunchForm extends React.Component {
+  
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
+    this.gotoToken = this.gotoToken.bind(this);
     this.state = {
       value: ''
     };
+  }
+
+  gotoToken() {
+    this.props.gotoToken();
   }
 
   getValidationState() {
@@ -24,9 +32,24 @@ class RenderLaunch extends React.Component {
       <Grid>
         <Row>
           <Col>
-            Launch a crowdsale
+          <h4>Start your Crowdsale!</h4>
           </Col>
         </Row>
+        {!this.props.wallet &&  <Row>
+          <Col>
+            <p>
+              Did you already create a token? If not, 
+              <Button onClick={this.gotoToken} bsStyle="info" bsSize="small">do that first</Button>
+            </p><p>
+              If you already have a token, unlock your wallet to start the ICO.
+            </p>
+            <hr />
+              <Panel header="Please unlock your account to continue">
+                  <OpenWallet />
+              </Panel>
+            
+          </Col>
+        </Row>}
         <Form>
           <FormGroup
             controlId="etherPrice"
@@ -40,7 +63,6 @@ class RenderLaunch extends React.Component {
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
-            <HelpBlock>Required.</HelpBlock>
           </FormGroup>
 
           <FormGroup
@@ -80,7 +102,9 @@ const LaunchIco = connect(
     return {}
   },
   (dispatch, ownProps) => ({
+      gotoToken: () => 
+        dispatch(gotoTab('token'))
   })
-)(RenderLaunch)
+)(LaunchForm)
 
 export default LaunchIco;

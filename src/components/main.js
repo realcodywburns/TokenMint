@@ -36,21 +36,22 @@ const Render = ({...props}) => (
                     <Tab eventKey={"ico"} title="Launch an ICO">
                         <LaunchIco />
                     </Tab>
-                    <Tab eventKey={"buy"} title="Buy Tokens">ICO / Crowdsale Browser</Tab>
+                    <Tab eventKey={"buy"} title="Buy Tokens">
+                        <h1> ICO / Crowdsale Browser coming soon... </h1>
+                    </Tab>
                     <Tab eventKey={"wallet"} title="Wallet Manager">
                         <OpenWallet />
                     </Tab>
-                    <Tab eventKey={"exchange"} title="Exchange">Token Market</Tab>
+                    <Tab eventKey={"exchange"} title="Exchange">
+                        <h1> Token Market coming soon... </h1>
+                    </Tab>
                 </Tabs>
             </Col>
         </Row>
-        <Row>
-            <Col xs={12}>
-                <div id="footer">
-                    Built for Ethereum Classic, 2017
-                </div>
-            </Col>
-        </Row>
+        <hr />
+        <footer>
+            <p>Built for Ethereum Classic, 2017</p>
+        </footer>
     </Grid>
 );
 
