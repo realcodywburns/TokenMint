@@ -75,3 +75,15 @@ export function functionToData(func, inputs) {
     ).toString('hex');
     return `0x${data}`;
 }
+
+export function dataToParams(func, data) {
+    data = new Buffer(data.replace('0x', ''), 'hex');
+    const types = func.get('outputs').map((output) => output.get('type')).toArray();
+    const params = ethAbi.rawDecode(types, data);
+    return func.get('outputs').map((o, i) => ({
+        type: o.get('type'),
+        name: o.get('name'),
+        value: (params[i] instanceof BigNumber) ? params[i].toString() : params[i],
+    }));
+}
+
