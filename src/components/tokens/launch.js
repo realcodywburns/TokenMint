@@ -2,17 +2,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { LaunchICOModal } from '../transaction/modals';
+import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { gotoTab } from '../../store/tabActions';
+import { hexToDecimal } from '../../lib/convert';
+
+const DefaultGas = "0x94da7";
 
 class LaunchForm extends React.Component {
   
   constructor(props) {
     super(props);
+    this.initIco = this.initIco.bind(this);
+    this.estimateGas = this.estimateGas.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.gotoToken = this.gotoToken.bind(this);
+    this.submitTx = this.submitTx.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
-      value: ''
+      price: 1,
+      fundingGoal: 10000000,
+      modalShow: false, 
+      showTx: false,
+      gas: DefaultGas,
+      tx: {},
     };
   }
 
@@ -20,14 +34,57 @@ class LaunchForm extends React.Component {
     this.props.gotoToken();
   }
 
-  getValidationState() {
+  getRequiredValidation(key) {
+    if (this.state.key) return 'success';
+    else return 'warning';
   }
 
   handleChange(e) {
     this.setState({ [e.target.id]: e.target.value });
   }
 
+  estimateGas() {
+    const data = {
+      price: this.state.price,
+      fundingGoal: this.state.fundingGoal,
+    }
+    this.props.estimateGas(data, this.props.wallet)
+      .then((result) => { 
+        this.setState({ modalShow: true, 
+                        showTx: false
+                      });
+        this.setState({ gas: result || DefaultGas});
+      })
+  }
+
+  initIco() {
+    const data = {
+      etherPrice: this.state.price,
+      fundingGoal: this.state.fundingGoal,
+      gasLimit: this.state.gas,
+    }
+    this.props.initIco(data, this.props.wallet)
+      .then((result) => { 
+        this.setState({ modalShow: true, 
+                        showTx: true,
+                        tx: result
+                      });
+      })
+  }
+
+  submitTx() {
+    this.props.sendTransaction(
+        this.state.tx.signedTx, 
+        this.state,
+        this.props.wallet.getAddressString()
+        ).then((result) => {
+          this.setState({ modalShow: false, showTx: false })
+      })
+  }
+
   render() {
+    let modalClose = () => this.setState({ modalShow: false });
+
     return (
       <Grid>
         <Row>
@@ -35,30 +92,46 @@ class LaunchForm extends React.Component {
           <h4>Start your Crowdsale!</h4>
           </Col>
         </Row>
-        {!this.props.wallet &&  <Row>
+        {!this.props.token &&  <Row>
           <Col>
             <p>
               Did you already create a token? If not, 
               <Button onClick={this.gotoToken} bsStyle="info" bsSize="small">do that first</Button>
-            </p><p>
-              If you already have a token, unlock your wallet to start the ICO.
             </p>
+            {!this.props.wallet && <p>
+              If you already have a token, unlock your wallet to start the ICO.
+            </p>}
             <hr />
-              <Panel header="Please unlock your account to continue">
+            {!this.props.wallet && <Panel header="Please unlock your account to continue">
                   <OpenWallet />
-              </Panel>
+              </Panel>}
             
           </Col>
         </Row>}
-        <Form>
+        {this.props.token && <Row>
+          <h4>{this.props.token.get("name")}({this.props.token.get("symbol")})</h4>
+          
+          <Row>
+            <Col sm={4}>Token Contract</Col>
+            <Col sm={8}>
+              <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} target="_blank">
+                {this.props.token.get("tokenAddress")}
+              </a>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={4}>Token Supply</Col>
+            <Col sm={8}>{this.props.token.get("initialSupply")}</Col>
+          </Row>
+        </Row>}
+        {this.props.token && <Form>
           <FormGroup
-            controlId="etherPrice"
-            validationState={this.getValidationState()}
+            controlId="price"
+            validationState={this.getRequiredValidation('price')}
           >
             <ControlLabel>Price per Token (in ether)</ControlLabel>
             <FormControl
               type="number"
-              value={this.state.value}
               placeholder="1"
               onChange={this.handleChange}
             />
@@ -67,12 +140,11 @@ class LaunchForm extends React.Component {
 
           <FormGroup
             controlId="fundingGoal"
-            validationState={this.getValidationState()}
+            validationState={this.getRequiredValidation('fundingGoal')}
           >
             <ControlLabel>Funding Goal (sale will end when goal is reached)</ControlLabel>
             <FormControl
               type="number"
-              value={this.state.value}
               placeholder="100000000"
               onChange={this.handleChange}
             />
@@ -83,14 +155,26 @@ class LaunchForm extends React.Component {
           </FormGroup>
 
           <FormGroup>
+            {this.props.wallet &&
             <Button 
               bsStyle="primary"
-              onClick={this.initIco} >
+              onClick={this.estimateGas} >
               START THE ICO
-            </Button>
+            </Button>}
           </FormGroup>
 
-        </Form>
+        </Form>}
+        <LaunchICOModal 
+          show={this.state.modalShow} 
+          close={modalClose} 
+          showTx={this.state.showTx}
+          rawTx={this.state.tx.rawTx}
+          signedTx={this.state.tx.signedTx}
+          gas={hexToDecimal(this.state.gas || DefaultGas)}
+          changeGas={this.handleChange}
+          onGenerate={this.initToken}
+          submitTx={this.submitTx}
+          />
       </Grid>
     );
   }
@@ -99,9 +183,25 @@ class LaunchForm extends React.Component {
 
 const LaunchIco = connect(
   (state, ownProps) => {
-    return {}
+    return {
+      wallet: state.wallet.get('wallet'),
+      token: state.tokens.get('token')
+    }
   },
   (dispatch, ownProps) => ({
+      estimateGas: (data, wallet) => {
+        return new Promise((resolve, reject) => {
+          dispatch(estimateIcoGas( data, wallet ))
+          .then((result) => resolve(result));
+        })      
+      },
+      initIco: (data, wallet) => {
+        return new Promise((resolve, reject) => {
+          dispatch(
+            generateIcoTransaction( data, wallet )
+          ).then((result) => resolve(result))
+        })
+      },    
       gotoToken: () => 
         dispatch(gotoTab('token'))
   })
