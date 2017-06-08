@@ -63,5 +63,6 @@ export default function transactionReducers(state, action) {
     state = onLoading(state, action);
     state = onTransactionData(state, action);
     state = onTransactionGenerate(state, action);
+    state = onTransactionSend(state, action);
     return state;
 }

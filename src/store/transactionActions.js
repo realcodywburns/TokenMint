@@ -1,12 +1,12 @@
 import { rpc } from '../lib/rpc';
 import BigNumber from 'bignumber.js';
 
-export function getTransactionData(addr) {
+export function getTransactionData(address) {
     return (dispatch) => {
         dispatch({
             type: 'TRANSACTION/BUSY',
         });
-        rpc.getTransactionData(addr).then((result) => {
+        rpc.getTransactionData(address).then((result) => {
             const balance = new BigNumber(result[0].result).toString();
             const gasPrice = result[1].result;
             const nonce = result[2].result;
@@ -15,6 +15,7 @@ export function getTransactionData(addr) {
                 balance,
                 gasPrice,
                 nonce,
+                address,
             });
         });    
     }
