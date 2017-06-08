@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import { rpc } from '../lib/rpc';
 import { generateTx } from '../lib/transaction';
-import { functionToData, dataToParams } from '../lib/convert';
+import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
 
 
 const IcoMachineAddress = "0x26c243b8a4a460a9bb20f3afcf127fa7dd764cfa";
@@ -40,18 +40,23 @@ const initialTx = {
     data: '0x',
 };
 
-export function readTokens(wallet) {
+export function readTokens(address) {
     return (dispatch) => {
-        const data = functionToData(TokensFunc, { '': wallet.getAddressString() });
+        const data = functionToData(TokensFunc, { '': address });
         return rpc.call("eth_call", [{ 
             to: IcoMachineAddress,
             data: data,
         }]).then((result) => {
-            console.log(result);
-            var outputs = dataToParams(TokensFunc, result);
+            const params = dataToParams(TokensFunc, result);
+            const outputs = paramsToToken(params);
             if (outputs.saleAddress)
                 readCrowdsale(outputs.saleAddress);
-            return result;
+            console.log(outputs)
+            outputs.owner = address;
+            dispatch({
+                type: 'TOKEN/LOAD',
+                token: outputs,
+            })
         })
     }
 }

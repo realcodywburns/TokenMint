@@ -37,14 +37,13 @@ function onTokenLoad(state, action) {
         const t = action.token;
         if (!state.get('token') || 
             (t.owner !== state.get('token').get('owner'))) {
-            console.log("new tokens")
             return state.set('token', initToken.merge({
                     owner: t.owner,
-                    initialSupply: t.initialSupply,
+                    initialSupply: t.initialSupply.toString(10),
                     name: t.tokenName,
                     saleAddress: t.saleAddress,
                     tokenAddress: t.tokenAddress,
-                    decimals: t.decimals,
+                    decimals: t.decimals.toString(10),
                     symbol: t.symbol,
                     tokenTx: t.tokenTx,
                 })
