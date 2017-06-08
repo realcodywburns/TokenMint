@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab, Grid, Row, Col } from 'react-bootstrap';
+import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import Information from './tokens/info';
 import LaunchIco from './tokens/launch';
@@ -22,21 +23,24 @@ const Render = ({...props}) => (
         </Row>
         <Row>
             <Col xs={12}>
-                <Tabs defaultActiveKey={5} id="tokenTabs">
-                    <Tab eventKey={1} title="Getting Started">
+                <Tabs defaultActiveKey={"wallet"} 
+                    activeKey={props.tab} 
+                    onSelect={props.handleSelect} 
+                    id="tokenTabs">
+                    <Tab eventKey={"start"} title="Getting Started">
                         <Information />
                     </Tab>
-                    <Tab eventKey={2} title="Create a Token">
+                    <Tab eventKey={"token"} title="Create a Token">
                         <CreateToken />
                     </Tab>
-                    <Tab eventKey={3} title="Launch an ICO">
+                    <Tab eventKey={"ico"} title="Launch an ICO">
                         <LaunchIco />
                     </Tab>
-                    <Tab eventKey={4} title="Buy Tokens">ICO / Crowdsale Browser</Tab>
-                    <Tab eventKey={5} title="Wallet Manager">
+                    <Tab eventKey={"buy"} title="Buy Tokens">ICO / Crowdsale Browser</Tab>
+                    <Tab eventKey={"wallet"} title="Wallet Manager">
                         <OpenWallet />
                     </Tab>
-                    <Tab eventKey={6} title="Exchange">Token Market</Tab>
+                    <Tab eventKey={"exchange"} title="Exchange">Token Market</Tab>
                 </Tabs>
             </Col>
         </Row>
@@ -52,10 +56,13 @@ const Render = ({...props}) => (
 
 const Main = connect(
     (state, ownProps) => ({
-
+        tab: state.tab.get('id'),
+        params: state.tab.get('params'),
     }),
     (dispatch, ownProps) => ({
-
+        handleSelect: (key) => {
+            dispatch(gotoTab(key));
+        }
     })
 )(Render);
 
