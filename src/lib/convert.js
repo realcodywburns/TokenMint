@@ -87,3 +87,13 @@ export function dataToParams(func, data) {
     }));
 }
 
+export function paramsToToken(params) {
+    const token = {};
+    params.map((p) => {
+        if (p.type === "address")
+            token[p.name] = sanitizeHex(p.value.toString());
+        else token[p.name] = p.value;
+        return null;
+    });
+    return token;
+}
