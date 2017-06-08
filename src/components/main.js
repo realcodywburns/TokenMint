@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Tabs, Tab, Grid, Row, Col } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
-import Information from './tokens/info';
+import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 
