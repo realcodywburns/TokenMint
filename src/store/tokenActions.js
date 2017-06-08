@@ -14,12 +14,10 @@ const CreateTokenFunc = Immutable.fromJS({
             { name:'symbol', type:'string' }]
     });
 
-const CrowdsaleFunc = Immutable.fromJS({
+const CreateSaleFunc = Immutable.fromJS({
     name:'Crowdsale',
-    inputs:[{ name:'ifSuccessfulSendTo', type:'address' },
-            { name:'fundingGoalInEthers', type:'uint' },
-            { name:'etherCostOfEachToken', type:'uint' },
-            { name:'addressOfTokenUsedAsReward', type:'address' }]
+    inputs:[{ name:'fundingGoal', type:'uint' },
+            { name:'etherCostOfEachToken', type:'uint' }]
     });
 
 
@@ -53,11 +51,9 @@ export function estimateTokenGas(token, wallet) {
 export function estimateIcoGas(ico, wallet) {
     const addr =  wallet.getAddressString();
     return (dispatch) => {
-        const data = functionToData(CrowdsaleFunc, 
-            { ifSuccessfulSendTo: addr, 
-                fundingGoalInEthers: ico.fundingGoal,
-                etherCostOfEachToken: ico.price,
-                addressOfTokenUsedAsReward: ico.tokenAddress });
+        const data = functionToData(CreateSaleFunc, 
+            { fundingGoal: ico.fundingGoal,
+                etherCostOfEachToken: ico.price });
         return rpc.call("eth_estimateGas", [{
             from: addr,
             to: IcoMachineAddress,
@@ -97,6 +93,33 @@ export function generateTokenTransaction(token, wallet) {
     }
 }
 
+export function generateIcoTransaction(ico, wallet) {
+    const addr = wallet.getAddressString();
+    const data = functionToData(CreateSaleFunc, 
+            { fundingGoal: ico.fundingGoal,
+                etherCostOfEachToken: ico.price });
+    const tx = Object.assign(initialTx, { 
+        gasLimit: ico.gasLimit,
+        data: data,
+        from: addr });
+    return (dispatch, getState) => {
+        const transaction = getState().transaction;
+        if (!transaction.get('busy')) {
+            tx.gasPrice = transaction.get('data').get('gasPrice');
+            tx.nonce = transaction.get('data').get('nonce');
+        }
+        return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/GENERATE',
+                raw: result.rawTx,
+                signed: result.signedTx,
+            });
+            return result;
+        });
+    }
+}
+
+
 export function createToken(token) {
     return (dispatch) => {
         dispatch({
@@ -107,11 +130,11 @@ export function createToken(token) {
 }
 
 
-export function createIco(token) {
+export function createIco(ico) {
     return (dispatch) => {
         dispatch({
             type: 'TOKEN/ICO', 
-            token,
+            ico,
         });
     }
 }
