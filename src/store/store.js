@@ -4,10 +4,11 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { gotoTab } from './tabActions';
 import walletReducers from './walletReducers';
 import transactionReducers from './transactionReducers';
+import tokenReducers from './tokenReducers';
 import tabReducers from './tabReducers';
 
 const stateTransformer = (state) => ({
-    //tokens: state.tokens.toJS(),
+    tokens: state.tokens.toJS(),
     wallet: state.wallet.toJS(),
     transaction: state.transaction.toJS(),
     tab: state.tab.toJS(),
@@ -21,6 +22,7 @@ const reducers = {
     wallet: walletReducers,
     transaction: transactionReducers,
     tab: tabReducers,
+    tokens: tokenReducers,
 };
 
 
