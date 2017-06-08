@@ -20,3 +20,14 @@ export function getTransactionData(address) {
         });    
     }
 }
+
+export function sendTransaction(tx) {
+    return (dispatch, getState) => 
+        rpc.call("eth_sendRawTransaction", [tx]).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/SEND',
+                tx: result
+            });
+            return result;
+        })
+};

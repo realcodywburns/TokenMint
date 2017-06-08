@@ -68,13 +68,3 @@ export function generateTokenTransaction(token, wallet) {
         });
     }
 }
-
-export function sendTransaction(tx) {
-    return (dispatch, getState) => 
-        rpc.call("eth_sendRawTransaction", [tx]).then((result) => {
-            dispatch({
-                type: 'TRANSACTION/SEND',
-                tx: result
-            });
-        })
-};
