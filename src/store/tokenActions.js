@@ -14,6 +14,15 @@ const CreateTokenFunc = Immutable.fromJS({
             { name:'symbol', type:'string' }]
     });
 
+const CrowdsaleFunc = Immutable.fromJS({
+    name:'Crowdsale',
+    inputs:[{ name:'ifSuccessfulSendTo', type:'address' },
+            { name:'fundingGoalInEthers', type:'uint' },
+            { name:'etherCostOfEachToken', type:'uint' },
+            { name:'addressOfTokenUsedAsReward', type:'address' }]
+    });
+
+
 const initialTx = {
     to: IcoMachineAddress,
     value: 0,
@@ -32,6 +41,25 @@ export function estimateTokenGas(token, wallet) {
             symbol: token.symbol });
         return rpc.call("eth_estimateGas", [{
             from: wallet.getAddressString(),
+            to: IcoMachineAddress,
+            data: data,
+        }]).then((result) => {
+            console.log(result);
+            return result;
+        });
+    }
+}
+
+export function estimateIcoGas(ico, wallet) {
+    const addr =  wallet.getAddressString();
+    return (dispatch) => {
+        const data = functionToData(CrowdsaleFunc, 
+            { ifSuccessfulSendTo: addr, 
+                fundingGoalInEthers: ico.fundingGoal,
+                etherCostOfEachToken: ico.price,
+                addressOfTokenUsedAsReward: ico.tokenAddress });
+        return rpc.call("eth_estimateGas", [{
+            from: addr,
             to: IcoMachineAddress,
             data: data,
         }]).then((result) => {
@@ -65,6 +93,25 @@ export function generateTokenTransaction(token, wallet) {
                 signed: result.signedTx,
             });
             return result;
+        });
+    }
+}
+
+export function createToken(token) {
+    return (dispatch) => {
+        dispatch({
+            type: 'TOKEN/CREATE', 
+            token,
+        });
+    }
+}
+
+
+export function createIco(token) {
+    return (dispatch) => {
+        dispatch({
+            type: 'TOKEN/ICO', 
+            token,
         });
     }
 }
