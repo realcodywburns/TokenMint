@@ -1,7 +1,6 @@
 import Immutable from 'immutable';
 import { rpc } from '../lib/rpc';
 import { generateTx } from '../lib/transaction';
-import { getTransactionData } from './transactionActions';
 import { functionToData } from '../lib/convert';
 
 
@@ -18,7 +17,6 @@ const CreateTokenFunc = Immutable.fromJS({
 const initialTx = {
     to: IcoMachineAddress,
     value: 0,
-    unit: "ether",
     gasLimit: null,
     gasPrice: null,
     nonce: null,
@@ -37,37 +35,37 @@ export function estimateTokenGas(token, wallet) {
             to: IcoMachineAddress,
             data: data,
         }]).then((result) => {
-            if (result.result) return result;
+            console.log(result);
+            return result;
         });
     }
 }
 
 export function generateTokenTransaction(token, wallet) {
     const addr = wallet.getAddressString();
-    const tx = initialTx;
-    tx.from = addr;
-                
+    const data = functionToData(CreateTokenFunc, 
+            { initialSupply: token.totalSupply || 0, 
+            tokenName: token.token || "elaine", 
+            decimals: token.decimals,
+            symbol: token.symbol });
+    const tx = Object.assign(initialTx, { 
+        gasLimit: token.gasLimit,
+        data: data,
+        from: addr });
     return (dispatch, getState) => {
-
-
-
-        return rpc.call("eth_estimateGas", [{}]).then((result) => {
-            tx.gasLimit = result;
-            const transaction = getState().transaction;
-            if (!transaction.get('busy')) {
-                tx.gasPrice = transaction.get('data').get('gasPrice');
-                tx.nonce = transaction.get('data').get('nonce');
-            }
-            return generateTx(tx, wallet.getPrivateKey()).then((result) => {
-                dispatch({
-                    type: 'TRANSACTION/GENERATE',
-                    raw: result.rawTx,
-                    signed: result.signedTx,
-                });
-                console.log(result)
-                return result;
+        const transaction = getState().transaction;
+        if (!transaction.get('busy')) {
+            tx.gasPrice = transaction.get('data').get('gasPrice');
+            tx.nonce = transaction.get('data').get('nonce');
+        }
+        return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/GENERATE',
+                raw: result.rawTx,
+                signed: result.signedTx,
             });
-        })
+            return result;
+        });
     }
 }
 
