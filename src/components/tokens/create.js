@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import { generateTokenTransaction, estimateTokenGas } from '../../store/tokenActions';
+import { sendTransaction } from '../../store/transactionActions';
 import { CreateTxModal } from '../transaction/createModal';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
@@ -55,7 +56,6 @@ class CreateTokenForm extends React.Component {
   }
 
   initToken() {
-    console.log(this.state)
     const data = {
       token: this.state.token,
       symbol: this.state.symbol,
@@ -70,6 +70,11 @@ class CreateTokenForm extends React.Component {
                         tx: result
                       });
       })
+  }
+
+  submitTx() {
+    this.props.sendTransaction(this.state.tx.signedTx)
+      .then((result) => console.log(result))
   }
 
   render() {
@@ -153,6 +158,7 @@ class CreateTokenForm extends React.Component {
           gas={hexToDecimal(this.state.gas || DefaultGas)}
           changeGas={this.changeGas}
           onGenerate={this.initToken}
+          submitTx={this.submitTx}
           />
       </div>
     );
@@ -177,6 +183,13 @@ const CreateToken = connect(
       return new Promise((resolve, reject) => {
         dispatch(
           generateTokenTransaction( data, wallet )
+        ).then((result) => resolve(result))
+      })
+    },
+    sendTransaction: (tx) => {
+      return new Promise((resolve, reject) => {
+        dispatch(
+          sendTransaction( tx )
         ).then((result) => resolve(result))
       })
     }
