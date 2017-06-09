@@ -7,10 +7,11 @@ import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 
+
 const Header = ({ logo }) => (
-    <div className="App-header">
-      <img src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo" />
-      <h2>Token Mint</h2>
+    <div className="App-header" >
+      <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo" />
+     <h2>Token Mint</h2>
     </div>
 );
 
@@ -23,9 +24,9 @@ const Render = ({...props}) => (
         </Row>
         <Row>
             <Col xs={12}>
-                <Tabs defaultActiveKey={"wallet"} 
-                    activeKey={props.tab} 
-                    onSelect={props.handleSelect} 
+                <Tabs defaultActiveKey={"wallet"}
+                    activeKey={props.tab}
+                    onSelect={props.handleSelect}
                     id="tokenTabs">
                     <Tab eventKey={"start"} title="Getting Started">
                         <Information />

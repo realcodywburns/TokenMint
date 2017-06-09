@@ -19,9 +19,9 @@ class CreateTokenForm extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.changeGas = this.changeGas.bind(this);
     this.state = {
-      symbol: 'POOP',
+      symbol: 'TOKN',
       decimals: 8,
-      modalShow: false, 
+      modalShow: false,
       showTx: false,
       gas: DefaultGas,
       tx: {},
@@ -49,8 +49,8 @@ class CreateTokenForm extends React.Component {
       decimals: this.state.decimals,
     }
     this.props.estimateGas(data, this.props.wallet)
-      .then((result) => { 
-        this.setState({ modalShow: true, 
+      .then((result) => {
+        this.setState({ modalShow: true,
                         showTx: false
                       });
         this.setState({ gas: result || DefaultGas});
@@ -66,8 +66,8 @@ class CreateTokenForm extends React.Component {
       gasLimit: this.state.gas,
     }
     this.props.initToken(data, this.props.wallet)
-      .then((result) => { 
-        this.setState({ modalShow: true, 
+      .then((result) => {
+        this.setState({ modalShow: true,
                         showTx: true,
                         tx: result
                       });
@@ -76,7 +76,7 @@ class CreateTokenForm extends React.Component {
 
   submitTx() {
     this.props.sendTransaction(
-        this.state.tx.signedTx, 
+        this.state.tx.signedTx,
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
@@ -95,70 +95,81 @@ class CreateTokenForm extends React.Component {
             validationState={this.getRequiredValidation('token')}
           >
             <ControlLabel>Token Name</ControlLabel>
+            <span data-toggle="tooltip" title="Pick a great name for your new token that is easy to remember.">
             <FormControl
               type="text"
               value={this.state.token}
-              placeholder="Scamcoin"
+              placeholder="TokenMint Coin"
               onChange={this.handleChange}
             />
-            <FormControl.Feedback />
+            </span>
+              <FormControl.Feedback />
+
           </FormGroup>
 
           <FormGroup
+
             controlId="totalSupply"
             validationState={this.getRequiredValidation('totalSupply')}
           >
             <ControlLabel>Total Supply</ControlLabel>
+            <span data-toggle="tooltip" title="This is the total amount of coins that will ever be in existence.">
             <FormControl
               type="number"
               value={this.state.totalSupply}
               placeholder="1000000"
               onChange={this.handleChange}
             />
+            </span>
             <FormControl.Feedback />
+
           </FormGroup>
 
           <FormGroup
             controlId="symbol"
           >
             <ControlLabel>Token Symbol (optional)</ControlLabel>
+            <span data-toggle="tooltip" title="This is the 3-5 letter 'code' that users will use to identify your token on exchanges and in their wallet.">
             <FormControl
               type="text"
               value={this.state.symbol}
-              placeholder="POOP"
+              placeholder="TOKN"
               onChange={this.handleChange}
             />
-            <FormControl.Feedback />
+            </span>
+              <FormControl.Feedback />
           </FormGroup>
 
           <FormGroup
             controlId="decimals"
           >
             <ControlLabel>Decimal Places (optional)</ControlLabel>
+            <span data-toggle="tooltip" title="How many decimals will the token have?">
             <FormControl
               type="number"
               value={this.state.decimals}
               placeholder="8"
               onChange={this.handleChange}
             />
+            </span>
             <FormControl.Feedback />
           </FormGroup>
         </Form>
         {this.props.wallet &&
-          <Button 
+          <Button
             bsStyle="primary"
             onClick={this.estimateGas} >
-            LET'S DO THIS
+            "LET'S DO THIS"
           </Button>}
-        {!this.props.wallet && 
+        {!this.props.wallet &&
           <Panel header="Please unlock your account to continue">
               <OpenWallet />
           </Panel>
         }
 
-        <CreateTxModal 
-          show={this.state.modalShow} 
-          close={modalClose} 
+        <CreateTxModal
+          show={this.state.modalShow}
+          close={modalClose}
           showTx={this.state.showTx}
           rawTx={this.state.tx.rawTx}
           signedTx={this.state.tx.signedTx}
@@ -184,7 +195,7 @@ const CreateToken = connect(
       return new Promise((resolve, reject) => {
         dispatch(estimateTokenGas( data, wallet ))
         .then((result) => resolve(result));
-      })      
+      })
     },
     initToken: (data, wallet) => {
       return new Promise((resolve, reject) => {
