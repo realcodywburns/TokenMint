@@ -4,11 +4,12 @@ import { Nav, NavItem, Tab, Row, Col } from 'react-bootstrap';
 export const Information = (props) => {
 
     return (
-      <Tab.Container id="tokenInfo" defaultActiveKey="prep">
+      <Tab.Container id="tokenInfo" defaultActiveKey="welcome">
         <Row className="clearfix">
           <Col sm={4}>
             <Nav bsStyle="pills" stacked>
-              <NavItem eventKey="0">
+              <NavItem eventKey="welcome">
+              Welcome
               </NavItem>
               <NavItem eventKey="prep">
                 Preparation
@@ -26,7 +27,8 @@ export const Information = (props) => {
           </Col>
           <Col sm={8}>
             <Tab.Content animation>
-             <Tab.Pane eventKey="0">
+             <Tab.Pane eventKey="welcome">
+             <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/welcome.png"} alt="logo" />
              Token Browser and Manager for Ethereum Classic (ETC) and Ethereum (ETH)
             <ul>
             <li>This is simple to use token and ICO generator created for use with the Ethereum blockchains ETC & ETH. The purpose of this generator is to make it simple for users to create their own token and crowdsale using smart contracts. Tokens are effectively a virtual currency created and secured on top of the Ethereum blockchain. An ICO is an Intial Coin Offering. At a designated price, users can offer their tokens at a set price in either ETC or ETH. This can be useful for raising funds in a crowdsale. Tokens can be used in a variety of ways, user rewards, rebates, virtual currencies, or as a voting mechanism with a Decentralized Autonomous Organization (DAO).</li>
@@ -53,7 +55,7 @@ export const Information = (props) => {
                   <li> You will unlock your account, enter the price per token, and your fundraising goal. Now those that wish to purchase your token can do so by sending ETC or ETH at your designated price to the contract address.</li>
                   <li> US financial regulations are very strict on how funds can and can not be raised. You are not clever because you are being sneaky and using the blockchain, scammers have been doing the same thing for 100 years.</li>
                   <li> Even though you may not live in the USA. Through international treaties, that doesnt matter if you are still soliciting to its citizens. Your conuntry most likely has similar laws you are violiating such as anti-spamming and reporting rules.</li>
-                </ul>              
+                </ul>
               </Tab.Pane>
               <Tab.Pane eventKey="more">
                 References for the Legal Use of Initial Coin Offerings
