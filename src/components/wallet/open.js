@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import { Grid, Row, Col } from 'react-bootstrap';
-import { Form, FormGroup, ControlLabel, FormControl, Radio, Button, Glyphicon } from 'react-bootstrap';
-import { openWallet } from '../../store/walletActions';
+import { Grid, Row, Col, Alert } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Radio, Button, Glyphicon } from 'react-bootstrap';
+import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
 
 class WalletForm extends React.Component {
@@ -12,6 +12,7 @@ class WalletForm extends React.Component {
     super(props);
     this.openWallet = this.openWallet.bind(this);
     this.handlePrivKey = this.handlePrivKey.bind(this);
+    this.handlePassword = this.handlePassword.bind(this);
     this.handleFormat = this.handleFormat.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.state = {
@@ -21,11 +22,20 @@ class WalletForm extends React.Component {
       showAccessButton: false,
       showRequirePass: false,
       file: null,
+      password: null,
+      error: null,
     };
   }
 
   openWallet() {
-    this.props.openWallet(this.state.privKey);
+    if (this.state.showTextKey) 
+        this.props.openWallet(this.state.privKey, this.state.password);
+    else if (this.state.showRequirePass && this.state.showFileKey)
+        this.props.openWalletFile(this.state.file, this.state.password);
+  }
+
+  handlePassword(e) {
+    this.setState({ [e.target.id]: e.target.value });
   }
 
   handlePrivKey(e) {
@@ -47,12 +57,11 @@ class WalletForm extends React.Component {
   onDrop(acceptedFiles, rejectedFiles) {
         const reader = new FileReader();
         reader.readAsText(acceptedFiles[0]);
-        this.setState({ file: acceptedFiles[0].name });
+        this.setState({ filename: acceptedFiles[0].name });
         reader.onload = (e) => {
-          console.log(e.target.result)
           try {
               const pw = Wallet.walletRequirePass(e.target.result);
-              this.setState({ showRequirePass: pw });
+              this.setState({ showRequirePass: pw, file: e.target.result });
           } catch (e) {
               console.error(e)
           }
@@ -99,10 +108,24 @@ class WalletForm extends React.Component {
             <Dropzone style={{}} multiple={false} onDrop={this.onDrop}>
             <Button bsStyle="default">Click Me! <Glyphicon glyph="open-file" /></Button>
             </Dropzone>
-            {this.state.file && <div>File Selected: {this.state.file}</div>} 
+            {this.state.file && <div>File Selected: {this.state.fileName}</div>} 
             
           </Col>}
-          {this.state.showRequirePass && <div> Your file is encrypted. Please enter the password:</div>}
+          {this.state.showRequirePass && 
+            <Form>
+              <div> Your file is encrypted. Please enter the password:</div>
+              <FormGroup
+                controlId="password"
+              >
+                <FormControl
+                  componentClass="textarea"
+                  placeholder="Password"
+                  onChange={this.handlePassword}
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+            </Form>
+          }
           {this.state.showAccessButton && <Col sm={12} md={4}>
             <h4>Access Your Wallet:</h4>
             <Button 
@@ -110,6 +133,7 @@ class WalletForm extends React.Component {
               onClick={this.openWallet}>
               OPEN WALLET
             </Button>
+            {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
           </Col>}
         </Row>
       </Grid>
@@ -122,9 +146,12 @@ const OpenWallet = connect(
     return {};
   },
   (dispatch, ownProps) => ({
-    openWallet: (key) => {
-      dispatch(openWallet(key));
-    }
+    openWallet: (key, password) => {
+      dispatch(openWallet(key, password));
+    },
+    openWalletFile: (key, password) => {
+      dispatch(openWalletFile(key, password));
+    },
   })
 )(WalletForm)
 
