@@ -5,6 +5,7 @@ import { Grid, Row, Col, Alert } from 'react-bootstrap';
 import { Form, FormGroup, FormControl, Radio, Button, Glyphicon } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
+import ShowWallet from './show';
 
 class WalletForm extends React.Component {
 
@@ -163,6 +164,7 @@ class WalletForm extends React.Component {
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
           </Col>}
         </Row>
+        {this.props.wallet && this.state.showBalance && <ShowWallet />}
       </Grid>
     );
   }
@@ -170,7 +172,9 @@ class WalletForm extends React.Component {
 
 const OpenWallet = connect(
   (state, ownProps) => {
-    return {};
+    return {
+      wallet: state.wallet.get('wallet'),
+    };
   },
   (dispatch, ownProps) => ({
     openWallet: (key, password) => {
