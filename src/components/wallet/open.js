@@ -1,21 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Dropzone from 'react-dropzone';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Form, FormGroup, ControlLabel, FormControl, Radio, Button } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Radio, Button, Glyphicon } from 'react-bootstrap';
 import { openWallet } from '../../store/walletActions';
+import { Wallet } from '../../lib/wallet';
 
 class WalletForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.openWallet = this.openWallet.bind(this);
-    this.getRequiredValidation = this.getRequiredValidation.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handlePrivKey = this.handlePrivKey.bind(this);
     this.handleFormat = this.handleFormat.bind(this);
+    this.onDrop = this.onDrop.bind(this);
     this.state = {
       privKey: '',
       showFileKey: false,
       showTextKey: false,
+      showAccessButton: false,
+      showRequirePass: false,
+      file: null,
     };
   }
 
@@ -23,13 +28,13 @@ class WalletForm extends React.Component {
     this.props.openWallet(this.state.privKey);
   }
 
-  getRequiredValidation(key) {
-    if (this.state.key) return 'success';
-    else return 'warning';
-  }
-
-  handleChange(e) {
+  handlePrivKey(e) {
+    this.setState({ showAccessButton: false });
     this.setState({ [e.target.id]: e.target.value });
+    if (e.target.value.length === 64) 
+      this.setState({ showAccessButton: true });
+    else if (e.target.value.length === 128 || e.target.value.length === 132) 
+      this.setState({ showRequirePass: true });
   }
 
   handleFormat(e) {
@@ -39,6 +44,21 @@ class WalletForm extends React.Component {
       this.setState({ showTextKey: true, showFileKey: false });
   }
 
+  onDrop(acceptedFiles, rejectedFiles) {
+        const reader = new FileReader();
+        reader.readAsText(acceptedFiles[0]);
+        this.setState({ file: acceptedFiles[0].name });
+        reader.onload = (e) => {
+          console.log(e.target.result)
+          try {
+              const pw = Wallet.walletRequirePass(e.target.result);
+              this.setState({ showRequirePass: pw });
+          } catch (e) {
+              console.error(e)
+          }
+        };
+  }
+  
   render() {
     return (
       <Grid>
@@ -64,29 +84,32 @@ class WalletForm extends React.Component {
             <Form>
               <FormGroup
                 controlId="privKey"
-                validationState={this.getRequiredValidation('privKey')}
               >
                 <FormControl
                   componentClass="textarea"
-                  value={this.state.privKey}
                   placeholder="Private Key"
-                  onChange={this.handleChange}
+                  onChange={this.handlePrivKey}
                 />
                 <FormControl.Feedback />
               </FormGroup>
-
-              <FormGroup>
-                <Button 
-                  bsStyle="primary"
-                  onClick={this.openWallet} >
-                  OPEN WALLET
-                </Button>
-              </FormGroup>
-
             </Form>
           </Col> }
           {this.state.showFileKey && <Col sm={12} md={4}>
             <h4>Select your wallet file:</h4>
+            <Dropzone style={{}} multiple={false} onDrop={this.onDrop}>
+            <Button bsStyle="default">Click Me! <Glyphicon glyph="open-file" /></Button>
+            </Dropzone>
+            {this.state.file && <div>File Selected: {this.state.file}</div>} 
+            
+          </Col>}
+          {this.state.showRequirePass && <div> Your file is encrypted. Please enter the password:</div>}
+          {this.state.showAccessButton && <Col sm={12} md={4}>
+            <h4>Access Your Wallet:</h4>
+            <Button 
+              bsStyle="primary" 
+              onClick={this.openWallet}>
+              OPEN WALLET
+            </Button>
           </Col>}
         </Row>
       </Grid>
