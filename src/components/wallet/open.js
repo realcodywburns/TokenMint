@@ -14,6 +14,7 @@ class WalletForm extends React.Component {
     this.handlePrivKey = this.handlePrivKey.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleFormat = this.handleFormat.bind(this);
+    this.resetState = this.resetState.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.state = {
       privKey: '',
@@ -21,17 +22,42 @@ class WalletForm extends React.Component {
       showTextKey: false,
       showAccessButton: false,
       showRequirePass: false,
+      showBalance: false,
       file: null,
       password: null,
       error: null,
     };
   }
 
+  resetState() {
+    this.setState({ 
+      error: null, 
+      file: null, 
+      password: null, 
+      showBalance: false, 
+      showRequirePass: false, 
+      showAccessButton: false
+    });
+  }
+
   openWallet() {
     if (this.state.showTextKey) 
-        this.props.openWallet(this.state.privKey, this.state.password);
+        this.props.openWallet(this.state.privKey, this.state.password)
+          .then((result) => {
+            if (typeof result === 'object')
+              this.setState({ showOpenWallet: true });
+            else
+              this.setState({ error: result });
+          });
     else if (this.state.showRequirePass && this.state.showFileKey)
-        this.props.openWalletFile(this.state.file, this.state.password);
+        this.props.openWalletFile(this.state.file, this.state.password)
+          .then((result) => {
+            if (typeof result === 'object')
+              this.setState({ showOpenWallet: true });
+            else
+              this.setState({ error: result });
+          });
+    this.resetState();
   }
 
   handlePassword(e) {
@@ -39,7 +65,7 @@ class WalletForm extends React.Component {
   }
 
   handlePrivKey(e) {
-    this.setState({ showAccessButton: false });
+    this.resetState();
     this.setState({ [e.target.id]: e.target.value });
     if (e.target.value.length === 64) 
       this.setState({ showAccessButton: true });
@@ -52,6 +78,7 @@ class WalletForm extends React.Component {
       this.setState({ showFileKey: true, showTextKey: false });
     else if (e.target.value === "text")
       this.setState({ showTextKey: true, showFileKey: false });
+    this.resetState();
   }
 
   onDrop(acceptedFiles, rejectedFiles) {
@@ -147,10 +174,16 @@ const OpenWallet = connect(
   },
   (dispatch, ownProps) => ({
     openWallet: (key, password) => {
-      dispatch(openWallet(key, password));
+      return new Promise((resolve, reject) => {
+        const w = dispatch(openWallet(key, password));
+        resolve(w);
+      })
     },
     openWalletFile: (key, password) => {
-      dispatch(openWalletFile(key, password));
+      return new Promise((resolve, reject) => {
+        const w = dispatch(openWalletFile(key, password));
+        resolve(w);
+      });
     },
   })
 )(WalletForm)
