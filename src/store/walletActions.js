@@ -5,10 +5,14 @@ import { readTokens } from './tokenActions';
 export function openWallet(key, password = null) {
     return (dispatch) => {
         let wallet;
-        if (password)
-            wallet = Wallet.fromMyEtherWalletKey(key, password);
-        else 
-            wallet = new Wallet(key);
+        try { // TODO: Better error handling here
+            if (password)
+                wallet = Wallet.fromMyEtherWalletKey(key, password);
+            else 
+                wallet = new Wallet(key);
+        } catch (e) {
+            return new Error(e);
+        }
         dispatch({
             type: 'WALLET/OPEN',
             wallet: wallet,
@@ -17,7 +21,8 @@ export function openWallet(key, password = null) {
         const address = wallet.getAddressString()
         dispatch(getTransactionData(address)); 
         // Look up user tokens in registry
-        dispatch(readTokens(address))       
+        dispatch(readTokens(address));
+        return wallet;     
     };
 }
 
