@@ -9,9 +9,14 @@ import OpenWallet from './wallet/open';
 
 
 const Header = ({ logo }) => (
-    <div className="App-header" >
-      <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo" />
-     <h2>Token Mint</h2>
+    <div class="navbar navbar-inverse set-radius-zero" >
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo" />
+                </a>
+            </div>
+        </div>
     </div>
 );
 
@@ -47,9 +52,16 @@ const Render = ({...props}) => (
             </Col>
         </Row>
         <hr />
-        <footer>
-            <p>Built for Ethereum Classic, 2017</p>
-        </footer>
+        <section class="footer-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                       &copy; 2017 TokenMint.io |<a href="http://ethereumclassic.org/"  rel="noopener noreferrer" target="_blank"  > Designed for Ethereum Classic</a> 
+                    </div>
+
+                </div>
+            </div>
+        </section>
     </Grid>
 );
 
