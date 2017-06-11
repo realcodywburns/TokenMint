@@ -1,5 +1,5 @@
 import React from 'react';
-import { Nav, NavItem, Tab, Row, Col, Carousel, Panel, Well, Image } from 'react-bootstrap';
+import { Row, Col, Carousel, Panel } from 'react-bootstrap';
 
 
 

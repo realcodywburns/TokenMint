@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel, Form, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import { Panel, Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } from 'react-bootstrap';
 import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
@@ -64,6 +64,7 @@ class CreateTokenForm extends React.Component {
       totalSupply: this.state.totalSupply,
       decimals: this.state.decimals,
       gasLimit: this.state.gas,
+      premine: this.state.premine,
     }
     this.props.initToken(data, this.props.wallet)
       .then((result) => {
@@ -89,6 +90,8 @@ class CreateTokenForm extends React.Component {
 
     return (
       <div>
+      <Row>
+        <Col sm={6}>
         <Form>
           <FormGroup
             controlId="token"
@@ -104,10 +107,8 @@ class CreateTokenForm extends React.Component {
             />
             </span>
               <FormControl.Feedback />
-
           </FormGroup>
-
-          <FormGroup
+         <FormGroup
 
             controlId="totalSupply"
             validationState={this.getRequiredValidation('totalSupply')}
@@ -154,7 +155,37 @@ class CreateTokenForm extends React.Component {
             </span>
             <FormControl.Feedback />
           </FormGroup>
+
+          <FormGroup
+            controlId="premine"
+          >
+            <ControlLabel>Premine</ControlLabel>
+            <span data-toggle="tooltip" title="Number of tokens to reserve for your dev team.">
+            <FormControl
+              type="number"
+              value={this.state.premine}
+              placeholder="1000"
+              onChange={this.handleChange}
+            />
+            </span>
+              <FormControl.Feedback />
+
+          </FormGroup>
         </Form>
+        </Col>
+        <Col sm={6}>
+          <Panel header={"INFO"} bsStyle="success">
+          -This will contain dynamic steps <br />
+          - every time you click on a different field to fill out <br />
+          - They might be related to the field <br />
+          - or they can be general information <br />
+          </Panel>
+        </Col>
+        </Row>
+
+
+        <Row>
+        <Col sm={12}>
         {this.props.wallet &&
           <Button
             bsStyle="primary"
@@ -166,6 +197,8 @@ class CreateTokenForm extends React.Component {
               <OpenWallet />
           </Panel>
         }
+        </Col>
+        </Row>
 
         <CreateTxModal
           show={this.state.modalShow}
@@ -213,6 +246,7 @@ const CreateToken = connect(
             name: data.token,
             decimals: data.decimals,
             symbol: data.symbol,
+            premine: data.premine,
             tokenTx: txhash,
         };
         dispatch(gotoTab('ico', token));
