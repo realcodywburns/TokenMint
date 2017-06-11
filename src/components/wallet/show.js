@@ -17,11 +17,6 @@ class RenderWallet extends React.Component {
   render() {
     return (
       <Grid>
-        <Row>
-          <Col>
-            <h2>Wallet Information</h2>
-          </Col>
-        </Row>
         <Row>            
           <Col sm={8} md={6}>
             <Panel>
