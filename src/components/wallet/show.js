@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col} from 'react-bootstrap';
+import { Grid, Row, Col, Panel } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import { toFiat, toEther } from '../../lib/etherUnits';
+
 
 class RenderWallet extends React.Component {
 
@@ -17,16 +19,32 @@ class RenderWallet extends React.Component {
       <Grid>
         <Row>
           <Col>
-          <h2>Account Information</h2>
+            <h2>Wallet Information</h2>
           </Col>
         </Row>
-        <Row>
-          <Col sm={12} md={4}>
-            <h4>Account Address</h4>{this.props.wallet.getAddressString()}
-            <h4>Account Balance</h4>
-            Token Balances, 
-            Equivalent Values in BTC, EUR, USD
-            <Button>Close Wallet</Button>
+        <Row>            
+          <Col sm={8} md={6}>
+            <Panel>
+              
+              <Panel header="Account Address" bsStyle="success">
+                {this.props.wallet.getAddressString()}
+              </Panel>
+              <Panel bsStyle="info">
+                <h4>Balance</h4>
+                {this.props.balance || '?'} ETC
+              </Panel>
+              <Panel bsStyle="warning">
+                <h4>Tokens</h4>
+              </Panel>
+              <Panel>
+                <h4>Equivalent Values</h4>
+                <hr />  
+                {this.props.fiatValues.map((v) =>
+                  <Row key={v.currency}><Col smOffset={1}>{v.value} {v.currency.toUpperCase()}</Col>
+                  </Row>)}
+              </Panel>
+              {this.props.showClose && <Button onClick={this.props.closeWallet}>Close Wallet</Button>}
+            </Panel>
           </Col>
         </Row>
       </Grid>
@@ -36,8 +54,21 @@ class RenderWallet extends React.Component {
 
 const ShowWallet = connect(
   (state, ownProps) => {
+    const rates = state.wallet.get('rates');
+    const balance = state.transaction.get('data')  && 
+      toEther(state.transaction.get('data').get('balance'), 'wei');
+    let fiatValues = [];
+    if (rates && balance)
+      fiatValues = rates.map((r) => {
+        return { 
+          currency: r.currency, 
+          value: toFiat(balance, 'ether', r.rate)
+        }
+      });
     return {
       wallet: state.wallet.get('wallet'),
+      balance,
+      fiatValues,
     };
   },
   (dispatch, ownProps) => ({

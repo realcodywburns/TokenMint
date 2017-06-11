@@ -2,6 +2,7 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { gotoTab } from './tabActions';
+import { getExchangeRates } from './walletActions';
 import walletReducers from './walletReducers';
 import transactionReducers from './transactionReducers';
 import tokenReducers from './tokenReducers';
@@ -38,4 +39,5 @@ export function start() {
     console.log("start store")
     // store.dispatch(loadTokenList());
     store.dispatch(gotoTab('start'));
+    store.dispatch(getExchangeRates());
 }
