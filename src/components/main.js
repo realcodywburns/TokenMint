@@ -1,57 +1,80 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { PageHeader, Tabs, Tab, Grid, Row, Col  } from 'react-bootstrap';
+import { PageHeader, Tabs, Tab, Grid, Row, Col , Nav, NavItem, Navbar } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 
-const Header = ({ logo }) => (
-
-    <Col xs={3}>
-      <a href="/">
-        <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo"  />
-      </a>
-     </Col>
-
-);
 
 
 
 const Render = ({...props}) => (
     <Grid>
-      <Row>
-      <Header />
-      </Row>
-      <Row>
-           <Col xs={12} >
-                  <Tabs defaultActiveKey={"start"}
-                    activeKey={props.tab}
-                    onSelect={props.handleSelect}
-                    id="tokenTabs">
-                    <Tab eventKey={"start"} title="Getting Started">
-                    <hr />
-                      <Information />
-                    </Tab>
-                    <Tab eventKey={"token"} title="Mint a Token">
-                        <CreateToken />
-                    </Tab>
-                    <Tab eventKey={"ico"} title="Launch an ICO">
-                        <LaunchIco />
-                    </Tab>
-                    <Tab eventKey={"buy"} title="Token Trading">
-                        <h1> ICO / Crowdsale Browser coming soon... </h1>
-                    </Tab>
-                    <Tab eventKey={"wallet"} title="Wallet Manager">
-                        <OpenWallet />
-                    </Tab>
-                </Tabs>
-            </Col>
-        </Row>
-        <hr />
+  <Tab.Container id="tabs-with-dropdown" defaultActiveKey="first">
+  <Row className="clearfix">
+    <Col sm={12}>
+    <Navbar collapseOnSelect>
+      <Navbar.Header>
+        <Navbar.Brand>
 
-    </Grid>
+          <a href="/">
+            <img className="col-sm-6" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo"  />
+          </a>
+
+        </Navbar.Brand>
+      </Navbar.Header>
+      <Navbar.Collapse>
+      <Nav  pullRight bsStyle="tabs">
+        <NavItem eventKey="start">
+        Getting Started
+        </NavItem>
+        <NavItem eventKey="token">
+        Mint a Token
+        </NavItem>
+        <NavItem eventKey="ico">
+        Launch an ICO
+        </NavItem>
+        <NavItem eventKey="buy">
+        Token Trading
+        </NavItem>
+        <NavItem eventKey="wallet">
+        Wallet Manager
+        </NavItem>
+        </Nav>
+        </Navbar.Collapse>
+        </Navbar>
+    </Col>
+    <Col sm={12}>
+        <Tab.Content animation
+          defaultActiveKey={"start"}
+          activeKey={props.tab}
+          onSelect={props.handleSelect}
+          id="tokenTabs">
+          <hr />
+          <Tab.Pane eventKey={"start"}>
+            <Information />
+          </Tab.Pane>
+          <Tab.Pane eventKey={"token"}>
+            <CreateToken />
+          </Tab.Pane>
+          <Tab.Pane eventKey={"ico"}>
+            <LaunchIco />
+          </Tab.Pane>
+          <Tab.Pane eventKey={"buy"}>
+            <h1> ICO / Crowdsale Browser coming soon... </h1>
+          </Tab.Pane>
+          <Tab.Pane eventKey={"wallet"}>
+            <OpenWallet />
+          </Tab.Pane>
+        </Tab.Content>
+      </Col>
+    </Row>
+  </Tab.Container>
+<hr />
+
+</Grid>
 );
 
 const Main = connect(
