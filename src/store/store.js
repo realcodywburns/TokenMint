@@ -37,5 +37,5 @@ export const store = createStore(
 export function start() {
     console.log("start store")
     // store.dispatch(loadTokenList());
-    store.dispatch(gotoTab('wallet'));
+    store.dispatch(gotoTab('start'));
 }

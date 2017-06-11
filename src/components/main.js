@@ -1,44 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { PageHeader, Tabs, Tab, Grid, Row, Col } from 'react-bootstrap';
+import { PageHeader, Tabs, Tab, Grid, Row, Col  } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 
-
 const Header = ({ logo }) => (
-    <PageHeader>
-        <a href="/">
-            <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo" />
-        </a>
-    </PageHeader>
+
+    <Col xs={3}>
+      <a href="/">
+        <img className="img-responsive" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo"  />
+      </a>
+     </Col>
+
 );
+
+
 
 const Render = ({...props}) => (
     <Grid>
-        <Row>
-            <Col xs={12}>
-            <Header/>
-            </Col>
-        </Row>
-        <Row>
-            <Col xs={12}>
-                <Tabs defaultActiveKey={"wallet"}
+      <Row>
+      <Header />
+      </Row>
+      <Row>
+           <Col xs={12} >
+                  <Tabs defaultActiveKey={"start"}
                     activeKey={props.tab}
                     onSelect={props.handleSelect}
                     id="tokenTabs">
                     <Tab eventKey={"start"} title="Getting Started">
-                        <Information />
+                    <hr />
+                      <Information />
                     </Tab>
-                    <Tab eventKey={"token"} title="Create a Token">
+                    <Tab eventKey={"token"} title="Mint a Token">
                         <CreateToken />
                     </Tab>
                     <Tab eventKey={"ico"} title="Launch an ICO">
                         <LaunchIco />
                     </Tab>
-                    <Tab eventKey={"buy"} title="Buy Tokens">
+                    <Tab eventKey={"buy"} title="Token Trading">
                         <h1> ICO / Crowdsale Browser coming soon... </h1>
                     </Tab>
                     <Tab eventKey={"wallet"} title="Wallet Manager">
@@ -48,13 +50,7 @@ const Render = ({...props}) => (
             </Col>
         </Row>
         <hr />
-        <footer>
-            <Row>
-                <Col>
-                   &copy; 2017 TokenMint.io |<a href="http://ethereumclassic.org/"  rel="noopener noreferrer" target="_blank"  > Designed for Ethereum Classic</a> 
-               </Col>
-           </Row>
-       </footer>
+
     </Grid>
 );
 
