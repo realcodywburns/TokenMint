@@ -21,12 +21,16 @@ contract Crowdsale {
         address ifSuccessfulSendTo,
         uint fundingGoalInEthers,
         uint etherCostOfEachToken,
-        address addressOfTokenUsedAsReward
+        address addressOfTokenUsedAsReward,
+        uint premineAmount
     ) {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         price = etherCostOfEachToken * 1 ether;
         tokenReward = token(addressOfTokenUsedAsReward);
+        if (premineAmount > 0){
+            tokenReward.transfer(beneficiary, premineAmount);
+        }
     }
 
     /* The function without name is the default function that is called whenever anyone sends funds to a contract */
@@ -47,7 +51,6 @@ contract Crowdsale {
             GoalReached(beneficiary, amountRaised);
             crowdsaleClosed = true;
     }
-
 
     function safeWithdrawal() afterFundingGoal() {
         if (!fundingGoalReached) {
