@@ -1,5 +1,6 @@
 const MarketApi = "https://coinmarketcap-nexuist.rhcloud.com/api/";
 const ServerApi = "https://mewapi.epool.io";
+const Currency = "etc";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -20,6 +21,7 @@ export class RpcApi {
     call(name, params) {
         return new Promise((resolve, reject) => {
             this.jsonPost(name, params, headers).then((json) => {
+                console.log(json)
                 if (json.result) {
                     resolve(json.result);
                 } else if (json.error) {
@@ -89,6 +91,13 @@ export class RpcApi {
               method: "eth_getTransactionCount", 
               'params': [addr, 'latest'] }
         ];
+    }
+
+    getExchangeRates() {
+        return fetch(MarketApi + Currency, {
+            method: 'GET',
+            headers: headers,
+        }).then((response) => response.json());
     }
 }
 

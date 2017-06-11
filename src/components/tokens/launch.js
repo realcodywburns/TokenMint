@@ -115,7 +115,9 @@ class LaunchForm extends React.Component {
           <Row>
             <Col sm={4}>Token Contract</Col>
             <Col sm={8}>
-              <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} target="_blank">
+              <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} 
+                rel="noopener noreferrer"
+                target="_blank">
                 {this.props.token.get("tokenAddress")}
               </a>
             </Col>

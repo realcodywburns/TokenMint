@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { PageHeader, Tabs, Tab, Grid, Row, Col  } from 'react-bootstrap';
+import { Tabs, Tab, Grid, Row, Col  } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
