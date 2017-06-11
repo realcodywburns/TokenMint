@@ -7,7 +7,7 @@
 
     100% Free To use For Personal And Commercial Use.
     IN EXCHANGE JUST GIVE US CREDITS AND TELL YOUR FRIENDS ABOUT US
-   
+
     ========================================================  */
 
 (function ($) {
@@ -25,7 +25,7 @@
             $('#dataTables-example').dataTable();
 
         },
-       
+
         custom_fun:function()
         {
             /*====================================
@@ -38,13 +38,11 @@
         },
 
     }
-   
-   
+
+
     $(document).ready(function () {
         mainApp.slide_fun();
         mainApp.dataTable_fun();
         mainApp.custom_fun();
     });
 }(jQuery));
-
-

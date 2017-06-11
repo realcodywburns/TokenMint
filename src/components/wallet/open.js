@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
 import { Grid, Row, Col, Alert } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, Radio, Button, Glyphicon } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Radio, Button } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
 import ShowWallet from './show';
@@ -32,18 +32,18 @@ class WalletForm extends React.Component {
   }
 
   resetState() {
-    this.setState({ 
-      error: null, 
-      file: null, 
-      password: null, 
-      showBalance: false, 
-      showRequirePass: false, 
+    this.setState({
+      error: null,
+      file: null,
+      password: null,
+      showBalance: false,
+      showRequirePass: false,
       showAccessButton: false
     });
   }
 
   openWallet() {
-    if (this.state.showTextKey) 
+    if (this.state.showTextKey)
         this.props.openWallet(this.state.privKey, this.state.password)
           .then((result) => {
             if (typeof result === 'object')
@@ -73,14 +73,14 @@ class WalletForm extends React.Component {
   handlePrivKey(e) {
     this.resetState();
     this.setState({ [e.target.id]: e.target.value });
-    if (e.target.value.length === 64) 
+    if (e.target.value.length === 64)
       this.setState({ showAccessButton: true });
-    else if (e.target.value.length === 128 || e.target.value.length === 132) 
+    else if (e.target.value.length === 128 || e.target.value.length === 132)
       this.setState({ showRequirePass: true });
   }
 
   handleFormat(e) {
-    if (e.target.value === "file") 
+    if (e.target.value === "file")
       this.setState({ showFileKey: true, showTextKey: false });
     else if (e.target.value === "text")
       this.setState({ showTextKey: true, showFileKey: false });
@@ -90,7 +90,7 @@ class WalletForm extends React.Component {
   onDrop(acceptedFiles, rejectedFiles) {
         const reader = new FileReader();
         reader.readAsText(acceptedFiles[0]);
-        this.setState({ filename: acceptedFiles[0].name });
+        this.setState({ fileName: acceptedFiles[0].name });
         reader.onload = (e) => {
           try {
               const pw = Wallet.walletRequirePass(e.target.result);
@@ -100,7 +100,7 @@ class WalletForm extends React.Component {
           }
         };
   }
-  
+
   render() {
     return (
       <Grid>
@@ -134,10 +134,10 @@ class WalletForm extends React.Component {
           {this.state.showFileKey && <Col sm={12} md={4}>
             <h4>Select your wallet file:</h4>
             <Dropzone style={{}} multiple={false} onDrop={this.onDrop}>
-            <Button bsStyle="default">Click Me! <Glyphicon glyph="open-file" /></Button>
+            <Button bsStyle="default">Click Me! <i className="fa fa-qrcode" aria-hidden="true"></i></Button>
             </Dropzone>
-            {this.state.file && <div>File Selected: {this.state.fileName}</div>} 
-            
+            {this.state.file && <div>File Selected: {this.state.fileName}</div>}
+
           </Col>}
           {this.state.showRequirePass && <Col sm={12} md={4}>
             <Form>
