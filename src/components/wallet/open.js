@@ -12,6 +12,7 @@ class WalletForm extends React.Component {
   constructor(props) {
     super(props);
     this.openWallet = this.openWallet.bind(this);
+    this.closeWallet = this.closeWallet.bind(this);
     this.handlePrivKey = this.handlePrivKey.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleFormat = this.handleFormat.bind(this);
@@ -58,7 +59,11 @@ class WalletForm extends React.Component {
             else
               this.setState({ error: result });
           });
-    //this.resetState();
+    this.resetState();
+  }
+
+  closeWallet() {
+    this.resetState();
   }
 
   handlePassword(e) {
@@ -162,7 +167,8 @@ class WalletForm extends React.Component {
                 <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
           </Col>}
         </Row>
-        {this.props.wallet && this.state.showBalance && <ShowWallet />}
+        {this.props.wallet && this.state.showBalance && 
+          <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
       </Grid>
     );
   }
