@@ -173,14 +173,14 @@ class CreateTokenForm extends React.Component {
           </FormGroup>
         </Form>
         </Col>
-        // <Col sm={6}>
+        {/*<Col sm={6}>
         //  <Panel header={"INFO"} bsStyle="success">
         //  -This will contain dynamic steps <br />
         //  - every time you click on a different field to fill out <br />
         //  - They might be related to the field <br />
         //  - or they can be general information <br />
         //  </Panel>
-        //</Col>
+        //</Col>*/}
         </Row>
 
 

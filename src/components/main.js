@@ -71,14 +71,14 @@ const Render = ({...props}) => (
     <Row>
     <div>
       <Navbar collapseOnSelect fixedTop>
-          <Col sm={5}>
+          <Col sm={4}>
           <Navbar.Brand>
             <a href="/">
-              <img className="col-sm-6" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="TokenMint"  />
+              <img className="col-sm-8" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="TokenMint"  />
             </a>
           </Navbar.Brand>
           </Col>
-          <Col sm = {7}>
+          <Col sm={8}>
           <Navbar.Collapse>
             <Nav  pullRight bsStyle="tabs">
               <NavItem eventKey="start">
@@ -93,7 +93,10 @@ const Render = ({...props}) => (
               <NavItem eventKey="buy">
                 Token Trading
               </NavItem>
-              <NavDropdown eventKey={3} title={<i className="fa fa-cogs"></i>} id="basic-nav-dropdown">
+              <NavItem eventKey="wallet">
+                Wallet Manager
+              </NavItem>
+              { /*<NavDropdown eventKey={3} title={<i className="fa fa-cogs"></i>} id="basic-nav-dropdown">
                 <MenuItem eventKey={3.1}>Your Wallets</MenuItem>
                 <MenuItem eventKey={3.2}>Add Wallet</MenuItem>
                 <MenuItem eventKey={"Wallets"}>Manage Wallets</MenuItem>
@@ -117,7 +120,7 @@ const Render = ({...props}) => (
                   </Radio>
                   {' '}
                 </FormGroup>
-              </NavDropdown>
+              </NavDropdown>*/ }
             </Nav>
         </Navbar.Collapse>
         </Col>
