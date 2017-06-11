@@ -1,5 +1,9 @@
 .logo{
 	z-index: 10000;
 	min-height: 70px;
-	position: absolute;
+	
+}
+
+#main{
+	padding-top: 75px;
 }

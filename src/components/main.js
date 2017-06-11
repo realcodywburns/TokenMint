@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tab, Grid, Row, Col , Nav, NavItem, Navbar, Modal, Button, Popover, Tooltip } from 'react-bootstrap';
+import { Tab, Grid, Row, Col , Nav, NavItem, Navbar,NavDropdown, Modal, Button, Popover, Tooltip, MenuItem, Radio,FormGroup } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
@@ -66,48 +66,71 @@ const welcomeModal = React.createClass({
 
 const Render = ({...props}) => (
   <Grid>
-  <welcomeModal />
-  <Tab.Container id="tabs-with-dropdown" defaultActiveKey="start">
-  <Row className="clearfix">
-    <Col sm={12}>
-    <Navbar collapseOnSelect>
-      <Navbar.Header>
-        <Navbar.Brand>
-
-          <a href="/">
-            <img className="col-sm-6" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="logo"  />
-          </a>
-
-        </Navbar.Brand>
-      </Navbar.Header>
-      <Navbar.Collapse>
-      <Nav  pullRight bsStyle="tabs">
-        <NavItem eventKey="start">
-        Getting Started
-        </NavItem>
-        <NavItem eventKey="token">
-        Mint a Token
-        </NavItem>
-        <NavItem eventKey="ico">
-        Launch an ICO
-        </NavItem>
-        <NavItem eventKey="buy">
-        Token Trading
-        </NavItem>
-        <NavItem eventKey="wallet">
-        Wallet Manager
-        </NavItem>
-        </Nav>
+    <welcomeModal />
+    <Tab.Container id="tabs-with-dropdown" defaultActiveKey="start">
+    <Row>
+    <div>
+      <Navbar collapseOnSelect fixedTop>
+          <Col sm={5}>
+          <Navbar.Brand>
+            <a href="/">
+              <img className="col-sm-6" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="TokenMint"  />
+            </a>
+          </Navbar.Brand>
+          </Col>
+          <Col sm = {7}>
+          <Navbar.Collapse>
+            <Nav  pullRight bsStyle="tabs">
+              <NavItem eventKey="start">
+                Getting Started
+              </NavItem>
+              <NavItem eventKey="token">
+                Mint a Token
+              </NavItem>
+              <NavItem eventKey="ico">
+                Launch an ICO
+              </NavItem>
+              <NavItem eventKey="buy">
+                Token Trading
+              </NavItem>
+              <NavDropdown eventKey={3} title={<i className="fa fa-cogs"></i>} id="basic-nav-dropdown">
+                <MenuItem eventKey={3.1}>Your Wallets</MenuItem>
+                <MenuItem eventKey={3.2}>Add Wallet</MenuItem>
+                <MenuItem eventKey={"Wallets"}>Manage Wallets</MenuItem>
+                <MenuItem divider />
+                 <FormGroup>
+                 {' '}
+                  <Radio name="radioGroup" inline>
+                  ETC
+                  </Radio>
+                  {' '}
+                  <Radio name="radioGroup" inline>
+                  ETH
+                  </Radio>
+                  {' '}
+                  <Radio name="radioGroup" inline>
+                  RSK
+                  </Radio>
+                  {' '}
+                  <Radio name="radioGroup" inline>
+                  Local
+                  </Radio>
+                  {' '}
+                </FormGroup>
+              </NavDropdown>
+            </Nav>
         </Navbar.Collapse>
-        </Navbar>
-    </Col>
-    <Col sm={12}>
+        </Col>
+    </Navbar>
+      </div>
+
+      <div id="main">
+      <Col sm={12}>
         <Tab.Content animation
           defaultActiveKey={"start"}
           activeKey={props.tab}
           onSelect={props.handleSelect}
           id="tokenTabs">
-          <hr />
           <Tab.Pane eventKey={"start"}>
             <Information />
           </Tab.Pane>
@@ -124,12 +147,16 @@ const Render = ({...props}) => (
             <OpenWallet />
           </Tab.Pane>
         </Tab.Content>
-      </Col>
-    </Row>
-  </Tab.Container>
-<hr />
-
+        </Col>
+        </div>
+      </Row>
+    </Tab.Container>
+  <Col sm={12}>
+      <Navbar collapseOnSelect fixedBottom>
+      </Navbar>
+  </Col>
 </Grid>
+
 );
 
 const Main = connect(
