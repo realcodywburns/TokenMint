@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Grid, Row, Col  } from 'react-bootstrap';
+import { Panel, Tabs, Tab, Grid, Row, Col  } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
@@ -44,7 +44,10 @@ const Render = ({...props}) => (
                         <h1> ICO / Crowdsale Browser coming soon... </h1>
                     </Tab>
                     <Tab eventKey={"wallet"} title="Wallet Manager">
-                        <OpenWallet />
+                        <Panel>
+                          <h2>Wallet Information</h2>
+                          <OpenWallet />
+                        </Panel>
                     </Tab>
                 </Tabs>
             </Col>
