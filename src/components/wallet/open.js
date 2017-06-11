@@ -12,6 +12,7 @@ class WalletForm extends React.Component {
   constructor(props) {
     super(props);
     this.openWallet = this.openWallet.bind(this);
+    this.closeWallet = this.closeWallet.bind(this);
     this.handlePrivKey = this.handlePrivKey.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleFormat = this.handleFormat.bind(this);
@@ -46,7 +47,7 @@ class WalletForm extends React.Component {
         this.props.openWallet(this.state.privKey, this.state.password)
           .then((result) => {
             if (typeof result === 'object')
-              this.setState({ showOpenWallet: true });
+              this.setState({ showBalance: true });
             else
               this.setState({ error: result });
           });
@@ -54,10 +55,14 @@ class WalletForm extends React.Component {
         this.props.openWalletFile(this.state.file, this.state.password)
           .then((result) => {
             if (typeof result === 'object')
-              this.setState({ showOpenWallet: true });
+              this.setState({ showBalance: true });
             else
               this.setState({ error: result });
           });
+    this.resetState();
+  }
+
+  closeWallet() {
     this.resetState();
   }
 
@@ -100,11 +105,6 @@ class WalletForm extends React.Component {
     return (
       <Grid>
         <Row>
-          <Col>
-          <h2>Access Your Wallet</h2>
-          </Col>
-        </Row>
-        <Row>
           <Col sm={12} md={4}>
             <h4>Select the format of your private key.</h4>
             <Form>
@@ -139,36 +139,36 @@ class WalletForm extends React.Component {
             {this.state.file && <div>File Selected: {this.state.fileName}</div>}
 
           </Col>}
-          {this.state.showRequirePass &&
-
-            <Col sm = {7}>
+          {this.state.showRequirePass && <Col sm={12} md={4}>
             <Form>
               <div> Your file is encrypted. Please enter the password:</div>
-                  <FormGroup
-                    controlId="password"
-                    >
-                    <FormControl
-                      componentClass="textarea"
-                      placeholder="Password"
-                      onChange={this.handlePassword}
-                    />
-                    <FormControl.Feedback />
-                  </FormGroup>
-                </Form>
-              </Col>
-
-          }
+              <FormGroup
+                controlId="password"
+              >
+                <FormControl
+                  componentClass="textarea"
+                  placeholder="Password"
+                  onChange={this.handlePassword}
+                />
+                <FormControl.Feedback />
+              </FormGroup>
+            </Form>
+          </Col>}
           {this.state.showAccessButton && <Col sm={12} md={4}>
-            <h4>Access Your Wallet:</h4>
-            <Button
-              bsStyle="primary"
+            <Button 
+              bsStyle="primary" 
+              bsSize="large"
+              style={{marginTop: "20px"}}
               onClick={this.openWallet}>
               OPEN WALLET
             </Button>
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
+            {this.props.wallet && this.state.showBalance && 
+                <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
           </Col>}
         </Row>
-        {this.props.wallet && this.state.showBalance && <ShowWallet />}
+        {this.props.wallet && this.state.showBalance && 
+          <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
       </Grid>
     );
   }

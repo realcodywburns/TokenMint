@@ -1,3 +1,4 @@
+import { rpc } from '../lib/rpc';
 import { Wallet } from '../lib/wallet';
 import { getTransactionData } from './transactionActions';
 import { readTokens } from './tokenActions';
@@ -38,4 +39,22 @@ export function openWalletFile(file, password = null) {
         dispatch(getTransactionData(address)); 
         dispatch(readTokens(address))       
     };
+}
+
+export function getExchangeRates() {
+    return (dispatch) => {
+        rpc.getExchangeRates().then((result) => {
+            if (result.price) {
+                const rates = {
+                    usd: result.price.usd.toFixed(6),
+                    eur: result.price.eur.toFixed(6),
+                    btc: result.price.btc.toFixed(6)
+                };
+                dispatch({
+                    type: 'WALLET/RATES',
+                    rates,
+                });
+            }
+        })  
+    }
 }
