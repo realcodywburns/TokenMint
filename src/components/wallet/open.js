@@ -46,7 +46,7 @@ class WalletForm extends React.Component {
         this.props.openWallet(this.state.privKey, this.state.password)
           .then((result) => {
             if (typeof result === 'object')
-              this.setState({ showOpenWallet: true });
+              this.setState({ showBalance: true });
             else
               this.setState({ error: result });
           });
@@ -54,11 +54,11 @@ class WalletForm extends React.Component {
         this.props.openWalletFile(this.state.file, this.state.password)
           .then((result) => {
             if (typeof result === 'object')
-              this.setState({ showOpenWallet: true });
+              this.setState({ showBalance: true });
             else
               this.setState({ error: result });
           });
-    this.resetState();
+    //this.resetState();
   }
 
   handlePassword(e) {
@@ -100,11 +100,6 @@ class WalletForm extends React.Component {
     return (
       <Grid>
         <Row>
-          <Col>
-          <h2>Access Your Wallet</h2>
-          </Col>
-        </Row>
-        <Row>
           <Col sm={12} md={4}>
             <h4>Select the format of your private key.</h4>
             <Form>
@@ -139,7 +134,7 @@ class WalletForm extends React.Component {
             {this.state.file && <div>File Selected: {this.state.fileName}</div>} 
             
           </Col>}
-          {this.state.showRequirePass && 
+          {this.state.showRequirePass && <Col sm={12} md={4}>
             <Form>
               <div> Your file is encrypted. Please enter the password:</div>
               <FormGroup
@@ -153,15 +148,18 @@ class WalletForm extends React.Component {
                 <FormControl.Feedback />
               </FormGroup>
             </Form>
-          }
+          </Col>}
           {this.state.showAccessButton && <Col sm={12} md={4}>
-            <h4>Access Your Wallet:</h4>
             <Button 
               bsStyle="primary" 
+              bsSize="large"
+              style={{marginTop: "20px"}}
               onClick={this.openWallet}>
               OPEN WALLET
             </Button>
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
+            {this.props.wallet && this.state.showBalance && 
+                <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
           </Col>}
         </Row>
         {this.props.wallet && this.state.showBalance && <ShowWallet />}
