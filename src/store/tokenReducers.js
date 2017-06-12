@@ -21,6 +21,7 @@ const initIco = Immutable.fromJS({
     fundingGoal: null,
     etherPrice: null,
     saleTx: null,
+    amountRaised: null,
 });
 
 function onTokenCreate(state, action) {
@@ -77,6 +78,7 @@ function onTokenLoad(state, action) {
 export default function tokenReducers(state, action) {
     state = state || initial;
     state = onTokenCreate(state, action);
+    state = onIcoCreate(state, action);
     state = onTokenLoad(state, action);
     return state;
 }
