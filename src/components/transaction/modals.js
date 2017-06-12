@@ -1,6 +1,7 @@
 import React from 'react';
 import { Well, Modal, Button } from 'react-bootstrap';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { code } from '../../lib/styles';
 
 export const CreateTxModal = (props) => {
     const { show, close, gas, changeGas, onGenerate, showTx } = props;
@@ -25,17 +26,17 @@ export const CreateTxModal = (props) => {
             </FormGroup>
             <Button bsStyle="primary" onClick={onGenerate}>Generate Transaction</Button>
           </Modal.Body>}
-          {showTx && <Modal.Footer>
+          {showTx && <Modal.Body>
               <FormGroup>
                 <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm">{rawTx}</Well>  
+                <Well bsSize="sm" style={code}>{rawTx}</Well>  
               </FormGroup>
               <FormGroup>
                 <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm">{signedTx}</Well>
+                <Well bsSize="sm" style={code}>{signedTx}</Well>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
-          </Modal.Footer>}
+          </Modal.Body>}
         </Modal>
     );
 };
@@ -63,17 +64,17 @@ export const LaunchICOModal = (props) => {
             </FormGroup>
             <Button bsStyle="primary" onClick={onGenerate}>Generate Transaction</Button>
           </Modal.Body>}
-          {showTx && <Modal.Footer>
+          {showTx && <Modal.Body>
               <FormGroup>
                 <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm">{rawTx}</Well>  
+                <Well bsSize="sm" style={code}>{rawTx}</Well>  
               </FormGroup>
               <FormGroup>
                 <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm">{signedTx}</Well>
+                <Well bsSize="sm" style={code}>{signedTx}</Well>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
-          </Modal.Footer>}
+          </Modal.Body>}
         </Modal>
     );
 };
