@@ -106,7 +106,9 @@ export function loadCrowdSale(address) {
                     type: 'TOKEN/ICO_INFO',
                     name: c.get('name'),
                     value: outputs[""],
-                })
+                });
+                //if (c.get('name') === 'beneficiary')
+                //   dispatch(readTokens(outputs[""]));
             })
         }
     }
@@ -201,6 +203,30 @@ export function generateIcoTransaction(ico, wallet) {
     }
 }
 
+// Buy tokens is the equivalent of sending money to contract address
+export function generateBuyIco(data, wallet) {
+    const addr = wallet.getAddressString();
+    const tx = Object.assign(initialTx, { 
+        gasLimit: data.gasLimit,
+        data: null,
+        value: data.amount,
+        from: addr });
+    return (dispatch, getState) => {
+        const transaction = getState().transaction;
+        if (!transaction.get('busy')) {
+            tx.gasPrice = transaction.get('data').get('gasPrice');
+            tx.nonce = transaction.get('data').get('nonce');
+        }
+        return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/GENERATE',
+                raw: result.rawTx,
+                signed: result.signedTx,
+            });
+            return result;
+        });
+    }
+}
 
 export function createToken(token) {
     return (dispatch) => {
