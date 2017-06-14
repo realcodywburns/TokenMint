@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
-import { generateIcoTransaction, estimateIcoGas, loadCrowdSale } from '../../store/tokenActions';
+import { generateBuyIco, loadCrowdSale } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
@@ -15,12 +15,10 @@ class BuyForm extends React.Component {
   
   constructor(props) {
     super(props);
-    this.estimateGas = this.estimateGas.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.gotoToken = this.gotoToken.bind(this);
     this.loadSale = this.loadSale.bind(this);
     this.submitTx = this.submitTx.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.state = {
       modalShow: false, 
       showTx: false,
@@ -41,19 +39,22 @@ class BuyForm extends React.Component {
     this.props.loadSale(this.state.address);
   }
 
-  estimateGas() {
+  buyIco() {
     const data = {
-      price: this.state.price,
-      fundingGoal: this.state.fundingGoal,
+      quantity: this.state.quantity
     }
-    this.props.estimateGas(data, this.props.wallet)
-      .then((result) => { 
-        this.setState({ modalShow: true, 
-                        showTx: false
+    this.setState({ modalShow: true, 
+                    showTx: false
+                  });
+    this.props.buyIco(data, this.props.wallet)
+      .then((result) => {
+        this.setState({ modalShow: true,
+                        showTx: true,
+                        tx: result
                       });
-        this.setState({ gas: result || DefaultGas});
       })
   }
+
 
   submitTx() {
     this.props.sendTransaction(
@@ -157,13 +158,13 @@ class BuyForm extends React.Component {
               placeholder="1"
               onChange={this.handleChange}
             />
-            Total Cost(ETC)
+            Total Cost(ETC) tODO: conversion
           </FormGroup>
           <FormGroup>
             {this.props.wallet &&
             <Button 
               bsStyle="primary"
-              onClick={this.estimateGas} >
+              onClick={this.buyIco} >
               BUY
             </Button>}
           </FormGroup>
@@ -175,9 +176,6 @@ class BuyForm extends React.Component {
           showTx={this.state.showTx}
           rawTx={this.state.tx.rawTx}
           signedTx={this.state.tx.signedTx}
-          gas={hexToDecimal(this.state.gas || DefaultGas)}
-          changeGas={this.handleChange}
-          onGenerate={this.initIco}
           submitTx={this.submitTx}
           />
         </Col></Row>}
@@ -196,31 +194,19 @@ const BuyIco = connect(
     }
   },
   (dispatch, ownProps) => ({
-      estimateGas: (data, wallet) => {
-        return new Promise((resolve, reject) => {
-          dispatch(estimateIcoGas( data, wallet ))
-          .then((result) => resolve(result));
-        })      
-      },
       loadSale: (address) => {
         dispatch(loadCrowdSale(address));
       },
-      initIco: (data, wallet) => {
+      buyIco: (data, wallet) => {
         return new Promise((resolve, reject) => {
           dispatch(
-            generateIcoTransaction( data, wallet )
+            generateBuyIco( data, wallet )
           ).then((result) => resolve(result))
         })
       },
       sendTransaction: (tx, data, address) => {
         const afterTx = (txhash) => {
           console.log(txhash)
-          const ico = {
-              saleTx: txhash,
-              owner: address,
-              fundingGoal: data.fundingGoal,
-              etherPrice: data.price,
-          };
         };
 
         const resolver = (resolve, f) => (x) => {
