@@ -80,7 +80,7 @@ export const LaunchICOModal = (props) => {
 };
 
 export const BuyTokenModal = (props) => {
-    const { show, close, gas, changeGas, onGenerate, showTx } = props;
+    const { show, close, showTx } = props;
     const { rawTx, signedTx, submitTx } = props;
 
     return (

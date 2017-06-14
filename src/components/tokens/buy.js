@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
 import { generateBuyIco, loadCrowdSale } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
@@ -99,7 +99,7 @@ class BuyForm extends React.Component {
             <Row>
               <Col sm={4}>Crowdsale Contract</Col>
               <Col sm={8}>
-                <a href={`"http://gastracker.io/addr/${this.props.token.get("saleAddress")}"`} target="_blank">
+                <a href={`"http://gastracker.io/addr/${this.props.token.get("saleAddress")}"`} rel="noopener noreferrer" target="_blank">
                   {this.props.token.get("saleAddress")}
                 </a>
               </Col>
@@ -107,7 +107,7 @@ class BuyForm extends React.Component {
             <Row>
               <Col sm={4}>Token Contract</Col>
               <Col sm={8}>
-                <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} target="_blank">
+                <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} rel="noopener noreferrer" target="_blank">
                   {this.props.token.get("tokenAddress")}
                 </a>
               </Col>
@@ -115,7 +115,7 @@ class BuyForm extends React.Component {
             <Row>
               <Col sm={4}>Beneficiary</Col>
               <Col sm={8}>
-                <a href={`"http://gastracker.io/addr/${this.props.token.get("owner")}"`} target="_blank">
+                <a href={`"http://gastracker.io/addr/${this.props.token.get("owner")}"`} rel="noopener noreferrer" target="_blank">
                   {this.props.token.get("owner")}
                 </a>
               </Col>

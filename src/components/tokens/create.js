@@ -64,7 +64,6 @@ class CreateTokenForm extends React.Component {
       totalSupply: this.state.totalSupply,
       decimals: this.state.decimals,
       gasLimit: this.state.gas,
-      premine: this.state.premine,
     }
     this.props.initToken(data, this.props.wallet)
       .then((result) => {
@@ -156,21 +155,6 @@ class CreateTokenForm extends React.Component {
             <FormControl.Feedback />
           </FormGroup>
 
-          <FormGroup
-            controlId="premine"
-          >
-            <ControlLabel>Premine</ControlLabel>
-            <span data-toggle="tooltip" title="Number of tokens to reserve for your dev team.">
-            <FormControl
-              type="number"
-              value={this.state.premine}
-              placeholder="1000"
-              onChange={this.handleChange}
-            />
-            </span>
-              <FormControl.Feedback />
-
-          </FormGroup>
         </Form>
         </Col>
         {/*<Col sm={6}>
@@ -246,7 +230,6 @@ const CreateToken = connect(
             name: data.token,
             decimals: data.decimals,
             symbol: data.symbol,
-            premine: data.premine,
             tokenTx: txhash,
         };
         dispatch(gotoTab('ico', token));

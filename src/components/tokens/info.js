@@ -11,29 +11,29 @@ export const Information = (props) => {
          <div className="col-md-3 col-sm-3 col-xs-6">
             <div className="alert alert-info back-widget-set text-center">
               <i className="fa fa-history fa-5x"></i>
-              <h3 id = "weekData">5 <i className="fa fa-dot-circle-o"></i></h3>
-              Tokens Minted
+              <h3>0 <i className="fa fa-dot-circle-o"></i></h3>
+              Tokens Minted (ETC)
             </div>
           </div>
           <div className="col-md-3 col-sm-3 col-xs-6">
             <div className="alert alert-success back-widget-set text-center">
               <i className="fa fa-bars fa-5x"></i>
-              <h3 id="crowdSalesCurrent"> 25 </h3>
-              Live Crowdsales
+              <h3> 0 </h3>
+              Live Crowdsales (ETC)
             </div>
           </div>
           <div className="col-md-3 col-sm-3 col-xs-6">
             <div className="alert alert-warning back-widget-set text-center">
               <i className="fa fa-exchange fa-5x"></i>
-              <h3 id = "regTokens">56 </h3>
-              Registered Tokens
+              <h3>0 </h3>
+              Tokens Minted (ETH)
             </div>
           </div>
           <div className="col-md-3 col-sm-3 col-xs-6">
             <div className="alert alert-success back-widget-set text-center">
               <i className="fa fa fa-users fa-5x"></i>
-              <h3 id = "weeklyusers">10k </h3>
-              Weekly Users
+              <h3>0 </h3>
+              Live Crowdsales (ETH)
             </div>
           </div>
         </Col>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tab, Grid, Row, Col , Nav, NavItem, Navbar,NavDropdown, Modal, Button, Popover, Tooltip, MenuItem, Radio,FormGroup } from 'react-bootstrap';
+import { Tab, Grid, Row, Col , Nav, NavItem, Navbar,NavDropdown, Modal, Button, MenuItem, Radio,FormGroup } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
@@ -8,22 +8,9 @@ import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 import BuyIco from './tokens/buy';
 
-const welcomeModal = React.createClass({
-  getInitialState() {
-    return { showModal: true };
-  },
+export const welcomeModal = (props) => {
 
-  close() {
-    this.setState({ showModal: false });
-  },
-
-  open() {
-    this.setState({ showModal: true });
-  },
-
-  render() {
     return (
-      <div>
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
             Welcome
@@ -35,18 +22,14 @@ const welcomeModal = React.createClass({
             <h5 class="text-align: center">We are currently still under construction but feel free to look around!</h5>
           </Modal.Body>
           <Modal.Footer>
-        <Button onClick={this.close}>Close</Button>
-    </Modal.Footer>
-   </Modal>
-  </div>
+              <Button onClick={this.close}>Close</Button>
+          </Modal.Footer>
+        </Modal>
   );
 }
-});
-
 
 const Render = ({...props}) => (
   <Grid>
-    <welcomeModal />
     <Tab.Container id="tabs-with-dropdown" defaultActiveKey="start">
     <Row>
     <div>
