@@ -158,7 +158,7 @@ class BuyForm extends React.Component {
               placeholder="1"
               onChange={this.handleChange}
             />
-            Total Cost(ETC) tODO: conversion
+            Total Cost(ETC) tODO: conversion (need decimals)
           </FormGroup>
           <FormGroup>
             {this.props.wallet &&
