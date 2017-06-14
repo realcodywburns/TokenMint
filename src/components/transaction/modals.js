@@ -78,3 +78,30 @@ export const LaunchICOModal = (props) => {
         </Modal>
     );
 };
+
+export const BuyTokenModal = (props) => {
+    const { show, close, gas, changeGas, onGenerate, showTx } = props;
+    const { rawTx, signedTx, submitTx } = props;
+
+    return (
+      <Modal show={show} onHide={close} bsSize="large">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-lg">Buy Tokens</Modal.Title>
+          </Modal.Header>
+          {!showTx && <Modal.Body>
+            <p>You are about to Buy Tokens on the Ethereum Classic chain.</p>
+          </Modal.Body>}
+          {showTx && <Modal.Body>
+              <FormGroup>
+                <ControlLabel>Raw Transaction</ControlLabel>
+                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+              </FormGroup>
+              <FormGroup>
+                <ControlLabel>Signed Transaction</ControlLabel>
+                <Well bsSize="sm" style={code}>{signedTx}</Well>
+              </FormGroup>
+            <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
+          </Modal.Body>}
+        </Modal>
+    );
+};
