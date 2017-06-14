@@ -91,7 +91,7 @@ export function paramsToToken(params) {
     const token = {};
     params.map((p) => {
         if (p.type === "address")
-            token[p.name] = sanitizeHex(p.value.toString());
+            token[p.name] = sanitizeHex(p.value.toString(16));
         else token[p.name] = p.value;
         return null;
     });

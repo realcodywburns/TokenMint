@@ -107,8 +107,8 @@ export function loadCrowdSale(address) {
                     name: c.get('name'),
                     value: outputs[""],
                 });
-                //if (c.get('name') === 'beneficiary')
-                //   dispatch(readTokens(outputs[""]));
+                if (c.get('name') === 'beneficiary')
+                   dispatch(readTokens(outputs[""]));
             })
         }
     }
