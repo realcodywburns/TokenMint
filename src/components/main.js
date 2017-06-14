@@ -6,6 +6,7 @@ import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
+import BuyIco from './tokens/buy';
 
 const welcomeModal = React.createClass({
   getInitialState() {
@@ -21,29 +22,8 @@ const welcomeModal = React.createClass({
   },
 
   render() {
-    const popover = (
-      <Popover id="modal-popover" title="popover">
-        very popover. such engagement
-      </Popover>
-    );
-    const tooltip = (
-      <Tooltip id="modal-tooltip">
-        wow.
-      </Tooltip>
-    );
-
     return (
       <div>
-        <p>Click to get the full Modal experience!</p>
-
-        <Button
-          bsStyle="primary"
-          bsSize="large"
-          onClick={this.open}
-        >
-          Launch demo modal
-        </Button>
-
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
             Welcome
@@ -91,7 +71,7 @@ const Render = ({...props}) => (
                 Launch an ICO
               </NavItem>
               <NavItem eventKey="buy">
-                Token Trading
+                Token Browser
               </NavItem>
               <NavItem eventKey="wallet">
                 Wallet Manager
@@ -144,7 +124,7 @@ const Render = ({...props}) => (
             <LaunchIco />
           </Tab.Pane>
           <Tab.Pane eventKey={"buy"}>
-            <h1> ICO / Crowdsale Browser coming soon... </h1>
+            <BuyIco />
           </Tab.Pane>
           <Tab.Pane eventKey={"wallet"}>
             <OpenWallet />

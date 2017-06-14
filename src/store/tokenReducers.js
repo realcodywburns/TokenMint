@@ -19,8 +19,9 @@ const initToken = Immutable.fromJS({
 const initIco = Immutable.fromJS({
     beneficiary: null,
     fundingGoal: null,
-    etherPrice: null,
+    tokenPrice: null,
     saleTx: null,
+    amountRaised: null,
 });
 
 function onTokenCreate(state, action) {
@@ -74,9 +75,23 @@ function onTokenLoad(state, action) {
     return state;    
 }
 
+function onCrowdsaleLoad(state, action) {
+    if (action.type === 'TOKEN/ICO_INFO') {
+        if (!state.get('ico'))
+            return state.set('ico', initIco.set(action.name, action.value));
+        else
+            return state.update('ico', (ico) => 
+               ico.set(action.name, action.value)
+        );
+    }
+    return state;    
+}
+
 export default function tokenReducers(state, action) {
     state = state || initial;
     state = onTokenCreate(state, action);
+    state = onIcoCreate(state, action);
     state = onTokenLoad(state, action);
+    state = onCrowdsaleLoad(state, action);
     return state;
 }

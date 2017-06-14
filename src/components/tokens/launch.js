@@ -79,7 +79,7 @@ class LaunchForm extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false })
+          this.setState({ modalShow: false, showTx: false });
       })
   }
 
@@ -211,7 +211,7 @@ const LaunchIco = connect(
           console.log(txhash)
           const ico = {
               saleTx: txhash,
-              owner: address,
+              beneficiary: address,
               fundingGoal: data.fundingGoal,
               etherPrice: data.price,
           };
