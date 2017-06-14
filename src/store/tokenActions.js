@@ -30,7 +30,35 @@ const TokensFunc = Immutable.fromJS({
             {name:"tokenName","type":"string"},
             {name:"decimals","type":"uint8"},
             {name:"symbol","type":"string"}]
-})
+});
+
+const CrowdSaleFuncs = [
+    Immutable.fromJS({
+        name: "amountRaised",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint'}]
+    }),
+    Immutable.fromJS({
+        name: "beneficiary",
+        inputs:[],
+        outputs:[{ name: '', type: 'address'}]
+    }),
+    Immutable.fromJS({
+        name: "fundingGoal",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint'}]
+    }),
+    Immutable.fromJS({
+        name: "tokenPrice",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint'}]
+    }),
+    Immutable.fromJS({
+        name: "tokenReward",
+        inputs:[],
+        outputs:[{ name: '', type: 'address'}]
+    })
+]
 
 const initialTx = {
     to: IcoMachineAddress,
@@ -51,7 +79,7 @@ export function readTokens(address) {
             const params = dataToParams(TokensFunc, result);
             const outputs = paramsToToken(params);
             if (outputs.saleAddress)
-                readCrowdsale(outputs.saleAddress);
+                loadCrowdSale(outputs.saleAddress);
             console.log(outputs)
             outputs.owner = address;
             dispatch({
@@ -63,36 +91,25 @@ export function readTokens(address) {
 }
     
 
-export function readCrowdsale(address) {
-/**** port this over. asspain.
-var amountRaisedHex = "0x7b3e5e7b";
-        var beneficiaryHex = "0x38af3eed"; //beneficiary()
-        var fundingGoalHex = "0x7a3a0e84"; //fundingGoal()
-        var priceHex = "0xa035b1fe"; //price()
-        var tokenRewardHex = "0x6e66f6e9"; //tokenReward()
-        var balanceOfHex = "0x70a08231"; //balanceOf(address)
-        var crowdsaleTypes = [
-            {"sig": amountRaisedHex, "type": "uint", "name": "amountRaised"},
-            {"sig": beneficiaryHex, "type": "address", "name": "beneficiary"},
-            {"sig": fundingGoalHex, "type": "uint", "name": "fundingGoal"},
-            {"sig": priceHex, "type": "uint", "name": "tokenPrice"},
-            {"sig": tokenRewardHex, "type": "address", "name": "tokenReward"}
-        ]
-        crowdsaleTypes.map(function(k) {
-            var crowdCall = ethFuncs.getDataObj(addr, k.sig, []);
-            ajaxReq.getEthCall(crowdCall, function (data) {
-                if (!data.error) {
-                    var decoded = ethUtil.solidityCoder.decodeParams([k.type], data.data.replace('0x', ''));
-                    if ((k.name == "fundingGoal") || (k.name == "tokenPrice") || (k.name == "amountRaised"))
-                        $scope.crowdsale[k.name] = etherUnits.toEther(decoded[0],'wei');
-                    else
-                        $scope.crowdsale[k.name] = decoded[0];
-                    if (k.name == "beneficiary") $scope.readOwnerToken(decoded[0]);
-                } else throw data.msg;
-            });
-        })
-***/
-
+export function loadCrowdSale(address) {
+    return (dispatch) => {
+        let data;
+        for (const c of CrowdSaleFuncs) {
+            data = functionToData(c, {});
+            rpc.call("eth_call", [{
+                to: address,
+                data: data,
+            }]).then((result) => {
+                const params = dataToParams(c, result);
+                const outputs = paramsToToken(params);
+                dispatch({
+                    type: 'TOKEN/ICO_INFO',
+                    name: c.get('name'),
+                    value: outputs[""],
+                })
+            })
+        }
+    }
 }
 
 export function estimateTokenGas(token, wallet) {
