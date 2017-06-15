@@ -48,6 +48,9 @@ export const Information = (props) => {
                 <Carousel.Item>
                   <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/3.jpg"}/>
                 </Carousel.Item>
+                <Carousel.Item>
+                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/4.jpg"}/>
+                </Carousel.Item>
               </Carousel>
             </Col>
             <Col sm = {4}>
