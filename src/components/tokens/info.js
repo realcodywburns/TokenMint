@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Carousel, Panel } from 'react-bootstrap';
-
+import { welcome } from './welcome';
 
 
 export const Information = (props) => {
@@ -40,13 +40,13 @@ export const Information = (props) => {
         <Col sm={8}>
              <Carousel>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src="img/hotcoin/1.jpg"/>
+                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/1.jpg"}/>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src="img/hotcoin/2.jpg"/>
+                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/2.jpg"}/>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src="img/hotcoin/3.jpg"/>
+                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/3.jpg"}/>
                 </Carousel.Item>
               </Carousel>
             </Col>
@@ -65,7 +65,13 @@ export const Information = (props) => {
             </Panel>
             </div>
             </Panel>
-            </Col>
+        </Col>
+
+        <Col sm ={12}>
+        <div>
+          <welcome />
+          </div>
+        </Col>
           </Row>
     );
 };
