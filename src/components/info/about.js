@@ -1,9 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Nav, NavItem, Tab, Row, Col } from 'react-bootstrap';
 
-export const splash = (props) => {
+export const Render = ({...props}) => (
 
-    return (
       <Tab.Container id="tokenInfo" defaultActiveKey="welcome">
         <Row className="clearfix">
           <Col sm={4}>
@@ -78,5 +78,15 @@ export const splash = (props) => {
           </Col>
         </Row>
       </Tab.Container>
-    );
-};
+
+);
+
+const About = connect(
+    (state, ownProps) => ({
+    }),
+    (dispatch, ownProps) => ({
+
+    })
+)(Render);
+
+export default About;
