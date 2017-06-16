@@ -6,11 +6,13 @@ import { getExchangeRates } from './walletActions';
 import walletReducers from './walletReducers';
 import transactionReducers from './transactionReducers';
 import tokenReducers from './tokenReducers';
+import icoReducers from './icoReducers';
 import tabReducers from './tabReducers';
 
 const stateTransformer = (state) => ({
     tokens: state.tokens.toJS(),
     wallet: state.wallet.toJS(),
+    ico: state.ico.toJS(),
     transaction: state.transaction.toJS(),
     tab: state.tab.toJS(),
 });
@@ -22,6 +24,7 @@ const logger = createLogger({
 const reducers = {
     wallet: walletReducers,
     transaction: transactionReducers,
+    ico: icoReducers,
     tab: tabReducers,
     tokens: tokenReducers,
 };
