@@ -5,7 +5,9 @@
   "author": "Ethereum Classic",
   "description": "Token Mint - Ethereum Classic",
   "homepage": "http://ethereumproject.github.io/TokenMint",
-  "moduleRoots": [ "src/lib" ],
+  "moduleRoots": [
+    "src/lib"
+  ],
   "dependencies": {
     "bignumber.js": "^4.0.2",
     "ethereumjs-tx": "^1.3.1",
@@ -17,6 +19,7 @@
     "react-dom": "^15.5.4",
     "react-dropzone": "^3.13.2",
     "react-redux": "^5.0.5",
+    "react-router": "^4.1.1",
     "redux": "^3.6.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0"
