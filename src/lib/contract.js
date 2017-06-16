@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
 
-const IcoMachineAddress = "0x26c243b8a4a460a9bb20f3afcf127fa7dd764cfa";
+export const IcoMachineAddress = "0x26c243b8a4a460a9bb20f3afcf127fa7dd764cfa";
 
-const CreateTokenFunc = Immutable.fromJS({
+export const CreateTokenFunc = Immutable.fromJS({
     name:'createToken',
     inputs:[{ name:'initialSupply', type:'uint256' },
             { name:'tokenName', type:'string' },
@@ -10,14 +10,14 @@ const CreateTokenFunc = Immutable.fromJS({
             { name:'symbol', type:'string' }]
     });
 
-const CreateSaleFunc = Immutable.fromJS({
+export const CreateSaleFunc = Immutable.fromJS({
     name:'createSale',
     inputs:[{ name:'fundingGoal', type:'uint' },
             { name:'etherCostOfEachToken', type:'uint' }],
     outputs:[{ name:'_saleAddress', type:'address' }]
     });
 
-const TokensFunc = Immutable.fromJS({
+export const TokensFunc = Immutable.fromJS({
     name:'tokens',
     inputs:[{ name: '', type: 'address' }],
     outputs:[{name:"tokenAddress","type":"address"},
@@ -28,7 +28,7 @@ const TokensFunc = Immutable.fromJS({
             {name:"symbol","type":"string"}]
 });
 
-const CrowdSaleFuncs = [
+export const CrowdSaleFuncs = [
     Immutable.fromJS({
         name: "amountRaised",
         inputs:[],
