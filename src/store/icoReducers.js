@@ -22,10 +22,10 @@ const initIco = Immutable.fromJS({
 function onIcoLoad(state, action) {
     if (action.type === 'ICO/ICO_INFO') {
         if (!state.get('ico'))
-            return state.set('ico', initIco.set(action.name, action.value));
+            return state.set('ico', initIco.set(action.name, action.value.toString()));
         else
             return state.update('ico', (ico) => 
-               ico.set(action.name, action.value)
+               ico.set(action.name, action.value.toString())
         );
     }
     return state;    

@@ -45,11 +45,11 @@ export function fetchIco(address) {
                 });
                 if (c.get('name') === 'beneficiary')
                    dispatch(fetchToken(outputs[""]));
-               dispatch({
-                    type: 'ICO/ICO_ID',
-                    id: address,
-                });
             })
         }
+        dispatch({
+                type: 'ICO/ICO_ID',
+                id: address,
+            });
     }
 }
