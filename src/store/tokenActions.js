@@ -21,8 +21,6 @@ export function readTokens(address) {
         }]).then((result) => {
             const params = dataToParams(TokensFunc, result);
             const outputs = paramsToToken(params);
-            if (outputs.saleAddress)
-                loadCrowdSale(outputs.saleAddress);
             console.log(outputs)
             outputs.owner = address;
             dispatch({
