@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tab, Grid, Row, Col , Nav, NavItem, Navbar,NavDropdown, Modal, Button, MenuItem, Radio,FormGroup } from 'react-bootstrap';
+import { Tabs, Tab, Grid, Row, Col , Nav, NavItem, NavDropdown, MenuItem, Radio,FormGroup } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
@@ -11,97 +11,80 @@ import { ToSmodal } from './info/ToS';
 import logo from '../img/logo.png';
 
 const Render = ({...props}) => (
-  <Grid>
-    <ToSmodal />
-    <Tab.Container id="tabs-with-dropdown" defaultActiveKey="start">
+  <Grid id="main">
       <Row>
-        <div>
-          <Navbar collapseOnSelect fixedTop>
-              <Col sm={5}>
-                <a href="/">
-                  <img className="col-md-4" src={logo} alt="TokenMint"  />
-                </a>
-              </Col>
-              <Col sm={7}>
-                <Navbar.Collapse>
-                  <Nav  pullRight bsStyle="tabs">
-                    <NavItem eventKey="start">
-                      Getting Started
-                    </NavItem>
-                    <NavItem eventKey="token">
-                      Mint a Token
-                    </NavItem>
-                    <NavItem eventKey="ico">
-                      Launch an ICO
-                    </NavItem>
-                    <NavItem eventKey="buy">
-                      Token Browser
-                    </NavItem>
-                    <NavItem eventKey="wallet">
-                      Wallet Manager
-                    </NavItem>
-                    { /*<NavDropdown eventKey={3} title={<i className="fa fa-cogs"></i>} id="basic-nav-dropdown">
-                      <MenuItem eventKey={3.1}>Your Wallets</MenuItem>
-                      <MenuItem eventKey={3.2}>Add Wallet</MenuItem>
-                      <MenuItem eventKey={"Wallets"}>Manage Wallets</MenuItem>
-                      <MenuItem divider />
-                       <FormGroup>
-                       {' '}
-                        <Radio name="radioGroup" inline>
-                        ETC
-                        </Radio>
-                        {' '}
-                        <Radio name="radioGroup" inline>
-                        ETH
-                        </Radio>
-                        {' '}
-                        <Radio name="radioGroup" inline>
-                        RSK
-                        </Radio>
-                        {' '}
-                        <Radio name="radioGroup" inline>
-                        Local
-                        </Radio>
-                        {' '}
-                      </FormGroup>
-                    </NavDropdown>*/ }
-                  </Nav>
-              </Navbar.Collapse>
-              </Col>
-          </Navbar>
-        </div>
-
-        <div id="main">
-          <Col sm={12}>
-            <Tab.Content animation
-              defaultActiveKey={"start"}
-              activeKey={props.tab}
-              onSelect={props.handleSelect}
-              id="tokenTabs">
-              <Tab.Pane eventKey={"start"}>
-                <Information />
-              </Tab.Pane>
-              <Tab.Pane eventKey={"token"}>
-                <CreateToken />
-              </Tab.Pane>
-              <Tab.Pane eventKey={"ico"}>
-                <LaunchIco />
-              </Tab.Pane>
-              <Tab.Pane eventKey={"buy"}>
-                <BuyIco />
-              </Tab.Pane>
-              <Tab.Pane eventKey={"wallet"}>
-                <OpenWallet />
-              </Tab.Pane>
-            </Tab.Content>
+          <Col sm={4}>
+              <img className="col-md-6" onClick={props.goHome} src={logo} alt="TokenMint"  />
           </Col>
-        </div>
-      </Row>
-    </Tab.Container>
-    <Col sm={12}>
-        <Navbar collapseOnSelect fixedBottom>
-        </Navbar>
-    </Col>
+          <Col sm={8}>
+              <Nav  pullRight bsStyle="tabs">
+                <NavItem onClick={() => props.handleSelect("start")}>
+                  Getting Started
+                </NavItem>
+                <NavItem onClick={() => props.handleSelect("token")}>
+                  Mint a Token
+                </NavItem>
+                <NavItem onClick={() => props.handleSelect("ico")}>
+                  Launch an ICO
+                </NavItem>
+                <NavItem onClick={() => props.handleSelect("buy")}>
+                  Token Browser
+                </NavItem>
+                <NavItem onClick={() => props.handleSelect("wallet")}>
+                  Wallet Manager
+                </NavItem>
+                { /*<NavDropdown eventKey={3} title={<i className="fa fa-cogs"></i>} id="basic-nav-dropdown">
+                  <MenuItem eventKey={3.1}>Your Wallets</MenuItem>
+                  <MenuItem eventKey={3.2}>Add Wallet</MenuItem>
+                  <MenuItem eventKey={"Wallets"}>Manage Wallets</MenuItem>
+                  <MenuItem divider />
+                   <FormGroup>
+                   {' '}
+                    <Radio name="radioGroup" inline>
+                    ETC
+                    </Radio>
+                    {' '}
+                    <Radio name="radioGroup" inline>
+                    ETH
+                    </Radio>
+                    {' '}
+                    <Radio name="radioGroup" inline>
+                    RSK
+                    </Radio>
+                    {' '}
+                    <Radio name="radioGroup" inline>
+                    Local
+                    </Radio>
+                    {' '}
+                  </FormGroup>
+                </NavDropdown>*/ }
+              </Nav>
+          </Col>
+    </Row>
+    <Row>
+      <Col sm={12}>
+        <Tabs
+          defaultActiveKey={"start"}
+          activeKey={props.tab}>
+          <Tab eventKey={"start"}>
+            <Information />
+          </Tab>
+          <Tab eventKey={"token"}>
+            <CreateToken />
+          </Tab>
+          <Tab eventKey={"ico"}>
+            <LaunchIco />
+          </Tab>
+          <Tab eventKey={"buy"}>
+            <BuyIco />
+          </Tab>
+          <Tab eventKey={"wallet"}>
+            <OpenWallet />
+          </Tab>
+        </Tabs>
+      </Col>
+  </Row>
+  <ToSmodal />
 </Grid>
 
 );
@@ -114,6 +97,9 @@ const Main = connect(
     (dispatch, ownProps) => ({
         handleSelect: (key) => {
             dispatch(gotoTab(key));
+        },
+        goHome: () => {
+            dispatch(gotoTab('start'));
         }
     })
 )(Render);
