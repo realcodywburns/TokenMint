@@ -40,7 +40,7 @@ export function fiatToWei(number, pricePerEther) {
 }
 
 export function toFiat(number, unit, multi) {
-    var returnValue = new BigNumber(toEther(number, unit)).times(multi).round(5);
+    var returnValue = new BigNumber(toEther(number, unit)).times(multi).round(2);
     return returnValue.toString(10);
 }
 
