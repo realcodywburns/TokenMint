@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 export const TokenMintAddress = "0x0023BEBee6FAE12E3b387497300FEd1316e6905e";
 
-export const IcoMachineAddress = "0x26c243b8a4a460a9bb20f3afcf127fa7dd764cfa";
+export const IcoMachineAddress = "0xff3da40077e541fdb56d85ac24c03ccd3a520d79";
 
 export const CreateTokenFunc = Immutable.fromJS({
     name:'createToken',
