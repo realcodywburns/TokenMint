@@ -1,7 +1,9 @@
 import React from 'react';
 import { Row, Col, Carousel, Panel } from 'react-bootstrap';
-import { welcome } from './welcome';
-
+import coin1 from '../../img/HotCoin/1.jpg';
+import coin2 from '../../img/HotCoin/2.jpg';
+import coin3 from '../../img/HotCoin/3.jpg';
+import coin4 from '../../img/HotCoin/4.jpg';
 
 export const Information = (props) => {
 
@@ -40,16 +42,16 @@ export const Information = (props) => {
         <Col sm={8}>
              <Carousel>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/1.jpg"}/>
+                  <img width={900} height={500} alt="900x500" src={coin1}/>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/2.jpg"}/>
+                  <img width={900} height={500} alt="900x500" src={coin2}/>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/3.jpg"}/>
+                  <img width={900} height={500} alt="900x500" src={coin3}/>
                 </Carousel.Item>
                 <Carousel.Item>
-                  <img width={900} height={500} alt="900x500" src={process.env.PUBLIC_URL + "img/hotcoin/4.jpg"}/>
+                  <img width={900} height={500} alt="900x500" src={coin4}/>
                 </Carousel.Item>
               </Carousel>
             </Col>
@@ -70,11 +72,6 @@ export const Information = (props) => {
             </Panel>
         </Col>
 
-        <Col sm ={12}>
-        <div>
-          <welcome />
-          </div>
-        </Col>
-          </Row>
+      </Row>
     );
 };

@@ -8,7 +8,7 @@ import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 import BuyIco from './tokens/buy';
 import { ToSmodal } from './info/ToS';
-
+import logo from '../img/logo.png';
 
 const Render = ({...props}) => (
   <Grid>
@@ -19,7 +19,7 @@ const Render = ({...props}) => (
           <Navbar collapseOnSelect fixedTop>
               <Col sm={5}>
                 <a href="/">
-                  <img className="col-md-4" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="TokenMint"  />
+                  <img className="col-md-4" src={logo} alt="TokenMint"  />
                 </a>
               </Col>
               <Col sm={7}>

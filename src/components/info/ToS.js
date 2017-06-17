@@ -1,5 +1,6 @@
 import React from 'react';
-import { Row, Col, Carousel, Panel, Modal, Button,Popover } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
+import logo from '../../img/logo.png';
 
 
 export const ToSmodal = React.createClass({
@@ -18,14 +19,9 @@ export const ToSmodal = React.createClass({
 
   render() {
     return (
-      <div>
-        <Button onClick={this.open}>
-          Launch modal
-        </Button>
-
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
-            <Modal.Title><img className="col-md-6" src={process.env.PUBLIC_URL + "/img/logo.png"} alt="TokenMint"  /></Modal.Title>
+            <Modal.Title><img className="col-md-6" src={logo} alt="TokenMint"  /></Modal.Title>
           </Modal.Header>
           <Modal.Body>
           <div>
@@ -56,12 +52,7 @@ export const ToSmodal = React.createClass({
             <h5 class="text-align: center">We are currently still under construction but feel free to look around!</h5>
           </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button bsStyle="success" onClick={this.close}>I AGREE!</Button>
-            <Button bsStyle="danger" onClick={this.eject}>Nope!</Button>
-          </Modal.Footer>
         </Modal>
-      </div>
     );
   }
 });
