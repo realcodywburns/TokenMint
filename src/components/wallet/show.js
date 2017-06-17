@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { toFiat, toEther } from '../../lib/etherUnits';
+import { gotoTab } from '../../store/tabActions';
 
 
 class RenderWallet extends React.Component {
@@ -13,7 +14,9 @@ class RenderWallet extends React.Component {
       privKey: '',
     };
   }
-  
+ 
+
+
   render() {
     return (
       <Grid>
@@ -38,12 +41,14 @@ class RenderWallet extends React.Component {
                       target="_blank">
                       {this.props.token.get("tokenAddress")}
                     </a><hr />
-                    ICO Contract:
-                    <a href={`"http://gastracker.io/addr/${this.props.token.get("saleAddress")}"`} 
-                      rel="noopener noreferrer"
-                      target="_blank">
-                      {this.props.token.get("saleAddress")}
-                    </a>
+                    Crowdsale Status: 
+                    {this.props.token.get("saleAddress") && 
+                      <Button bsSize="small" bsStyle="info" href={`/ico/${this.props.token.get("saleAddress")}`}>
+                      Active
+                    </Button>}
+                    {this.props.token.get("saleAddress") && 
+                      <Button bsSize="small" bsStyle="success" onClick={this.props.gotoIco}>Launch ICO
+                      </Button>}
                   </ListGroupItem>}
                   {this.props.ico && 
                     <ListGroupItem header={`${this.props.token.get("name")} Crowdsale`}>
@@ -95,7 +100,8 @@ const ShowWallet = connect(
     };
   },
   (dispatch, ownProps) => ({
-
+    gotoIco: () => 
+      dispatch(gotoTab('ico'))
   })
 )(RenderWallet)
 
