@@ -53,7 +53,7 @@ export const CrowdSaleFuncs = [
         outputs:[{ name: '', type: 'uint'}]
     }),
     Immutable.fromJS({
-        name: "tokenPrice",
+        name: "price",
         inputs:[],
         outputs:[{ name: '', type: 'uint'}]
     }),

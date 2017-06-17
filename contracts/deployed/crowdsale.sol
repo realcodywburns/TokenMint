@@ -32,7 +32,7 @@ contract Crowdsale {
     /* The function without name is the default function that is called whenever anyone sends funds to a contract */
     function () payable {
         if (crowdsaleClosed) throw;
-        uint amount = msg.value;
+        uint amount = msg.value; //in wei
         balanceOf[msg.sender] = amount;
         amountRaised += amount;
         tokenReward.transfer(msg.sender, amount / price);

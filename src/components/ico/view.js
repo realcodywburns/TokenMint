@@ -66,14 +66,14 @@ class RenderIco extends React.Component {
   render() {
     
     let modalClose = () => this.setState({ modalShow: false });
-    let cost = this.props.tokenPrice * this.state.amount;
+    let cost = this.props.price * this.state.amount;
     let costUSD = (this.props.usdRate && cost) ? toFiat(cost, "ether", this.props.usdRate.rate) : "0.00";
     let fundingGoalUSD = (this.props.usdRate && this.props.fundingGoal) ? 
       toFiat(this.props.fundingGoal, "ether", this.props.usdRate.rate) : "0.00";
     let amountRaisedUSD = (this.props.usdRate && this.props.amountRaised) ? 
       toFiat(this.props.amountRaised, "ether", this.props.usdRate.rate) : "0.00";
-    let priceUSD = (this.props.usdRate && this.props.tokenPrice) ? 
-      toFiat(this.props.tokenPrice, "ether", this.props.usdRate.rate) : "0.00";
+    let priceUSD = (this.props.usdRate && this.props.price) ? 
+      toFiat(this.props.price, "ether", this.props.usdRate.rate) : "0.00";
 
     return (
       <Grid>
@@ -103,7 +103,7 @@ class RenderIco extends React.Component {
               </Row>
               <Row>
                 <Col sm={4}>Total Token Supply</Col>
-                <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}s</Col>
+                <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}</Col>
               </Row>
               <Row>
                 <Col sm={4}>Funding Goal</Col>
@@ -115,7 +115,7 @@ class RenderIco extends React.Component {
               </Row>
               <Row>
                 <Col sm={4}>Token Price</Col>
-                <Col sm={8}>{this.props.tokenPrice} ETC (${priceUSD}) </Col>
+                <Col sm={8}>{this.props.price} ETC (${priceUSD}) </Col>
               </Row>
             </Panel>
 
@@ -191,15 +191,15 @@ const ViewIco = connect(
         toEther((state.ico.get('ico').get('fundingGoal') || 0), 'wei');
       const amountRaised = state.ico.get('ico') && 
         toEther((state.ico.get('ico').get('amountRaised') || 0), 'wei');
-      const tokenPrice = state.ico.get('ico') && 
-        toEther((state.ico.get('ico').get('tokenPrice') || 0), 'wei');
+      const price = state.ico.get('ico') && 
+        toEther((state.ico.get('ico').get('price') || 0), 'wei');
       const balance = state.ico.get('balance').toString(10);
       return {
         ico: state.ico.get('ico'),
         wallet: state.wallet.get('wallet'),
         fundingGoal,
         amountRaised,
-        tokenPrice,
+        price,
         usdRate,
         balance,
       }
