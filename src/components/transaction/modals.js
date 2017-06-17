@@ -105,3 +105,24 @@ export const BuyTokenModal = (props) => {
         </Modal>
     );
 };
+
+export const SuccessModal = (props) => {
+    const { show, close } = props;
+    const { txHash } = props;
+
+    return (
+      <Modal show={show} onHide={close} bsSize="large">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-lg">Your transaction has been submitted!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {txHash && <p>View the status of your transaction: 
+             <a href={`"http://gastracker.io/tx/${txHash}"`} 
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    {txHash}
+                  </a></p>}
+          </Modal.Body>
+        </Modal>
+    );
+};
