@@ -1,7 +1,6 @@
 import { rpc } from '../lib/rpc';
-import { generateTx } from '../lib/transaction';
 import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
-import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc, TokensFunc, CrowdSaleFuncs } from '../lib/contract';
+import { IcoMachineAddress, BalanceOfFunc, TokensFunc, CrowdSaleFuncs } from '../lib/contract';
 
 export function fetchToken(address) {
     return (dispatch) => {
@@ -22,6 +21,28 @@ export function fetchToken(address) {
         })
     }
 }
+
+export function getBalanceOf(token, address) {
+    return (dispatch) => {
+        const data = functionToData(BalanceOfFunc, { '_owner': address });
+        return rpc.call("eth_call", [{ 
+            to: token,
+            data: data,
+        }]).then((result) => {
+            const params = dataToParams(BalanceOfFunc, result);
+            const outputs = paramsToToken(params);
+            console.log(outputs)
+            for (var o of Object.keys(outputs)) {
+                dispatch({
+                    type: 'ICO/BALANCE_OF',
+                    name: o,
+                    value: outputs[o],
+                })
+            }
+        })
+    }
+}
+
     
 /** 
     Right now, ICO ID is address

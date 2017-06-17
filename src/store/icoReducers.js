@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 const initial = Immutable.fromJS({
     id: null,
     ico: null,
+    balance: 0,
 });
 
 const initIco = Immutable.fromJS({
@@ -38,9 +39,17 @@ function onIcoId(state, action) {
     return state;        
 }
 
+function onBalanceOf(state, action) {
+    if (action.type === 'ICO/BALANCE_OF') {       
+        return state.set('balance', action.value);
+    }
+    return state;         
+}
+
 export default function tokenReducers(state, action) {
     state = state || initial;
     state = onIcoLoad(state, action);
     state = onIcoId(state, action);
+    state = onBalanceOf(state, action);
     return state;
 }
