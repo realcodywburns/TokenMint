@@ -46,7 +46,7 @@ class RenderWallet extends React.Component {
                       <Button bsSize="small" bsStyle="info" href={`/ico/${this.props.token.get("saleAddress")}`}>
                       Active
                     </Button>}
-                    {this.props.token.get("saleAddress") && 
+                    {!this.props.token.get("saleAddress") && 
                       <Button bsSize="small" bsStyle="success" onClick={this.props.gotoIco}>Launch ICO
                       </Button>}
                   </ListGroupItem>}

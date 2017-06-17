@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
 import { generateBuyIco, loadCrowdSale } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
 import { toFiat, toEther } from '../../lib/etherUnits';
-import { fetchIco } from '../../store/icoActions';
+import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
 
 const DefaultGas = "0x94da7";
@@ -22,7 +22,7 @@ class RenderIco extends React.Component {
       gas: DefaultGas,
       tx: {},
       id: this.props.match.params.id,
-      quantity: 1,
+      amount: 1,
     };
   }
 
@@ -39,7 +39,6 @@ class RenderIco extends React.Component {
       amount: this.state.amount,
       gasLimit: this.state.gas,
     }
-    console.log(data)
     this.setState({ modalShow: true, 
                     showTx: false
                   });
@@ -59,14 +58,14 @@ class RenderIco extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false })
+          this.setState({ modalShow: false, showTx: false, amount: 0 })
       })
 
 
   render() {
     
     let modalClose = () => this.setState({ modalShow: false });
-    let cost = this.props.tokenPrice * this.state.quantity;
+    let cost = this.props.tokenPrice * this.state.amount;
     let costUSD = (this.props.usdRate && cost) ? toFiat(cost, "ether", this.props.usdRate.rate) : "0.00";
     let fundingGoalUSD = (this.props.usdRate && this.props.fundingGoal) ? 
       toFiat(this.props.fundingGoal, "ether", this.props.usdRate.rate) : "0.00";
@@ -87,9 +86,9 @@ class RenderIco extends React.Component {
         {this.props.ico && <Row>
           <Col>
             <h1>{this.props.ico.get("tokenName")}({this.props.ico.get("symbol")})</h1>
-            <h3>Sale Address: {this.state.id}</h3>
 
-            <Panel>
+            <Panel bsStyle="info" 
+              header={`Sale Address: ${this.state.id}`} > 
           
               <Row>
                 <Col sm={4}>Token Contract</Col>
@@ -129,33 +128,45 @@ class RenderIco extends React.Component {
         </Row>}
 
 
-        <hr />
-        <h3> Buy Tokens</h3>
-        <Form>
-          <FormGroup
-            controlId="amount"
-          >
-            <ControlLabel>Number of Tokens to Buy</ControlLabel>
-            <FormControl
-              type="number"
-              placeholder="1"
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <h4>Total cost: {cost} ETC  (${costUSD} USD)</h4> 
-          
+        <Panel bsStyle="success" header="Buy Tokens" footer={`Total cost: ${cost} ETC  (${costUSD} USD)`}>
+            <FormGroup
+              controlId="amount"
+            >
+              <ControlLabel>Number of Tokens to Buy</ControlLabel>
+              <FormControl
+                type="number"
+                placeholder="1"
+                onChange={this.handleChange}
+              />
+            </FormGroup>
 
           {this.props.wallet &&
-          <FormGroup>
-            <Button 
-              bsStyle="primary"
-              onClick={this.buyIco} >
-              BUY {this.props.ico.get('symbol')}
-            </Button>
-          </FormGroup>}
-          {!this.props.wallet && <OpenWallet />}
+            <FormGroup>
+              <Button 
+                bsStyle="primary"
+                onClick={this.buyIco} >
+                BUY {this.props.ico.get('symbol')}
+              </Button>
+            </FormGroup>}
+          </Panel>
+          {this.props.wallet && 
+            <Panel bsStyle="success">
+              {this.props.ico.get('tokenName')} Tokens Owned: 
+              {this.props.balance} 
+              <Button 
+                bsStyle="danger"
+                onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
+                bsSize="xs" >
+                Check Balance
+              </Button>
+            </Panel>}
 
-        </Form>
+            {!this.props.wallet && 
+              <Panel header="Please unlock your account to continue">
+                <OpenWallet />
+              </Panel>}
+
+        
         <BuyTokenModal 
           show={this.state.modalShow} 
           close={modalClose} 
@@ -181,6 +192,7 @@ const ViewIco = connect(
         toEther((state.ico.get('ico').get('amountRaised') || 0), 'wei');
       const tokenPrice = state.ico.get('ico') && 
         toEther((state.ico.get('ico').get('tokenPrice') || 0), 'wei');
+      const balance = state.ico.get('balance').toString(10);
       return {
         ico: state.ico.get('ico'),
         wallet: state.wallet.get('wallet'),
@@ -188,10 +200,14 @@ const ViewIco = connect(
         amountRaised,
         tokenPrice,
         usdRate,
+        balance,
       }
     },
     (dispatch, ownProps) => ({
       dispatch,
+      getBalance: (token, wallet) => {
+        dispatch(getBalanceOf(token, wallet.getAddressString()));
+      },
       buyIco: (data, wallet) => {
         return new Promise((resolve, reject) => {
           dispatch(
