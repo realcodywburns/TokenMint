@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel } from 'react-bootstrap';
-import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
 import { generateBuyIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
@@ -89,8 +89,21 @@ class RenderIco extends React.Component {
             <h1>{this.props.ico.get("tokenName")}({this.props.ico.get("symbol")})</h1>
 
             <Panel bsStyle="info" 
-              header={`Sale Address: ${this.state.id}`} > 
+              header={`${this.props.amountRaised} ETC Raised (${amountRaisedUSD})`} > 
           
+              <Row>
+                <Col sm={4}>Funding Goal</Col>
+                <Col sm={8}>{this.props.fundingGoal} ETC (${fundingGoalUSD})</Col>
+              </Row>
+              <Row>
+                <Col sm={4}>Token Price</Col>
+                <Col sm={8}>{this.props.price} ETC (${priceUSD}) </Col>
+              </Row>
+              <hr />
+              <Row>
+                <Col sm={4}>Number of Tokens Available</Col>
+                <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}</Col>
+              </Row>                        
               <Row>
                 <Col sm={4}>Token Contract</Col>
                 <Col sm={8}>
@@ -98,24 +111,19 @@ class RenderIco extends React.Component {
                     rel="noopener noreferrer"
                     target="_blank">
                     {this.props.ico.get("tokenAddress")}
+                    {`Sale Address: ${this.state.id}`}
                   </a>
                 </Col>
               </Row>
               <Row>
-                <Col sm={4}>Total Token Supply</Col>
-                <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}</Col>
-              </Row>
-              <Row>
-                <Col sm={4}>Funding Goal</Col>
-                <Col sm={8}>{this.props.fundingGoal} ETC (${fundingGoalUSD})</Col>
-              </Row>
-              <Row>
-                <Col sm={4}>Amount Raised</Col>
-                <Col sm={8}>{this.props.amountRaised} ETC (${amountRaisedUSD})</Col>
-              </Row>
-              <Row>
-                <Col sm={4}>Token Price</Col>
-                <Col sm={8}>{this.props.price} ETC (${priceUSD}) </Col>
+                <Col sm={4}>Crowdsale Address</Col>
+                <Col sm={8}>
+                  <a href={`http://gastracker.io/addr/${this.state.id}`} 
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    {this.state.id}
+                  </a>
+                </Col>
               </Row>
             </Panel>
 
@@ -129,7 +137,7 @@ class RenderIco extends React.Component {
         </Row>}
 
 
-        <Panel bsStyle="success" header="Buy Tokens" footer={`Total cost: ${cost} ETC  (${costUSD} USD)`}>
+        <Panel bsStyle="success" header="Buy Tokens" footer={`Total cost: ${cost} ETC  ($${costUSD} USD)`}>
             <FormGroup
               controlId="amount"
             >
@@ -139,6 +147,7 @@ class RenderIco extends React.Component {
                 placeholder="1"
                 onChange={this.handleChange}
               />
+              <HelpBlock>You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
             </FormGroup>
 
           {this.props.wallet &&
@@ -164,6 +173,7 @@ class RenderIco extends React.Component {
 
             {!this.props.wallet && 
               <Panel header="Please unlock your account to continue">
+                OR, pay with Bitcoin!
                 <OpenWallet />
               </Panel>}
 
