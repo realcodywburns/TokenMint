@@ -3,14 +3,15 @@ import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel } from 'react-bootstrap';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
-import { generateBuyIco, loadCrowdSale } from '../../store/tokenActions';
+import { generateBuyIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
 import { toFiat, toEther } from '../../lib/etherUnits';
+import { decimalToHex } from '../../lib/convert';
 import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
 
-const DefaultGas = "0x94da7";
+const DefaultGas = 21000;
 
 class RenderIco extends React.Component {
 
@@ -19,7 +20,7 @@ class RenderIco extends React.Component {
     this.state = {
       modalShow: false, 
       showTx: false,
-      gas: DefaultGas,
+      gas: decimalToHex(DefaultGas),
       tx: {},
       id: this.props.match.params.id,
       amount: 1,

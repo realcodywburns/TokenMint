@@ -7,7 +7,7 @@ import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
 import BuyIco from './tokens/buy';
-import { ToSmodal } from './info/ToS';
+import ToSmodal from './info/ToS';
 import logo from '../img/logo.png';
 
 const Render = ({...props}) => (

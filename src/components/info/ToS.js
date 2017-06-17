@@ -3,19 +3,21 @@ import { Modal } from 'react-bootstrap';
 import logo from '../../img/logo.png';
 
 
-export const ToSmodal = React.createClass({
+class ToSmodal extends React.Component {
 
-  getInitialState(){
-    return { showModal: true };
-  },
-
-  close(){
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: true,
+    };
+  }
+  close = () => {
     this.setState({ showModal: false });
-  },
+  }
 
-  eject(){
+  eject = () => {
     this.setState({ showModal: true });
-  },
+  }
 
   render() {
     return (
@@ -55,4 +57,6 @@ export const ToSmodal = React.createClass({
         </Modal>
     );
   }
-});
+};
+
+export default ToSmodal;
