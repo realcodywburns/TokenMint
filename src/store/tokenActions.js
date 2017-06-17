@@ -149,7 +149,7 @@ export function generateBuyIco(data, wallet) {
     const addr = wallet.getAddressString();
     const tx = Object.assign(initialTx, { 
         gasLimit: data.gasLimit,
-        data: null,
+        data: "0x",
         value: data.amount,
         from: addr });
     return (dispatch, getState) => {
