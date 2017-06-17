@@ -51,7 +51,7 @@ class ToSmodal extends React.Component {
             <li> Minting of tokens may constitute the sale of securities in certain jurisdictions. Seek appropriate legal advice before deploying a crowdsale contract.</li>
             </ol>
 
-            <h5 class="text-align: center">We are currently still under construction but feel free to look around!</h5>
+            <h5>We are currently still under construction but feel free to look around!</h5>
           </div>
           </Modal.Body>
         </Modal>

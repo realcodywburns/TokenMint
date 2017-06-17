@@ -100,7 +100,6 @@ class CreateTokenForm extends React.Component {
             <span data-toggle="tooltip" title="Pick a great name for your new token that is easy to remember.">
             <FormControl
               type="text"
-              value={this.state.token}
               placeholder="TokenMint Coin"
               onChange={this.handleChange}
             />
@@ -116,7 +115,6 @@ class CreateTokenForm extends React.Component {
             <span data-toggle="tooltip" title="This is the total amount of coins that will ever be in existence.">
             <FormControl
               type="number"
-              value={this.state.totalSupply}
               placeholder="1000000"
               onChange={this.handleChange}
             />
@@ -132,7 +130,6 @@ class CreateTokenForm extends React.Component {
             <span data-toggle="tooltip" title="This is the 3-5 letter 'code' that users will use to identify your token on exchanges and in their wallet.">
             <FormControl
               type="text"
-              value={this.state.symbol}
               placeholder="TOKN"
               onChange={this.handleChange}
             />
@@ -147,7 +144,6 @@ class CreateTokenForm extends React.Component {
             <span data-toggle="tooltip" title="How many decimals will the token have?">
             <FormControl
               type="number"
-              value={this.state.decimals}
               placeholder="8"
               onChange={this.handleChange}
             />

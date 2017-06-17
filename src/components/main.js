@@ -64,8 +64,10 @@ const Render = ({...props}) => (
     <Row>
       <Col sm={12}>
         <Tabs
+          id="tokenTabs"
           defaultActiveKey={"start"}
-          activeKey={props.tab}>
+          activeKey={props.tab}
+          onSelect={props.handleSelect}>
           <Tab eventKey={"start"}>
             <Information />
           </Tab>

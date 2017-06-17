@@ -88,7 +88,7 @@ export const BuyTokenModal = (props) => {
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-lg">Buy Tokens</Modal.Title>
           </Modal.Header>
-          {!showTx && <Modal.Body>
+          {showTx && <Modal.Body>
             <p>You are about to Buy Tokens on the Ethereum Classic chain.</p>
           </Modal.Body>}
           {showTx && <Modal.Body>
