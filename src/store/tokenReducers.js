@@ -46,7 +46,7 @@ function onIcoCreate(state, action) {
         return state.set('ico', initIco.merge({
                 beneficiary: t.owner,
                 fundingGoal: t.fundingGoal,
-                etherPrice: t.etherPrice,
+                price: t.price,
                 saleTx: t.saleTx,
             })
         );
