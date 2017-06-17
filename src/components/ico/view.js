@@ -94,7 +94,7 @@ class RenderIco extends React.Component {
               <Row>
                 <Col sm={4}>Token Contract</Col>
                 <Col sm={8}>
-                  <a href={`"http://gastracker.io/addr/${this.props.ico.get("tokenAddress")}"`} 
+                  <a href={`http://gastracker.io/addr/${this.props.ico.get("tokenAddress")}`} 
                     rel="noopener noreferrer"
                     target="_blank">
                     {this.props.ico.get("tokenAddress")}
