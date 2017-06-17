@@ -131,8 +131,8 @@ class LaunchForm extends React.Component {
         <hr />
         {this.props.token && <Form>
           <FormGroup
-            controlId="etherPrice"
-            validationState={this.getRequiredValidation('etherPrice')}
+            controlId="price"
+            validationState={this.getRequiredValidation('price')}
           >
             <ControlLabel>Price per Token (in ether)</ControlLabel>
             <FormControl
