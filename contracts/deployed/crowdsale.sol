@@ -45,11 +45,11 @@ contract Crowdsale {
     function checkGoalReached() afterFundingGoal() {
             fundingGoalReached = true;
             GoalReached(beneficiary, amountRaised);
-            crowdsaleClosed = true;
+            // crowdsaleClosed = true;
     }
 
 
-    function safeWithdrawal() afterFundingGoal() {
+    function safeWithdrawal() {
         if (!fundingGoalReached) {
             uint amount = balanceOf[msg.sender];
             balanceOf[msg.sender] = 0;
