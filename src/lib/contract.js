@@ -15,7 +15,7 @@ export const CreateTokenFunc = Immutable.fromJS({
 export const CreateSaleFunc = Immutable.fromJS({
     name:'createSale',
     inputs:[{ name:'fundingGoal', type:'uint' },
-            { name:'etherCostOfEachToken', type:'uint' }],
+            { name:'costOfEachToken', type:'uint' }],
     outputs:[{ name:'_saleAddress', type:'address' }]
     });
 
