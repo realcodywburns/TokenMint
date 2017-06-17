@@ -8,6 +8,7 @@ import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
 import { hexToDecimal } from '../../lib/convert';
+import { toWei } from '../../lib/etherUnits';
 
 const DefaultGas = "0x94da7";
 
@@ -46,7 +47,7 @@ class LaunchForm extends React.Component {
 
   estimateGas() {
     const data = {
-      price: this.state.price,
+      price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
     }
     this.props.estimateGas(data, this.props.wallet)
@@ -60,7 +61,7 @@ class LaunchForm extends React.Component {
 
   initIco() {
     const data = {
-      price: this.state.price,
+      price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
       gasLimit: this.state.gas,
     }
@@ -130,8 +131,8 @@ class LaunchForm extends React.Component {
         <hr />
         {this.props.token && <Form>
           <FormGroup
-            controlId="price"
-            validationState={this.getRequiredValidation('price')}
+            controlId="etherPrice"
+            validationState={this.getRequiredValidation('etherPrice')}
           >
             <ControlLabel>Price per Token (in ether)</ControlLabel>
             <FormControl
@@ -213,7 +214,7 @@ const LaunchIco = connect(
               saleTx: txhash,
               beneficiary: address,
               fundingGoal: data.fundingGoal,
-              etherPrice: data.price,
+              price: toWei(data.price),
           };
           dispatch(gotoTab('buy', ico));
           dispatch(createIco(ico));
