@@ -33,8 +33,6 @@ class RenderIco extends React.Component {
 
   componentWillMount = () => {
     this.props.dispatch(fetchIco(this.state.id));
-    if(this.state.id==="0xbc903121d0525f5eb52c76ae44756a02ff19c80f")
-        this.setState({ custom: true });
   }
 
   handleChange = (e) => 
