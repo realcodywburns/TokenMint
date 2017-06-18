@@ -147,11 +147,12 @@ export function generateIcoTransaction(ico, wallet) {
 // Buy tokens is the equivalent of sending money to contract address
 export function generateBuyIco(data, wallet) {
     const addr = wallet.getAddressString();
-    const tx = Object.assign(initialTx, { 
+    const tx = {
+        to: data.to, 
         gasLimit: data.gasLimit,
-        data: "0x",
-        value: data.amount,
-        from: addr });
+        data: "",
+        value: data.value,
+        from: addr };
     return (dispatch, getState) => {
         const transaction = getState().transaction;
         if (!transaction.get('busy')) {
