@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Panel, Media, PageHeader } from 'react-bootstrap';
+import { Grid, Row, Col, Panel, PageHeader } from 'react-bootstrap';
 import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
 import { generateBuyIco } from '../../store/tokenActions';
@@ -33,7 +33,6 @@ class RenderIco extends React.Component {
 
   componentWillMount = () => {
     this.props.dispatch(fetchIco(this.state.id));
-
   }
 
   handleChange = (e) => 
@@ -41,8 +40,10 @@ class RenderIco extends React.Component {
 
 
   buyIco = () => {
+    const value = this.props.price * this.state.amount;
     const data = {
-      amount: this.state.amount,
+      to: this.state.id,
+      value,
       gasLimit: this.state.gas,
     }
     this.setState({ modalShow: true, 
@@ -132,20 +133,20 @@ class RenderIco extends React.Component {
           header="Buy Tokens" 
           footer={!this.props.wallet && 
                       <Row>
-                        <Col sm={2} mdOffset={1}>
+                        <Col sm={2}>
                           <Button 
                             bsStyle="success"
                             onClick={this.selectETC} >
                             PAY WITH ETC
                           </Button>
                         </Col>
-                        <Col>
+                        {false && <Col>
                           <Button 
                             bsStyle="success"
                             onClick={this.buyIco} >
                             PAY WITH ANOTHER CURRENCY
                           </Button>
-                        </Col>
+                        </Col>}
                       </Row>}>
             <FormGroup
               controlId="amount"
@@ -189,8 +190,8 @@ class RenderIco extends React.Component {
         <hr />
         {this.props.ico && <Row>
           <Col>
-            <h3>About this Token</h3>
-            <Panel>
+            <h3>More Info</h3>
+            <Panel footer={this.state.custom && <CustomAbout />}>
               <Row>
                 <Col sm={4}>Token Contract</Col>
                 <Col sm={8}>
@@ -211,7 +212,6 @@ class RenderIco extends React.Component {
                   </a>
                 </Col>
               </Row>
-              {this.state.custom && <CustomAbout />}
             </Panel>
           </Col>
         </Row>}
