@@ -12,7 +12,7 @@ import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
 import { CustomHead, CustomAbout } from './custom';
 
-const DefaultGas = 21000;
+const DefaultGas = 100000;
 
 class RenderIco extends React.Component {
 
@@ -171,16 +171,16 @@ class RenderIco extends React.Component {
 
 
           {this.props.wallet && 
-            <Panel bsStyle="success" footer="Token balance may take a minute to update...">
-              {this.props.ico.get('tokenName')}s Owned: &nbsp;
-              {this.props.balance} 
-              &nbsp;<Button 
-                bsStyle="danger"
-                onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
-                bsSize="xs" >
-                Check Balance
-              </Button>
-            </Panel>}
+            <Panel bsStyle="success" 
+              footer={`${this.props.ico.get('tokenName')}s Owned: 
+                      ${this.props.balance} 
+                      ${<Button 
+                        bsStyle="danger"
+                        onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
+                        bsSize="xs" >
+                        Check Balance
+                      </Button>}`}
+            />}
 
             {!this.props.wallet && this.state.payETC &&
               <Panel header="Unlock your account to continue">
@@ -216,6 +216,7 @@ class RenderIco extends React.Component {
           </Col>
         </Row>}
         
+        {this.props.ico &&
         <BuyTokenModal 
           show={this.state.modalShow} 
           close={modalClose} 
@@ -223,7 +224,8 @@ class RenderIco extends React.Component {
           rawTx={this.state.tx.rawTx}
           signedTx={this.state.tx.signedTx}
           submitTx={this.submitTx}
-          />
+          token={this.props.ico.get("symbol")}
+          />}
 
       </Grid>
     );
