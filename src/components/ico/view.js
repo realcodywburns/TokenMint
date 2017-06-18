@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Panel } from 'react-bootstrap';
+import { Grid, Row, Col, Panel, Media, PageHeader } from 'react-bootstrap';
 import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal } from '../transaction/modals';
 import { generateBuyIco } from '../../store/tokenActions';
@@ -10,6 +10,7 @@ import { toFiat, toEther } from '../../lib/etherUnits';
 import { decimalToHex } from '../../lib/convert';
 import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
+import { CustomHead, CustomAbout } from './custom';
 
 const DefaultGas = 21000;
 
@@ -24,11 +25,15 @@ class RenderIco extends React.Component {
       tx: {},
       id: this.props.match.params.id,
       amount: 1,
+      custom: false,
+      payETC: false,
+      paySS: false,
     };
   }
 
-  componentWillMount() {
+  componentWillMount = () => {
     this.props.dispatch(fetchIco(this.state.id));
+
   }
 
   handleChange = (e) => 
@@ -52,6 +57,9 @@ class RenderIco extends React.Component {
       })
   }
 
+  selectETC = () => {
+    this.setState({ payETC: true, paySS: false });
+  }
 
   submitTx = () => 
     this.props.sendTransaction(
@@ -78,18 +86,25 @@ class RenderIco extends React.Component {
     return (
       <Grid>
         <Row>
-          <Col sm={6}>
+          <Col md={4} mdOffset={4}>
             <a href="/">
               <img className="col-md-6 col-sm-8" src={logo} alt="TokenMint"  />
             </a>
           </Col>
         </Row>
-        {this.props.ico && <Row>
-          <Col>
-            <h1>{this.props.ico.get("tokenName")}({this.props.ico.get("symbol")})</h1>
-
+        
+        {this.props.ico && this.state.custom && 
+            <CustomHead name={this.props.ico.get("tokenName")}
+              symbol={this.props.ico.get("symbol")} />
+        }
+        {this.props.ico && !this.state.custom && 
+          <PageHeader>{this.props.ico.get("tokenName")}
+              &nbsp;<small>({this.props.ico.get("symbol")})</small>
+          </PageHeader>
+        }
+        {this.props.ico && 
             <Panel bsStyle="info" 
-              header={`${this.props.amountRaised} ETC Raised (${amountRaisedUSD})`} > 
+              header={`${this.props.amountRaised} ETC Raised ($${amountRaisedUSD})`} > 
           
               <Row>
                 <Col sm={4}>Funding Goal</Col>
@@ -104,6 +119,78 @@ class RenderIco extends React.Component {
                 <Col sm={4}>Number of Tokens Available</Col>
                 <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}</Col>
               </Row>                        
+            </Panel>
+        }
+
+        {!this.props.ico && 
+          <Panel>
+            <h1>Loading...</h1>
+          </Panel>}
+
+
+        <Panel bsStyle="success" 
+          header="Buy Tokens" 
+          footer={!this.props.wallet && 
+                      <Row>
+                        <Col sm={2} mdOffset={1}>
+                          <Button 
+                            bsStyle="success"
+                            onClick={this.selectETC} >
+                            PAY WITH ETC
+                          </Button>
+                        </Col>
+                        <Col>
+                          <Button 
+                            bsStyle="success"
+                            onClick={this.buyIco} >
+                            PAY WITH ANOTHER CURRENCY
+                          </Button>
+                        </Col>
+                      </Row>}>
+            <FormGroup
+              controlId="amount"
+            >
+              <ControlLabel>Number of Tokens to Buy</ControlLabel>
+              <FormControl
+                type="number"
+                placeholder="1"
+                onChange={this.handleChange}
+              />
+              <HelpBlock>{`Total cost: ${cost} ETC  ($${costUSD} USD).`} You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
+              {this.props.wallet &&
+              <FormGroup>
+                <Button 
+                  bsStyle="primary"
+                  onClick={this.buyIco} >
+                  BUY {this.props.ico.get('symbol')}
+                </Button>
+              </FormGroup>}
+            </FormGroup>
+          </Panel>
+
+
+          {this.props.wallet && 
+            <Panel bsStyle="success" footer="Token balance may take a minute to update...">
+              {this.props.ico.get('tokenName')}s Owned: &nbsp;
+              {this.props.balance} 
+              &nbsp;<Button 
+                bsStyle="danger"
+                onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
+                bsSize="xs" >
+                Check Balance
+              </Button>
+            </Panel>}
+
+            {!this.props.wallet && this.state.payETC &&
+              <Panel header="Unlock your account to continue">
+                <OpenWallet />
+              </Panel>}
+
+        <hr />
+        {this.props.ico && <Row>
+          <Col>
+            <h3>About this Token</h3>
+            <Panel>
               <Row>
                 <Col sm={4}>Token Contract</Col>
                 <Col sm={8}>
@@ -111,7 +198,6 @@ class RenderIco extends React.Component {
                     rel="noopener noreferrer"
                     target="_blank">
                     {this.props.ico.get("tokenAddress")}
-                    {`Sale Address: ${this.state.id}`}
                   </a>
                 </Col>
               </Row>
@@ -125,58 +211,10 @@ class RenderIco extends React.Component {
                   </a>
                 </Col>
               </Row>
+              {this.state.custom && <CustomAbout />}
             </Panel>
-
-
           </Col>
         </Row>}
-        {!this.props.ico && <Row>
-          <Col>
-            <h1>Loading...</h1>
-          </Col>
-        </Row>}
-
-
-        <Panel bsStyle="success" header="Buy Tokens" footer={`Total cost: ${cost} ETC  ($${costUSD} USD)`}>
-            <FormGroup
-              controlId="amount"
-            >
-              <ControlLabel>Number of Tokens to Buy</ControlLabel>
-              <FormControl
-                type="number"
-                placeholder="1"
-                onChange={this.handleChange}
-              />
-              <HelpBlock>You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
-            </FormGroup>
-
-          {this.props.wallet &&
-            <FormGroup>
-              <Button 
-                bsStyle="primary"
-                onClick={this.buyIco} >
-                BUY {this.props.ico.get('symbol')}
-              </Button>
-            </FormGroup>}
-          </Panel>
-          {this.props.wallet && 
-            <Panel bsStyle="success">
-              {this.props.ico.get('tokenName')} Tokens Owned: 
-              {this.props.balance} 
-              <Button 
-                bsStyle="danger"
-                onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
-                bsSize="xs" >
-                Check Balance
-              </Button>
-            </Panel>}
-
-            {!this.props.wallet && 
-              <Panel header="Please unlock your account to continue">
-                OR, pay with Bitcoin!
-                <OpenWallet />
-              </Panel>}
-
         
         <BuyTokenModal 
           show={this.state.modalShow} 
