@@ -5,6 +5,7 @@ import { store } from './store/store.js';
 import Main from './components/main';
 import About from './components/info/about';
 import ViewIco from './components/ico/view';
+import ShapeShift from './components/transaction/shapeshift';
 
 class TokenApp extends Component {
   render() {
@@ -13,6 +14,7 @@ class TokenApp extends Component {
         <div>
             <Route exact path="/" component={Main}/>
             <Route path="/about" component={About}/>
+            <Route path="/ss" component={ShapeShift}/>
             <Route path="/ico/:id" component={ViewIco}/>
         </div>
       </Provider>
