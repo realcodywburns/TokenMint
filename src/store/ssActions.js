@@ -27,3 +27,21 @@ export function getMarketData(coinIn) {
             })
         });
 }
+
+export function shiftIt(withdrawal, pair, amount) {
+    const data = {
+        withdrawal,
+        pair,
+        amount,
+    }
+    return (dispatch) =>
+        new Promise((resolve, reject) => {
+            ss.FixedAmountTx(data, (result) => {
+                dispatch({
+                    type: 'SHAPESHIFT/SHIFT_IT',
+                    shift: result,
+                })
+                resolve(result);
+            })
+        });
+}
