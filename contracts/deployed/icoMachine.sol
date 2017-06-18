@@ -47,7 +47,10 @@ contract IcoMachine {
         if (tokens[msg.sender].tokenAddress == 0x0) throw;
         address tokenAddress = tokens[msg.sender].tokenAddress;
         address saleAddress = new Crowdsale(msg.sender, fundingGoal, costOfEachToken, tokenAddress);
-        tokens[msg.sender].saleAddress = saleAddress;   
+        tokens[msg.sender].saleAddress = saleAddress;
+        Token tokenReward = Token(tokenAddress);
+        // Transfer tokens to sale address
+        tokenReward.transfer(saleAddress, tokens[msg.sender].initialSupply);   
     }
  
     function kill() 

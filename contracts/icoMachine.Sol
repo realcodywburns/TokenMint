@@ -32,7 +32,7 @@ contract IcoMachine {
         uint8 decimals,
         string symbol )
     {
-        address newToken = new CoinGenToken(initialSupply, tokenName, decimals, symbol);
+        address newToken = new Token(initialSupply, tokenName, decimals, symbol);
         tokens[msg.sender].tokenAddress = newToken;
         tokens[msg.sender].initialSupply = initialSupply;
         tokens[msg.sender].tokenName = tokenName;
@@ -54,6 +54,7 @@ contract IcoMachine {
         address tokenAddress = tokens[msg.sender].tokenAddress;
         address saleAddress = new Crowdsale(msg.sender, fundingGoal, etherCostOfEachToken, tokenAddress, premineAmount);
         tokens[msg.sender].saleAddress = saleAddress;
+        //NOTE: This contract does not work, because Tokens still belong to ICOMachine
     }
 
     /* some callable outputs */
