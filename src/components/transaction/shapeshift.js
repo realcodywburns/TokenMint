@@ -9,7 +9,7 @@ class RenderSS extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            modalShow: false,
         };
     }
 
@@ -17,13 +17,25 @@ class RenderSS extends React.Component {
         this.props.dispatch(loadSSCoins());
     }
 
+    getExchangeRate = (coin) => {
+        this.props.dispatch(getMarketData(coin))
+            .then((result) => {
+                this.setState({ modalShow: true });
+            });
+    }
+
     render() {
         return (
             <Grid>
             <DropdownButton 
+                id="ssCoins"
                 bsStyle="success"
-                title="PAY WITH BTC">
-                <MenuItem eventKey="1" onClick={getMarketData}>coin.symbol</MenuItem>
+                title="PAY WITH...">
+                {this.props.coins.valueSeq().map((coin) => 
+                    <MenuItem key={coin.get('symbol')} onClick={(e)=>this.getExchangeRate(coin.get('symbol'))}>
+                        {coin.get('name')}
+                    </MenuItem>)
+                }
             </DropdownButton>
             <FormGroup controlId="returnAddress" >
             <ControlLabel>Return Address (for refunds)</ControlLabel>
@@ -51,7 +63,10 @@ class RenderSS extends React.Component {
 
 const ShapeShift = connect(
     (state, ownProps) => {
-
+        const coins = state.shapeshift.get('coins');
+        return {
+            coins,
+        }
     },
     (dispatch, ownProps) => ({
       dispatch,
