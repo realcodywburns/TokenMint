@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { FormGroup, FormControl, ControlLabel, DropdownButton, Button } from 'react-bootstrap';
-import { Grid, Panel, MenuItem } from 'react-bootstrap';
+import { Grid, Modal, MenuItem } from 'react-bootstrap';
 import { loadSSCoins, getMarketData } from '../../store/ssActions';
 
 class RenderSS extends React.Component {
@@ -10,6 +10,8 @@ class RenderSS extends React.Component {
         super(props);
         this.state = {
             modalShow: false,
+            exchangeRate: 1, // XBT/ETC
+            coin: 'ETC',
         };
     }
 
@@ -20,8 +22,18 @@ class RenderSS extends React.Component {
     getExchangeRate = (coin) => {
         this.props.dispatch(getMarketData(coin))
             .then((result) => {
-                this.setState({ modalShow: true });
+                console.log(result)
+                if (result.rate)
+                    this.setState({ 
+                        coin,
+                        modalShow: true,
+                        exchangeRate: result.rate
+                    });
             });
+    }
+
+    ShiftIt = () => {
+
     }
 
     render() {
@@ -42,18 +54,24 @@ class RenderSS extends React.Component {
             <FormControl type="text"/>
             </FormGroup>
             {/* this should be a modal
+            */}
             
-            <Panel header="Pay with BLAH">
-                    <div>Deposit Limit: {{marketData.limit}}</div>
-                    <div>Minimum Amount: {{marketData.minimum}}</div>
-                    <div>MinerFee: {{marketData.minerFee}}</div>
-                    <div>Rate: {{marketData.rate}}</div>
+            <Modal show={this.state.modalShow} bsSize="large">
+                <Modal.Header closebutton>
+                    <Modal.Title>Pay with {this.state.coin}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {/*<div>Deposit Limit: {this.state.rate.limit}</div>
+                    <div>Minimum Amount: {this.state.rate.minimum}</div>
+                    <div>MinerFee: {this.state.rate.minerFee}</div>*/}
+                    <div>Rate: {this.state.exchangeRate}</div>
                     <Button 
                       bsStyle="primary"
-                      onClick={ShiftIt} >
+                      onClick={this.ShiftIt} >
                       ACCEPT
                     </Button>
-            </Panel>*/}
+                </Modal.Body>
+            </Modal>
           </Grid>
 
         );
