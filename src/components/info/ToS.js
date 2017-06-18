@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 import logo from '../../img/logo.png';
 
 
@@ -22,8 +22,9 @@ class ToSmodal extends React.Component {
   render() {
     return (
         <Modal show={this.state.showModal} onHide={this.close}>
-          <Modal.Header closeButton>
-            <Modal.Title><img className="col-md-6" src={logo} alt="TokenMint"  /></Modal.Title>
+          <Modal.Header>
+            <Modal.Title><img className="col-md-6 img-responsive" src={logo} alt="TokenMint"  /></Modal.Title>
+              <Button className="col-md-3 text-center pull-right" bsStyle="success" onClick={this.close}>I AGREE!</Button>
           </Modal.Header>
           <Modal.Body>
           <div>
@@ -32,7 +33,7 @@ class ToSmodal extends React.Component {
             <p>This is simple to use token and ICO generator created for use with the Ethereum blockchains ETC & ETH. The purpose of this generator is to make it simple for users to create their own token and crowdsale using smart contracts. Tokens are effectively a virtual currency created and secured on top of the Ethereum blockchain. An ICO is an Intial Coin Offering. At a designated price, users can offer their tokens at a set price in either ETC or ETH. This can be useful for raising funds in a crowdsale. Tokens can be used in a variety of ways, user rewards, rebates, virtual currencies, or as a voting mechanism with a Decentralized Autonomous Organization (DAO).</p>
             <hr />
             <h2> Disclaimer </h2>
-            <h4>NEITHER THE SOFTWARE NOR ITS CREATORS PROVIDE LEGAL ADVICE AND THIS CODE WAS NOT CREATED TO PROVIDE LEGAL ADVICE OR AS A SUBSTITUTE FOR LEGAL ADVICE. BY USING THIS CODE YOU ALSO AGREE:</h4>
+            <h5>NEITHER THE SOFTWARE NOR ITS CREATORS PROVIDE LEGAL ADVICE AND THIS CODE WAS NOT CREATED TO PROVIDE LEGAL ADVICE OR AS A SUBSTITUTE FOR LEGAL ADVICE. BY USING THIS CODE YOU ALSO AGREE:</h5>
             <ol>
             <li> The creators of the Software and its contributors are not your lawyers.</li>
 
@@ -54,6 +55,7 @@ class ToSmodal extends React.Component {
             <h5>We are currently still under construction but feel free to look around!</h5>
           </div>
           </Modal.Body>
+
         </Modal>
     );
   }
