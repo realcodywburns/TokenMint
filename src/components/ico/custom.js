@@ -8,7 +8,7 @@ export const CustomHead = (props) => {
     return ( 
       <Media>
         <Media.Left align="top">
-          <img width={200} height={200} src={customImg} />
+          <img width={200} height={200} src={customImg} alt={name} />
         </Media.Left>
         <Media.Body>
           <Media.Heading>
