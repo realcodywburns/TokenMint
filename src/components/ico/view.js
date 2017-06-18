@@ -171,8 +171,8 @@ class RenderIco extends React.Component {
 
 
           {this.props.wallet && 
-            <Panel bsStyle="success" 
-              footer={`${this.props.ico.get('tokenName')}s Owned: 
+            <Panel bsStyle="success">
+              {`${this.props.ico.get('tokenName')}s Owned: 
                       ${this.props.balance} 
                       ${<Button 
                         bsStyle="danger"
@@ -180,7 +180,7 @@ class RenderIco extends React.Component {
                         bsSize="xs" >
                         Check Balance
                       </Button>}`}
-            />}
+            </Panel>}
 
             {!this.props.wallet && this.state.payETC &&
               <Panel header="Unlock your account to continue">
