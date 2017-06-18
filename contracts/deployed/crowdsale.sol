@@ -1,20 +1,18 @@
 pragma solidity ^0.4.2;
-contract token { function transfer(address receiver, uint amount){  } }
+
+import "./ERC20.sol";
 
 contract Crowdsale {
     address public beneficiary;
     uint public fundingGoal;
     uint public amountRaised;
-    uint public deadline;
     uint public price;
-    token public tokenReward;
+    Token public tokenReward;
     mapping(address => uint256) public balanceOf;
     bool fundingGoalReached = false;
     event GoalReached(address beneficiary, uint amountRaised);
     event FundTransfer(address backer, uint amount, bool isContribution);
     bool crowdsaleClosed = false;
-
-    /* data structure to hold information about campaign contributors */
 
     /*  at initialization, setup the owner */
     function Crowdsale(
@@ -26,7 +24,7 @@ contract Crowdsale {
         beneficiary = ifSuccessfulSendTo;
         fundingGoal = fundingGoalInEthers * 1 ether;
         price = weiCostOfEachToken;
-        tokenReward = token(addressOfTokenUsedAsReward);
+        tokenReward = Token(addressOfTokenUsedAsReward);
     }
 
     /* The function without name is the default function that is called whenever anyone sends funds to a contract */
@@ -35,7 +33,7 @@ contract Crowdsale {
         uint amount = msg.value; //in wei
         balanceOf[msg.sender] = amount;
         amountRaised += amount;
-        tokenReward.transfer(msg.sender, amount / price);
+        tokenReward.transfer(msg.sender, amount/price);
         FundTransfer(msg.sender, amount, true);
     }
 
@@ -45,11 +43,11 @@ contract Crowdsale {
     function checkGoalReached() afterFundingGoal() {
             fundingGoalReached = true;
             GoalReached(beneficiary, amountRaised);
-            // crowdsaleClosed = true;
+            //crowdsaleClosed = true;
     }
 
 
-    function safeWithdrawal() {
+    function safeWithdrawal() afterFundingGoal() {
         if (!fundingGoalReached) {
             uint amount = balanceOf[msg.sender];
             balanceOf[msg.sender] = 0;
