@@ -4,7 +4,7 @@ import { Panel, Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } fr
 import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
-import { CreateTxModal } from '../transaction/modals';
+import { CreateTxModal, SuccessModal } from '../transaction/modals';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
 import { ToolPopup } from '../../elements/tooltip';
@@ -23,6 +23,8 @@ class CreateTokenForm extends React.Component {
       symbol: 'TOKN',
       decimals: 8,
       modalShow: false,
+      modalSuccess: false,
+      hash: null,
       showTx: false,
       gas: DefaultGas,
       tx: {},
@@ -81,7 +83,11 @@ class CreateTokenForm extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false })
+          this.setState({ 
+            modalShow: false, 
+            showTx: false, 
+            hash: result,
+            modalSuccess: true })
       })
   }
 
@@ -191,7 +197,14 @@ class CreateTokenForm extends React.Component {
           changeGas={this.changeGas}
           onGenerate={this.initToken}
           submitTx={this.submitTx}
-          />
+        />
+        <SuccessModal
+          show={this.state.modalSuccess}
+          hash={this.state.hash}
+        >
+          Congratulations! Once your token has been mined, you will be able to see it in your wallet. <br />
+          Next Step: <Button onClick={this.gotoIco} bsStyle="info" bsSize="small">Launch a Crowdsale</Button>
+        </SuccessModal>
       </div>
     );
   }
@@ -229,8 +242,8 @@ const CreateToken = connect(
             symbol: data.symbol,
             tokenTx: txhash,
         };
-        dispatch(gotoTab('ico', token));
         dispatch(createToken(token));
+        return txhash;
       };
 
       const resolver = (resolve, f) => (x) => {
@@ -242,7 +255,9 @@ const CreateToken = connect(
         dispatch(sendTransaction( tx ))
           .then(resolver(afterTx, resolve));
       });
-    }
+    },
+    gotoIco: () => 
+        dispatch(gotoTab('ico'))
   })
 )(CreateTokenForm)
 
