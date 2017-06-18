@@ -8,12 +8,14 @@ import transactionReducers from './transactionReducers';
 import tokenReducers from './tokenReducers';
 import icoReducers from './icoReducers';
 import tabReducers from './tabReducers';
+import ssReducers from './ssReducers';
 
 const stateTransformer = (state) => ({
     tokens: state.tokens.toJS(),
     wallet: state.wallet.toJS(),
     ico: state.ico.toJS(),
     transaction: state.transaction.toJS(),
+    shapeshift: state.shapeshift.toJS(),
     tab: state.tab.toJS(),
 });
 
@@ -24,6 +26,7 @@ const logger = createLogger({
 const reducers = {
     wallet: walletReducers,
     transaction: transactionReducers,
+    shapeshift: ssReducers,
     ico: icoReducers,
     tab: tabReducers,
     tokens: tokenReducers,
