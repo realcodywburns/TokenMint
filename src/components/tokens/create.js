@@ -232,9 +232,8 @@ const CreateToken = connect(
       })
     },
     sendTransaction: (tx, data, address) => {
-      const afterTx = (txhash) => {
-        console.log(txhash)
-        const token = {
+      const resolver = (resolve, f) => (txhash) => {
+         const token = {
             owner: address,
             initialSupply: data.totalSupply,
             name: data.token,
@@ -243,17 +242,12 @@ const CreateToken = connect(
             tokenTx: txhash,
         };
         dispatch(createToken(token));
-        return txhash;
-      };
-
-      const resolver = (resolve, f) => (x) => {
-        f.apply(x);
-        resolve(x);
+        resolve(txhash);
       };
 
       return new Promise((resolve, reject) => {
         dispatch(sendTransaction( tx ))
-          .then(resolver(afterTx, resolve));
+          .then(resolver(resolve));
       });
     },
     gotoIco: () => 

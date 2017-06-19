@@ -118,7 +118,7 @@ export const SuccessModal = (props) => {
           <Modal.Body>
             <p>{props.children}</p>
             {hash && <p>View the status of your transaction: 
-             <a href={`"http://gastracker.io/tx/${hash}"`} 
+             <a href={`http://gastracker.io/tx/${hash}`} 
                     rel="noopener noreferrer"
                     target="_blank">
                     {hash}
