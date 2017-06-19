@@ -128,7 +128,7 @@ class WalletForm extends React.Component {
           {this.state.showIntro && <Col sm={12} md={4} lg={4}>
           <Well>
           <p>
-          Please provide the private key for the address that you would like to use to create your ERC 223 tokens. The address you choose requires a minimum amount of ETC or ETH to pay for the Gas (Transaction Fee) necessary to execute the smart contract which creates the tokens you wish to create. We recommend having at least .1 ETC or .1 ETH in order to execute the smart contract and be able to move your tokens when you wish.
+          Please provide the private key for the address that you would like to use to create your tokens. The address you choose requires a minimum amount of ETC to pay for the Gas (Transaction Fee) necessary to execute the smart contract which creates the tokens you wish to create. We recommend having at least .1 ETC in order to execute the smart contract.
           </p>
           </Well>
           </Col>}
@@ -171,22 +171,22 @@ class WalletForm extends React.Component {
               </FormGroup>
             </Form>
           </Col>}
-          {this.state.showAccessButton && <Col sm={12} md={4} lg={3}>
-            <Button
-            nameClass="pull-right"
-              bsStyle="primary"
-              bsSize="large"
-              style={{marginTop: "20px"}}
-              onClick={this.openWallet}>
-              OPEN WALLET
-            </Button>
+          <Col sm={12} md={4} lg={3}>
+            {this.state.showAccessButton && 
+              <Button
+                bsStyle="primary"
+                bsSize="large"
+                style={{marginTop: "20px"}}
+                onClick={this.openWallet}>
+                OPEN WALLET
+              </Button>}
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-            {this.props.wallet && this.state.showBalance &&
-                <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
-          </Col>}
-        {this.props.wallet && this.state.showBalance &&
-          <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
+              {this.props.wallet && this.state.showBalance &&
+                  <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
+            </Col>
         </Row>
+          {this.props.wallet && this.state.showBalance &&
+          <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
       </Panel>
     );
   }
