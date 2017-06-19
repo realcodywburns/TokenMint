@@ -4,7 +4,7 @@
   "private": true,
   "author": "Ethereum Classic",
   "description": "Token Mint - Ethereum Classic",
-  "homepage": "http://ethereumproject.github.io/TokenMint",
+  "homepage": "http://tokenmint.io",
   "moduleRoots": [
     "src/lib"
   ],
