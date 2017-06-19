@@ -37,7 +37,8 @@ export function openWalletFile(file, password = null) {
         });
         const address = wallet.getAddressString()
         dispatch(getTransactionData(address)); 
-        dispatch(readTokens(address))       
+        dispatch(readTokens(address));
+        return wallet;
     };
 }
 
