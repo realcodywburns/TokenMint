@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { Modal, Image, Row, Col } from 'react-bootstrap';
 import logo from '../../img/logo.png';
 
 
@@ -23,7 +23,13 @@ class ToSmodal extends React.Component {
     return (
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
-            <Modal.Title><img className="col-md-6" src={logo} alt="TokenMint"  /></Modal.Title>
+            <Modal.Title>
+              <Row>
+                <Col md={4} sm={4} xs={6}>
+                <Image responsive={true} src={logo} alt="TokenMint"  />
+                </Col>
+              </Row>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
           <div>

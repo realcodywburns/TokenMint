@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Grid, Row, Col , Nav, NavItem, NavDropdown, MenuItem, Radio,FormGroup } from 'react-bootstrap';
+import { Tabs, Tab, Grid, Row, Col, Image, Nav, NavItem, NavDropdown, MenuItem, Radio,FormGroup } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
@@ -13,10 +13,10 @@ import logo from '../img/logo.png';
 const Render = ({...props}) => (
   <Grid id="main">
       <Row>
-          <Col sm={4}>
-              <img className="col-md-6" onClick={props.goHome} src={logo} alt="TokenMint"  />
+          <Col md={2} sm={4} xs={6}>
+              <Image responsive={true} onClick={props.goHome} src={logo} alt="TokenMint"  />
           </Col>
-          <Col sm={8}>
+          <Col sm={8} md={10}>
               <Nav  pullRight bsStyle="tabs">
                 <NavItem onClick={() => props.handleSelect("start")}>
                   Getting Started
