@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Panel, Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
@@ -116,9 +116,7 @@ class LaunchForm extends React.Component {
               If you already have a token, unlock your wallet to start the ICO.
             </p>}
             <hr />
-            {!this.props.wallet && <Panel header="Please unlock your account to continue">
-                  <OpenWallet />
-              </Panel>}
+            {!this.props.wallet &&  <OpenWallet />}
             
           </Col>
         </Row>}
