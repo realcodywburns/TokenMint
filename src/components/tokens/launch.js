@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
-import { LaunchICOModal } from '../transaction/modals';
+import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
@@ -26,6 +26,8 @@ class LaunchForm extends React.Component {
       price: 1,
       fundingGoal: 10000000,
       modalShow: false, 
+      modalSuccess: false,
+      hash: null,
       showTx: false,
       gas: DefaultGas,
       tx: {},
@@ -80,7 +82,11 @@ class LaunchForm extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false });
+          this.setState({ 
+            modalShow: false, 
+            showTx: false,
+            hash: result,
+            modalSuccess: true })
       })
   }
 
@@ -180,6 +186,12 @@ class LaunchForm extends React.Component {
           onGenerate={this.initIco}
           submitTx={this.submitTx}
           />
+        <SuccessModal
+          show={this.state.modalSuccess}
+          hash={this.state.hash}
+        >
+          Congratulations! Once your transaction has been processed, you will find the crowdsale link in your <Button onClick={this.gotoWallet} bsStyle="info" bsSize="small">wallet.</Button> <br />
+        </SuccessModal>          
       </Grid>
     );
   }
@@ -208,30 +220,28 @@ const LaunchIco = connect(
         })
       },
       sendTransaction: (tx, data, address) => {
-        const afterTx = (txhash) => {
-          console.log(txhash)
-          const ico = {
-              saleTx: txhash,
-              beneficiary: address,
-              fundingGoal: data.fundingGoal,
-              price: toWei(data.price),
+        const resolver = (resolve, f) => (txhash) => {
+           const token = {
+              owner: address,
+              initialSupply: data.totalSupply,
+              name: data.token,
+              decimals: data.decimals,
+              symbol: data.symbol,
+              tokenTx: txhash,
           };
-          dispatch(gotoTab('buy', ico));
-          dispatch(createIco(ico));
-        };
-
-        const resolver = (resolve, f) => (x) => {
-          f.apply(x);
-          resolve(x);
+          dispatch(createToken(token));
+          resolve(txhash);
         };
 
         return new Promise((resolve, reject) => {
           dispatch(sendTransaction( tx ))
-            .then(resolver(afterTx, resolve));
+            .then(resolver(resolve));
         });
-      },      
+      },
       gotoToken: () => 
-        dispatch(gotoTab('token'))
+        dispatch(gotoTab('token')),
+      gotoWallet: () => 
+        dispatch(gotoTab('wallet'))
   })
 )(LaunchForm)
 
