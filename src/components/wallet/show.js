@@ -36,7 +36,7 @@ class RenderWallet extends React.Component {
                   {this.props.token && 
                     <ListGroupItem header={`${this.props.token.get("name")}(${this.props.token.get("symbol")})`}>
                     Token Contract: 
-                    <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} 
+                    <a href={`http://gastracker.io/addr/${this.props.token.get("tokenAddress")}`} 
                       rel="noopener noreferrer"
                       target="_blank">
                       {this.props.token.get("tokenAddress")}
