@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel, PageHeader } from 'react-bootstrap';
 import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
-import { BuyTokenModal } from '../transaction/modals';
+import { BuyTokenModal, SuccessModal } from '../transaction/modals';
 import { generateBuyIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
@@ -20,6 +20,8 @@ class RenderIco extends React.Component {
     super(props);
     this.state = {
       modalShow: false, 
+      modalSuccess: false,
+      hash: null,      
       showTx: false,
       gas: decimalToHex(DefaultGas),
       tx: {},
@@ -33,6 +35,8 @@ class RenderIco extends React.Component {
 
   componentWillMount = () => {
     this.props.dispatch(fetchIco(this.state.id));
+    if(this.state.id==="0x59153bcf752b4e1ef294b370d635ce320bfdac08")    
+        this.setState({ custom: true });
   }
 
   handleChange = (e) => 
@@ -68,7 +72,13 @@ class RenderIco extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false, amount: 0 })
+          this.setState({ 
+            modalShow: false, 
+            showTx: false, 
+            amount: 0,
+            hash: result,
+            modalSuccess: true
+          })
       })
 
 
@@ -171,15 +181,15 @@ class RenderIco extends React.Component {
 
 
           {this.props.wallet && 
-            <Panel bsStyle="success">
-              {`${this.props.ico.get('tokenName')}s Owned: 
-                      ${this.props.balance} 
-                      ${<Button 
+            <Panel bsStyle="success"> 
+              {this.props.ico.get('tokenName')}s Owned: &nbsp; 
+              {this.props.balance} 
+                &nbsp; <Button 
                         bsStyle="danger"
                         onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
                         bsSize="xs" >
                         Check Balance
-                      </Button>}`}
+                      </Button>
             </Panel>}
 
             {!this.props.wallet && this.state.payETC &&
@@ -226,7 +236,12 @@ class RenderIco extends React.Component {
           submitTx={this.submitTx}
           token={this.props.ico.get("symbol")}
           />}
-
+        <SuccessModal
+          show={this.state.modalSuccess}
+          hash={this.state.hash}
+        >
+          Congratulations! Once your transaction has been processed, the tokens will be in your account.<br />
+        </SuccessModal>  
       </Grid>
     );
 
@@ -267,18 +282,9 @@ const ViewIco = connect(
         })
       },
       sendTransaction: (tx, data, address) => {
-        const afterTx = (txhash) => {
-          console.log(txhash)
-        };
-
-        const resolver = (resolve, f) => (x) => {
-          f.apply(x);
-          resolve(x);
-        };
-
         return new Promise((resolve, reject) => {
           dispatch(sendTransaction( tx ))
-            .then(resolver(afterTx, resolve));
+            .then((hash)=>resolve(hash));
         });
       },
     })
