@@ -1,4 +1,6 @@
 import ethUtil from 'ethereumjs-util';
+import crypto from 'crypto';
+import scrypt from 'scryptsy';
 
 // TODO: error messages
 
@@ -8,13 +10,13 @@ export const Wallet = function(priv) {
 Wallet.generate = function(icapDirect) {
     if (icapDirect) {
         while (true) {
-            var privKey = ethUtil.crypto.randomBytes(32)
+            var privKey = crypto.randomBytes(32)
             if (ethUtil.privateToAddress(privKey)[0] === 0) {
                 return new Wallet(privKey)
             }
         }
     } else {
-        return new Wallet(ethUtil.crypto.randomBytes(32))
+        return new Wallet(crypto.randomBytes(32))
     }
 }
 Wallet.prototype.getPrivateKey = function() {
@@ -43,8 +45,8 @@ Wallet.fromPrivateKey = function(priv) {
 }
 Wallet.prototype.toV3 = function(password, opts) {
     opts = opts || {}
-    var salt = opts.salt || ethUtil.crypto.randomBytes(32)
-    var iv = opts.iv || ethUtil.crypto.randomBytes(16)
+    var salt = opts.salt || crypto.randomBytes(32)
+    var iv = opts.iv || crypto.randomBytes(16)
     var derivedKey
     var kdf = opts.kdf || 'scrypt'
     var kdfparams = {
@@ -54,17 +56,17 @@ Wallet.prototype.toV3 = function(password, opts) {
     if (kdf === 'pbkdf2') {
         kdfparams.c = opts.c || 262144
         kdfparams.prf = 'hmac-sha256'
-        derivedKey = ethUtil.crypto.pbkdf2Sync(new Buffer(password), salt, kdfparams.c, kdfparams.dklen, 'sha256')
+        derivedKey = crypto.pbkdf2Sync(new Buffer(password), salt, kdfparams.c, kdfparams.dklen, 'sha256')
     } else if (kdf === 'scrypt') {
         // FIXME: support progress reporting callback
         kdfparams.n = opts.n || 262144
         kdfparams.r = opts.r || 8
         kdfparams.p = opts.p || 1
-        derivedKey = ethUtil.scrypt(new Buffer(password), salt, kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen)
+        derivedKey = scrypt(new Buffer(password), salt, kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen)
     } else {
         throw new Error('Unsupported kdf')
     }
-    var cipher = ethUtil.crypto.createCipheriv(opts.cipher || 'aes-128-ctr', derivedKey.slice(0, 16), iv)
+    var cipher = crypto.createCipheriv(opts.cipher || 'aes-128-ctr', derivedKey.slice(0, 16), iv)
     if (!cipher) {
         throw new Error('Unsupported cipher')
     }
@@ -73,7 +75,7 @@ Wallet.prototype.toV3 = function(password, opts) {
     return {
         version: 3,
         id: ethUtil.uuid.v4({
-            random: opts.uuid || ethUtil.crypto.randomBytes(16)
+            random: opts.uuid || crypto.randomBytes(16)
         }),
         address: this.getAddress().toString('hex'),
         Crypto: {
@@ -120,7 +122,7 @@ Wallet.fromMyEtherWallet = function(input, password) {
             keysize: 32,
             ivsize: 16
         })
-        var decipher = ethUtil.crypto.createDecipheriv('aes-256-cbc', evp.key, evp.iv)
+        var decipher = crypto.createDecipheriv('aes-256-cbc', evp.key, evp.iv)
         privKey = Wallet.decipherBuffer(decipher, new Buffer(cipher.ciphertext))
         privKey = new Buffer((privKey.toString()), 'hex')
     }
@@ -141,8 +143,8 @@ Wallet.fromMyEtherWalletV2 = function (input){
 Wallet.fromEthSale = function(input, password) {
     var json = (typeof input === 'object') ? input : JSON.parse(input)
     var encseed = new Buffer(json.encseed, 'hex')
-    var derivedKey = ethUtil.crypto.pbkdf2Sync(Buffer(password), Buffer(password), 2000, 32, 'sha256').slice(0, 16)
-    var decipher = ethUtil.crypto.createDecipheriv('aes-128-cbc', derivedKey, encseed.slice(0, 16))
+    var derivedKey = crypto.pbkdf2Sync(Buffer(password), Buffer(password), 2000, 32, 'sha256').slice(0, 16)
+    var decipher = crypto.createDecipheriv('aes-128-cbc', derivedKey, encseed.slice(0, 16))
     var seed = Wallet.decipherBuffer(decipher, encseed.slice(16))
     var wallet = new Wallet(ethUtil.sha3(seed))
     if (wallet.getAddress().toString('hex') !== json.ethaddr) {
@@ -157,7 +159,7 @@ Wallet.fromMyEtherWalletKey = function(input, password) {
         keysize: 32,
         ivsize: 16
     })
-    var decipher = ethUtil.crypto.createDecipheriv('aes-256-cbc', evp.key, evp.iv)
+    var decipher = crypto.createDecipheriv('aes-256-cbc', evp.key, evp.iv)
     var privKey = Wallet.decipherBuffer(decipher, new Buffer(cipher.ciphertext))
     privKey = new Buffer((privKey.toString()), 'hex')
     return new Wallet(privKey)
@@ -171,13 +173,13 @@ Wallet.fromV3 = function(input, password, nonStrict) {
     var kdfparams
     if (json.crypto.kdf === 'scrypt') {
         kdfparams = json.crypto.kdfparams
-        derivedKey = ethUtil.scrypt(new Buffer(password), new Buffer(kdfparams.salt, 'hex'), kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen)
+        derivedKey = scrypt(new Buffer(password), new Buffer(kdfparams.salt, 'hex'), kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen)
     } else if (json.crypto.kdf === 'pbkdf2') {
         kdfparams = json.crypto.kdfparams
         if (kdfparams.prf !== 'hmac-sha256') {
             throw new Error('Unsupported parameters to PBKDF2')
         }
-        derivedKey = ethUtil.crypto.pbkdf2Sync(new Buffer(password), new Buffer(kdfparams.salt, 'hex'), kdfparams.c, kdfparams.dklen, 'sha256')
+        derivedKey = crypto.pbkdf2Sync(new Buffer(password), new Buffer(kdfparams.salt, 'hex'), kdfparams.c, kdfparams.dklen, 'sha256')
     } else {
         throw new Error('Unsupported key derivation scheme')
     }
@@ -186,7 +188,7 @@ Wallet.fromV3 = function(input, password, nonStrict) {
     if (mac.toString('hex') !== json.crypto.mac) {
         throw new Error('Key derivation failed - possibly wrong passphrase')
     }
-    var decipher = ethUtil.crypto.createDecipheriv(json.crypto.cipher, derivedKey.slice(0, 16), new Buffer(json.crypto.cipherparams.iv, 'hex'))
+    var decipher = crypto.createDecipheriv(json.crypto.cipher, derivedKey.slice(0, 16), new Buffer(json.crypto.cipherparams.iv, 'hex'))
     var seed = Wallet.decipherBuffer(decipher, ciphertext, 'hex')
     return new Wallet(seed)
 }
@@ -222,13 +224,13 @@ Wallet.evp_kdf = function(data, salt, opts) {
     // A single EVP iteration, returns `D_i`, where block equlas to `D_(i-1)`
 
     function iter(block) {
-        var hash = ethUtil.crypto.createHash(opts.digest || 'md5')
+        var hash = crypto.createHash(opts.digest || 'md5')
         hash.update(block)
         hash.update(data)
         hash.update(salt)
         block = hash.digest()
         for (var i = 1; i < (opts.count || 1); i++) {
-            hash = ethUtil.crypto.createHash(opts.digest || 'md5')
+            hash = crypto.createHash(opts.digest || 'md5')
             hash.update(block)
             block = hash.digest()
         }
