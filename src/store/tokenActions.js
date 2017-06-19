@@ -71,6 +71,9 @@ export function estimateTokenGas(token, wallet) {
         }]).then((result) => {
             console.log(result);
             return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
         });
     }
 }
@@ -88,6 +91,9 @@ export function estimateIcoGas(ico, wallet) {
         }]).then((result) => {
             console.log(result);
             return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
         });
     }
 }
