@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel, Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } from 'react-bootstrap';
 import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
@@ -180,9 +180,7 @@ class CreateTokenForm extends React.Component {
             MINT A TOKEN
           </Button>}
         {!this.props.wallet &&
-          <Panel header="Please unlock your account to continue">
-              <OpenWallet />
-          </Panel>
+            <OpenWallet />
         }
         </Col>
         </Row>

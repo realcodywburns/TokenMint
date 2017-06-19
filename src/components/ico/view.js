@@ -193,9 +193,8 @@ class RenderIco extends React.Component {
             </Panel>}
 
             {!this.props.wallet && this.state.payETC &&
-              <Panel header="Unlock your account to continue">
                 <OpenWallet />
-              </Panel>}
+              }
 
         <hr />
         {this.props.ico && <Row>
