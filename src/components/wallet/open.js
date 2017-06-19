@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import { Row, Col, Panel, Alert } from 'react-bootstrap';
+import { Row, Col, Panel, Alert, Well } from 'react-bootstrap';
 import { Form, FormGroup, FormControl, Radio, Button } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
@@ -28,6 +28,7 @@ class WalletForm extends React.Component {
       file: null,
       password: null,
       error: null,
+      showIntro: true,
     };
   }
 
@@ -38,7 +39,8 @@ class WalletForm extends React.Component {
       password: null,
       showBalance: false,
       showRequirePass: false,
-      showAccessButton: false
+      showAccessButton: false,
+      showIntro: false,
     });
   }
 
@@ -67,7 +69,7 @@ class WalletForm extends React.Component {
   }
 
   handlePassword(e) {
-    this.setState({ [e.target.id]: e.target.value });
+    this.setState({ [e.target.id]: e.target.value, showRequirePass: true });
   }
 
   handlePrivKey(e) {
@@ -76,7 +78,8 @@ class WalletForm extends React.Component {
     if (e.target.value.length === 64)
       this.setState({ showAccessButton: true });
     else if (e.target.value.length === 128 || e.target.value.length === 132)
-      this.setState({ showRequirePass: true });
+      this.setState({ showAccessButton: true});
+
   }
 
   handleFormat(e) {
@@ -94,12 +97,15 @@ class WalletForm extends React.Component {
         reader.onload = (e) => {
           try {
               const pw = Wallet.walletRequirePass(e.target.result);
-              this.setState({ showRequirePass: pw, file: e.target.result });
+              this.setState({ showRequirePass: pw, file: e.target.result,showAccessButton: true });
           } catch (e) {
               console.error(e)
           }
         };
-  }
+    }
+  showIntroText(){
+      this.setState({ showIntro: true });
+    }
 
   render() {
     return (
@@ -108,10 +114,10 @@ class WalletForm extends React.Component {
         footer="Note: Your private key is only used to sign transactions in the browser. It is never transmitted to the server, and we do not store any account information. "
         >
         <Row>
-          <Col sm={12} md={4}>
+          <Col sm={12} md={4} >
             <h4>Select the format of your private key.</h4>
             <Form>
-              <FormGroup>
+              <FormGroup onLoad={this.showIntroText}>
                 <Radio name="keyFormat" value="file" onChange={this.handleFormat}>
                   JSON or Keystore File</Radio>
                 <Radio name="keyFormat" value="text" onChange={this.handleFormat}>
@@ -119,14 +125,21 @@ class WalletForm extends React.Component {
               </FormGroup>
             </Form>
           </Col>
-          {this.state.showTextKey && <Col sm={12} md={4}>
+          {this.state.showIntro && <Col sm={12} md={4} lg={4}>
+          <Well>
+          <p>
+          Please provide the private key for the address that you would like to use to create your tokens. The address you choose requires a minimum amount of ETC to pay for the Gas (Transaction Fee) necessary to execute the smart contract which creates the tokens you wish to create. We recommend having at least .1 ETC in order to execute the smart contract.
+          </p>
+          </Well>
+          </Col>}
+        {this.state.showTextKey && <Col sm={12} md={6} lg={6}>
             <h4>Paste / type your private key.</h4>
             <Form>
               <FormGroup
                 controlId="privKey"
               >
                 <FormControl
-                  componentClass="textarea"
+                  componentClass="input"
                   placeholder="Private Key"
                   onChange={this.handlePrivKey}
                 />
@@ -134,7 +147,7 @@ class WalletForm extends React.Component {
               </FormGroup>
             </Form>
           </Col> }
-          {this.state.showFileKey && <Col sm={12} md={4}>
+          {this.state.showFileKey && <Col sm={12} md={4} lg={3}>
             <h4>Select your wallet file:</h4>
             <Dropzone style={{}} multiple={false} onDrop={this.onDrop}>
             <Button bsStyle="default">Click Me! <i className="fa fa-qrcode" aria-hidden="true"></i></Button>
@@ -142,7 +155,7 @@ class WalletForm extends React.Component {
             {this.state.file && <div>File Selected: {this.state.fileName}</div>}
 
           </Col>}
-          {this.state.showRequirePass && <Col sm={12} md={4}>
+          {this.state.showRequirePass && <Col sm={12} md={4} lg={3}>
             <Form>
               <div> Your file is encrypted. Please enter the password:</div>
               <FormGroup
@@ -151,26 +164,28 @@ class WalletForm extends React.Component {
                 <FormControl
                   componentClass="textarea"
                   placeholder="Password"
+                  bsSize="small"
                   onChange={this.handlePassword}
                 />
                 <FormControl.Feedback />
               </FormGroup>
             </Form>
           </Col>}
-          {this.state.showAccessButton && <Col sm={12} md={4}>
-            <Button 
-              bsStyle="primary" 
-              bsSize="large"
-              style={{marginTop: "20px"}}
-              onClick={this.openWallet}>
-              OPEN WALLET
-            </Button>
+          <Col sm={12} md={4} lg={3}>
+            {this.state.showAccessButton && 
+              <Button
+                bsStyle="primary"
+                bsSize="large"
+                style={{marginTop: "20px"}}
+                onClick={this.openWallet}>
+                OPEN WALLET
+              </Button>}
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-            {this.props.wallet && this.state.showBalance && 
-                <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
-          </Col>}
+              {this.props.wallet && this.state.showBalance &&
+                  <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
+            </Col>
         </Row>
-        {this.props.wallet && this.state.showBalance && 
+          {this.props.wallet && this.state.showBalance &&
           <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
       </Panel>
     );

@@ -38,7 +38,7 @@ class ToSmodal extends React.Component {
             <p>This is simple to use token and ICO generator created for use with the Ethereum Classic blockchain. The purpose of this generator is to make it simple for users to create their own token and crowdsale using smart contracts. Tokens are effectively a virtual currency created and secured on top of the Ethereum blockchain. An ICO is an Intial Coin Offering. At a designated price, users can offer their tokens at a set price in either ETC. This can be useful for raising funds in a crowdsale. Tokens can be used in a variety of ways, user rewards, rebates, virtual currencies, or as a voting mechanism.</p>
             <hr />
             <h2> Disclaimer </h2>
-            <h4>NEITHER THE SOFTWARE NOR ITS CREATORS PROVIDE LEGAL ADVICE AND THIS CODE WAS NOT CREATED TO PROVIDE LEGAL ADVICE OR AS A SUBSTITUTE FOR LEGAL ADVICE. BY USING THIS CODE YOU ALSO AGREE:</h4>
+            <h5>NEITHER THE SOFTWARE NOR ITS CREATORS PROVIDE LEGAL ADVICE AND THIS CODE WAS NOT CREATED TO PROVIDE LEGAL ADVICE OR AS A SUBSTITUTE FOR LEGAL ADVICE. BY USING THIS CODE YOU ALSO AGREE:</h5>
             <ol>
             <li> The creators of the Software and its contributors are not your lawyers.</li>
 
@@ -60,6 +60,7 @@ class ToSmodal extends React.Component {
             <h5>We are currently still under construction but feel free to look around!</h5>
           </div>
           </Modal.Body>
+
         </Modal>
     );
   }
