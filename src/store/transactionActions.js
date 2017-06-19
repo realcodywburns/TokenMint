@@ -29,5 +29,8 @@ export function sendTransaction(tx) {
                 tx: result
             });
             return result;
-        })
+        }).catch((error) => {
+            console.error(error);
+            return null;
+        });
 };
