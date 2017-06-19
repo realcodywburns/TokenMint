@@ -22,6 +22,8 @@ export function readTokens(address) {
             const params = dataToParams(TokensFunc, result);
             const outputs = paramsToToken(params);
             console.log(outputs)
+            if(outputs.tokenAddress==="0x00")
+                return;
             outputs.owner = address;
             dispatch({
                 type: 'TOKEN/LOAD',
@@ -69,6 +71,9 @@ export function estimateTokenGas(token, wallet) {
         }]).then((result) => {
             console.log(result);
             return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
         });
     }
 }
@@ -86,6 +91,9 @@ export function estimateIcoGas(ico, wallet) {
         }]).then((result) => {
             console.log(result);
             return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
         });
     }
 }

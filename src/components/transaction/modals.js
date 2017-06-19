@@ -13,7 +13,7 @@ export const CreateTxModal = (props) => {
             <Modal.Title id="contained-modal-title-lg">Create Transaction</Modal.Title>
           </Modal.Header>
           {!showTx && <Modal.Body>
-            <p>You are about to Create a token on the Ethereum Classic chain.</p>
+            <p>You are about to create a token on the Ethereum Classic chain.</p>
             <FormGroup
               controlId="gasLimit"
             >
@@ -51,7 +51,7 @@ export const LaunchICOModal = (props) => {
             <Modal.Title id="contained-modal-title-lg">Create Transaction</Modal.Title>
           </Modal.Header>
           {!showTx && <Modal.Body>
-            <p>You are about to Launch an ICO on the Ethereum Classic chain.</p>
+            <p>You are about to launch a crowdsale on the Ethereum Classic chain.</p>
             <FormGroup
               controlId="gasLimit"
             >
@@ -89,7 +89,7 @@ export const BuyTokenModal = (props) => {
             <Modal.Title id="contained-modal-title-lg">Buy Tokens</Modal.Title>
           </Modal.Header>
           {showTx && <Modal.Body>
-            <p>You are about to Buy Tokens on the Ethereum Classic chain.</p>
+            <p>You are about to buy {props.token} tokens on the Ethereum Classic chain.</p>
           </Modal.Body>}
           {showTx && <Modal.Body>
               <FormGroup>
@@ -108,7 +108,7 @@ export const BuyTokenModal = (props) => {
 
 export const SuccessModal = (props) => {
     const { show, close } = props;
-    const { txHash } = props;
+    const { hash } = props;
 
     return (
       <Modal show={show} onHide={close} bsSize="large">
@@ -116,11 +116,12 @@ export const SuccessModal = (props) => {
             <Modal.Title id="contained-modal-title-lg">Your transaction has been submitted!</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {txHash && <p>View the status of your transaction: 
-             <a href={`"http://gastracker.io/tx/${txHash}"`} 
+            <p>{props.children}</p>
+            {hash && <p>View the status of your transaction: 
+             <a href={`http://gastracker.io/tx/${hash}`} 
                     rel="noopener noreferrer"
                     target="_blank">
-                    {txHash}
+                    {hash}
                   </a></p>}
           </Modal.Body>
         </Modal>
