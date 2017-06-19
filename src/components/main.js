@@ -27,9 +27,9 @@ const Render = ({...props}) => (
                 <NavItem onClick={() => props.handleSelect("ico")}>
                   Launch an ICO
                 </NavItem>
-                <NavItem onClick={() => props.handleSelect("buy")}>
+                {/*<NavItem onClick={() => props.handleSelect("buy")}>
                   Token Browser
-                </NavItem>
+                </NavItem>*/}
                 <NavItem onClick={() => props.handleSelect("wallet")}>
                   Wallet Manager
                 </NavItem>
@@ -77,9 +77,9 @@ const Render = ({...props}) => (
           <Tab eventKey={"ico"}>
             <LaunchIco />
           </Tab>
-          <Tab eventKey={"buy"}>
+          {/*<Tab eventKey={"buy"}>
             <BuyIco />
-          </Tab>
+          </Tab>*/}
           <Tab eventKey={"wallet"}>
             <OpenWallet />
           </Tab>
