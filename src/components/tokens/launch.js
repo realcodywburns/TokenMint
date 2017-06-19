@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
+import { Panel, Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
+import { toFiat } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
 import { hexToDecimal } from '../../lib/convert';
 import { toWei } from '../../lib/etherUnits';
@@ -39,7 +40,7 @@ class LaunchForm extends React.Component {
   }
 
   getRequiredValidation(key) {
-    if (this.state.key) return 'success';
+    if (this.state[key]!=="") return null;
     else return 'warning';
   }
 
@@ -92,6 +93,11 @@ class LaunchForm extends React.Component {
 
   render() {
     let modalClose = () => this.setState({ modalShow: false });
+
+    let priceUSD = (this.state.price && this.props.usdRate) ? toFiat(this.state.price, "ether", this.props.usdRate.rate) : "0.00";
+    let priceBTC = (this.state.price && this.props.btcRate) ? toFiat(this.state.price, "ether", this.props.btcRate.rate) : "0";
+    let goalUSD = (this.state.fundingGoal && this.props.usdRate) ? toFiat(this.state.fundingGoal, "ether", this.props.usdRate.rate) : "0.00";
+    let goalBTC = (this.state.fundingGoal && this.props.btcRate) ? toFiat(this.state.fundingGoal, "ether", this.props.btcRate.rate) : "0.00";
 
     return (
       <Grid>
@@ -147,6 +153,8 @@ class LaunchForm extends React.Component {
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
+            <HelpBlock>{`$${priceUSD} USD`}<br />
+            {`${priceBTC} BTC`}</HelpBlock>
           </FormGroup>
 
           <FormGroup
@@ -160,9 +168,8 @@ class LaunchForm extends React.Component {
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
-            <FormControl.Static>
-              BTC, EUR USD
-            </FormControl.Static>
+            <HelpBlock>{`$${goalUSD} USD`}<br />
+            {`${goalBTC} BTC`}</HelpBlock>
           </FormGroup>
 
           <FormGroup>
@@ -200,9 +207,14 @@ class LaunchForm extends React.Component {
 
 const LaunchIco = connect(
   (state, ownProps) => {
+    const rates = state.wallet.get('rates');
+    const usdRate = rates.filter((r)=>r.currency==='usd')[0];
+    const btcRate = rates.filter((r)=>r.currency==='btc')[0];
     return {
       wallet: state.wallet.get('wallet'),
-      token: state.tokens.get('token')
+      token: state.tokens.get('token'),
+      usdRate,
+      btcRate,
     }
   },
   (dispatch, ownProps) => ({
@@ -229,7 +241,7 @@ const LaunchIco = connect(
               symbol: data.symbol,
               tokenTx: txhash,
           };
-          dispatch(createToken(token));
+          dispatch(createIco(token));
           resolve(txhash);
         };
 
