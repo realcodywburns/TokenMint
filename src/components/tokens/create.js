@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel, Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } from 'react-bootstrap';
 import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
-import { CreateTxModal } from '../transaction/modals';
+import { CreateTxModal, SuccessModal } from '../transaction/modals';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
+import { ToolPopup } from '../../elements/tooltip';
 
 const DefaultGas = "0x11a7a7";
 
@@ -22,6 +23,8 @@ class CreateTokenForm extends React.Component {
       symbol: 'TOKN',
       decimals: 8,
       modalShow: false,
+      modalSuccess: false,
+      hash: null,
       showTx: false,
       gas: DefaultGas,
       tx: {},
@@ -80,7 +83,11 @@ class CreateTokenForm extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false })
+          this.setState({ 
+            modalShow: false, 
+            showTx: false, 
+            hash: result,
+            modalSuccess: true })
       })
   }
 
@@ -89,6 +96,7 @@ class CreateTokenForm extends React.Component {
 
     return (
       <div>
+      <h2>Create a Token</h2>
       <Row>
         <Col sm={6}>
         <Form>
@@ -97,28 +105,27 @@ class CreateTokenForm extends React.Component {
             validationState={this.getRequiredValidation('token')}
           >
             <ControlLabel>Token Name</ControlLabel>
-            <span data-toggle="tooltip" title="Pick a great name for your new token that is easy to remember.">
+            <ToolPopup title="Pick a great name for your new token that is easy to remember.">
             <FormControl
               type="text"
               placeholder="TokenMint Coin"
               onChange={this.handleChange}
             />
-            </span>
+            </ToolPopup>
               <FormControl.Feedback />
           </FormGroup>
          <FormGroup
-
             controlId="totalSupply"
             validationState={this.getRequiredValidation('totalSupply')}
           >
             <ControlLabel>Total Supply</ControlLabel>
-            <span data-toggle="tooltip" title="This is the total amount of coins that will ever be in existence.">
+            <ToolPopup title="This is the total amount of tokens that will ever exist.">
             <FormControl
               type="number"
               placeholder="1000000"
               onChange={this.handleChange}
             />
-            </span>
+            </ToolPopup>
             <FormControl.Feedback />
 
           </FormGroup>
@@ -127,13 +134,13 @@ class CreateTokenForm extends React.Component {
             controlId="symbol"
           >
             <ControlLabel>Token Symbol (optional)</ControlLabel>
-            <span data-toggle="tooltip" title="This is the 3-5 letter 'code' that users will use to identify your token on exchanges and in their wallet.">
+            <ToolPopup  title="This is the 3-5 letter 'code' that users will use to identify your token on exchanges and in their wallet.">
             <FormControl
               type="text"
               placeholder="TOKN"
               onChange={this.handleChange}
             />
-            </span>
+            </ToolPopup>
               <FormControl.Feedback />
           </FormGroup>
 
@@ -141,13 +148,13 @@ class CreateTokenForm extends React.Component {
             controlId="decimals"
           >
             <ControlLabel>Decimal Places (optional)</ControlLabel>
-            <span data-toggle="tooltip" title="How many decimals will the token have?">
+            <ToolPopup title="How many decimal places will the token have?">
             <FormControl
               type="number"
               placeholder="8"
               onChange={this.handleChange}
             />
-            </span>
+            </ToolPopup>
             <FormControl.Feedback />
           </FormGroup>
 
@@ -170,12 +177,10 @@ class CreateTokenForm extends React.Component {
           <Button
             bsStyle="primary"
             onClick={this.estimateGas} >
-            "LET'S DO THIS"
+            MINT A TOKEN
           </Button>}
         {!this.props.wallet &&
-          <Panel header="Please unlock your account to continue">
-              <OpenWallet />
-          </Panel>
+            <OpenWallet />
         }
         </Col>
         </Row>
@@ -190,7 +195,14 @@ class CreateTokenForm extends React.Component {
           changeGas={this.changeGas}
           onGenerate={this.initToken}
           submitTx={this.submitTx}
-          />
+        />
+        <SuccessModal
+          show={this.state.modalSuccess}
+          hash={this.state.hash}
+        >
+          Congratulations! Once your token has been mined, you will be able to see it in your wallet. <br />
+          Next Step: <Button onClick={this.gotoIco} bsStyle="info" bsSize="small">Launch a Crowdsale</Button>
+        </SuccessModal>
       </div>
     );
   }
@@ -218,9 +230,8 @@ const CreateToken = connect(
       })
     },
     sendTransaction: (tx, data, address) => {
-      const afterTx = (txhash) => {
-        console.log(txhash)
-        const token = {
+      const resolver = (resolve, f) => (txhash) => {
+         const token = {
             owner: address,
             initialSupply: data.totalSupply,
             name: data.token,
@@ -228,20 +239,17 @@ const CreateToken = connect(
             symbol: data.symbol,
             tokenTx: txhash,
         };
-        dispatch(gotoTab('ico', token));
         dispatch(createToken(token));
-      };
-
-      const resolver = (resolve, f) => (x) => {
-        f.apply(x);
-        resolve(x);
+        resolve(txhash);
       };
 
       return new Promise((resolve, reject) => {
         dispatch(sendTransaction( tx ))
-          .then(resolver(afterTx, resolve));
+          .then(resolver(resolve));
       });
-    }
+    },
+    gotoIco: () => 
+        dispatch(gotoTab('ico'))
   })
 )(CreateTokenForm)
 

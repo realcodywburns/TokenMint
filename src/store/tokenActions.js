@@ -22,6 +22,8 @@ export function readTokens(address) {
             const params = dataToParams(TokensFunc, result);
             const outputs = paramsToToken(params);
             console.log(outputs)
+            if(outputs.tokenAddress==="0x00")
+                return;
             outputs.owner = address;
             dispatch({
                 type: 'TOKEN/LOAD',
@@ -69,6 +71,9 @@ export function estimateTokenGas(token, wallet) {
         }]).then((result) => {
             console.log(result);
             return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
         });
     }
 }
@@ -78,7 +83,7 @@ export function estimateIcoGas(ico, wallet) {
     return (dispatch) => {
         const data = functionToData(CreateSaleFunc, 
             { fundingGoal: ico.fundingGoal,
-                etherCostOfEachToken: ico.price});
+                costOfEachToken: ico.price});
         return rpc.call("eth_estimateGas", [{
             from: addr,
             to: IcoMachineAddress,
@@ -86,6 +91,9 @@ export function estimateIcoGas(ico, wallet) {
         }]).then((result) => {
             console.log(result);
             return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
         });
     }
 }
@@ -122,7 +130,7 @@ export function generateIcoTransaction(ico, wallet) {
     const addr = wallet.getAddressString();
     const data = functionToData(CreateSaleFunc, 
             { fundingGoal: ico.fundingGoal,
-                etherCostOfEachToken: ico.price });
+                costOfEachToken: ico.price });
     const tx = Object.assign(initialTx, { 
         gasLimit: ico.gasLimit,
         data: data,
@@ -147,11 +155,12 @@ export function generateIcoTransaction(ico, wallet) {
 // Buy tokens is the equivalent of sending money to contract address
 export function generateBuyIco(data, wallet) {
     const addr = wallet.getAddressString();
-    const tx = Object.assign(initialTx, { 
+    const tx = {
+        to: data.to, 
         gasLimit: data.gasLimit,
-        data: "0x",
-        value: data.amount,
-        from: addr });
+        data: "",
+        value: data.value,
+        from: addr };
     return (dispatch, getState) => {
         const transaction = getState().transaction;
         if (!transaction.get('busy')) {

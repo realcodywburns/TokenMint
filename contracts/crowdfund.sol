@@ -52,7 +52,7 @@ contract Crowdsale {
             crowdsaleClosed = true;
     }
 
-    function safeWithdrawal() afterFundingGoal() {
+    function safeWithdrawal() {
         if (!fundingGoalReached) {
             uint amount = balanceOf[msg.sender];
             balanceOf[msg.sender] = 0;

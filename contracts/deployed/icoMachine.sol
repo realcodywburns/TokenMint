@@ -42,12 +42,15 @@ contract IcoMachine {
 
     function createSale(
         uint fundingGoal,
-        uint etherCostOfEachToken )
+        uint costOfEachToken )
     {
         if (tokens[msg.sender].tokenAddress == 0x0) throw;
         address tokenAddress = tokens[msg.sender].tokenAddress;
-        address saleAddress = new Crowdsale(msg.sender, fundingGoal, etherCostOfEachToken, tokenAddress);
-        tokens[msg.sender].saleAddress = saleAddress;   
+        address saleAddress = new Crowdsale(msg.sender, fundingGoal, costOfEachToken, tokenAddress);
+        tokens[msg.sender].saleAddress = saleAddress;
+        Token tokenReward = Token(tokenAddress);
+        // Transfer tokens to sale address
+        tokenReward.transfer(saleAddress, tokens[msg.sender].initialSupply);   
     }
  
     function kill() 

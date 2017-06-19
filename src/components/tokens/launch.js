@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Panel, Form, FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
-import { LaunchICOModal } from '../transaction/modals';
+import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
+import { toFiat } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
 import { hexToDecimal } from '../../lib/convert';
+import { toWei } from '../../lib/etherUnits';
 
 const DefaultGas = "0x94da7";
 
@@ -25,6 +27,8 @@ class LaunchForm extends React.Component {
       price: 1,
       fundingGoal: 10000000,
       modalShow: false, 
+      modalSuccess: false,
+      hash: null,
       showTx: false,
       gas: DefaultGas,
       tx: {},
@@ -36,7 +40,7 @@ class LaunchForm extends React.Component {
   }
 
   getRequiredValidation(key) {
-    if (this.state.key) return 'success';
+    if (this.state[key]!=="") return null;
     else return 'warning';
   }
 
@@ -46,7 +50,7 @@ class LaunchForm extends React.Component {
 
   estimateGas() {
     const data = {
-      price: this.state.price,
+      price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
     }
     this.props.estimateGas(data, this.props.wallet)
@@ -60,7 +64,7 @@ class LaunchForm extends React.Component {
 
   initIco() {
     const data = {
-      price: this.state.price,
+      price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
       gasLimit: this.state.gas,
     }
@@ -79,12 +83,21 @@ class LaunchForm extends React.Component {
         this.state,
         this.props.wallet.getAddressString()
         ).then((result) => {
-          this.setState({ modalShow: false, showTx: false });
+          this.setState({ 
+            modalShow: false, 
+            showTx: false,
+            hash: result,
+            modalSuccess: true })
       })
   }
 
   render() {
     let modalClose = () => this.setState({ modalShow: false });
+
+    let priceUSD = (this.state.price && this.props.usdRate) ? toFiat(this.state.price, "ether", this.props.usdRate.rate) : "0.00";
+    let priceBTC = (this.state.price && this.props.btcRate) ? toFiat(this.state.price, "ether", this.props.btcRate.rate) : "0";
+    let goalUSD = (this.state.fundingGoal && this.props.usdRate) ? toFiat(this.state.fundingGoal, "ether", this.props.usdRate.rate) : "0.00";
+    let goalBTC = (this.state.fundingGoal && this.props.btcRate) ? toFiat(this.state.fundingGoal, "ether", this.props.btcRate.rate) : "0.00";
 
     return (
       <Grid>
@@ -103,9 +116,7 @@ class LaunchForm extends React.Component {
               If you already have a token, unlock your wallet to start the ICO.
             </p>}
             <hr />
-            {!this.props.wallet && <Panel header="Please unlock your account to continue">
-                  <OpenWallet />
-              </Panel>}
+            {!this.props.wallet &&  <OpenWallet />}
             
           </Col>
         </Row>}
@@ -140,6 +151,8 @@ class LaunchForm extends React.Component {
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
+            <HelpBlock>{`$${priceUSD} USD`}<br />
+            {`${priceBTC} BTC`}</HelpBlock>
           </FormGroup>
 
           <FormGroup
@@ -153,9 +166,8 @@ class LaunchForm extends React.Component {
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
-            <FormControl.Static>
-              BTC, EUR USD
-            </FormControl.Static>
+            <HelpBlock>{`$${goalUSD} USD`}<br />
+            {`${goalBTC} BTC`}</HelpBlock>
           </FormGroup>
 
           <FormGroup>
@@ -179,6 +191,12 @@ class LaunchForm extends React.Component {
           onGenerate={this.initIco}
           submitTx={this.submitTx}
           />
+        <SuccessModal
+          show={this.state.modalSuccess}
+          hash={this.state.hash}
+        >
+          Congratulations! Once your transaction has been processed, you will find the crowdsale link in your <Button onClick={this.gotoWallet} bsStyle="info" bsSize="small">wallet.</Button> <br />
+        </SuccessModal>          
       </Grid>
     );
   }
@@ -187,9 +205,14 @@ class LaunchForm extends React.Component {
 
 const LaunchIco = connect(
   (state, ownProps) => {
+    const rates = state.wallet.get('rates');
+    const usdRate = rates.filter((r)=>r.currency==='usd')[0];
+    const btcRate = rates.filter((r)=>r.currency==='btc')[0];
     return {
       wallet: state.wallet.get('wallet'),
-      token: state.tokens.get('token')
+      token: state.tokens.get('token'),
+      usdRate,
+      btcRate,
     }
   },
   (dispatch, ownProps) => ({
@@ -207,30 +230,28 @@ const LaunchIco = connect(
         })
       },
       sendTransaction: (tx, data, address) => {
-        const afterTx = (txhash) => {
-          console.log(txhash)
-          const ico = {
-              saleTx: txhash,
-              beneficiary: address,
-              fundingGoal: data.fundingGoal,
-              etherPrice: data.price,
+        const resolver = (resolve, f) => (txhash) => {
+           const token = {
+              owner: address,
+              initialSupply: data.totalSupply,
+              name: data.token,
+              decimals: data.decimals,
+              symbol: data.symbol,
+              tokenTx: txhash,
           };
-          dispatch(gotoTab('buy', ico));
-          dispatch(createIco(ico));
-        };
-
-        const resolver = (resolve, f) => (x) => {
-          f.apply(x);
-          resolve(x);
+          dispatch(createIco(token));
+          resolve(txhash);
         };
 
         return new Promise((resolve, reject) => {
           dispatch(sendTransaction( tx ))
-            .then(resolver(afterTx, resolve));
+            .then(resolver(resolve));
         });
-      },      
+      },
       gotoToken: () => 
-        dispatch(gotoTab('token'))
+        dispatch(gotoTab('token')),
+      gotoWallet: () => 
+        dispatch(gotoTab('wallet'))
   })
 )(LaunchForm)
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import { Grid, Row, Col, Alert } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, Radio, Button, Well } from 'react-bootstrap';
+import { Row, Col, Panel, Alert } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Radio, Button } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
 import ShowWallet from './show';
@@ -109,7 +109,10 @@ class WalletForm extends React.Component {
 
   render() {
     return (
-      <Grid>
+      <Panel 
+        header="Please unlock your account to continue"
+        footer="Note: Your private key is only used to sign transactions in the browser. It is never transmitted to the server, and we do not store any account information. "
+        >
         <Row>
           <Col sm={12} md={4} >
             <h4>Select the format of your private key.</h4>
@@ -183,8 +186,7 @@ class WalletForm extends React.Component {
           </Col>}
         {this.props.wallet && this.state.showBalance &&
           <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
-       </Row>
-      </Grid>
+      </Panel>
     );
   }
 }
