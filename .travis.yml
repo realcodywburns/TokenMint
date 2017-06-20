@@ -4,6 +4,7 @@ node_js:
 env:
   - FULL_CHECK=false
   - FULL_CHECK=true
+  - CI=false
 matrix:
   allow_failures:
     - env: FULL_CHECK=true
