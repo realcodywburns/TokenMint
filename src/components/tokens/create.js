@@ -15,11 +15,6 @@ const DefaultGas = "0x11a7a7";
 class CreateTokenForm extends React.Component {
   constructor(props) {
     super(props);
-    this.initToken = this.initToken.bind(this);
-    this.estimateGas = this.estimateGas.bind(this);
-    this.submitTx = this.submitTx.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.changeGas = this.changeGas.bind(this);
     this.state = {
       symbol: 'TOKN',
       decimals: 8,
@@ -32,15 +27,15 @@ class CreateTokenForm extends React.Component {
     };
   }
 
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-  changeGas(e) {
+  changeGas = (e) => {
     this.setState({ gas: e.target.value })
   }
 
-  estimateGas() {
+  estimateGas = () => {
     const data = {
       token: this.state.token,
       symbol: this.state.symbol,
@@ -56,7 +51,7 @@ class CreateTokenForm extends React.Component {
       })
   }
 
-  initToken() {
+  initToken = () => {
     const data = {
       token: this.state.token,
       symbol: this.state.symbol,
@@ -73,7 +68,7 @@ class CreateTokenForm extends React.Component {
       })
   }
 
-  submitTx() {
+  submitTx = () => {
     this.props.sendTransaction(
         this.state.tx.signedTx,
         this.state,
