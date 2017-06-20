@@ -91,8 +91,13 @@ class CreateTokenForm extends React.Component {
       })
   }
 
+  gotoIco = () => {
+    this.setState({ modalSuccess: false });
+  }
+
   render() {
     let modalClose = () => this.setState({ modalShow: false });
+    let modalSuccessClose = () => this.setState({ modalSuccess: false });
 
     return (
       <div>
@@ -198,10 +203,11 @@ class CreateTokenForm extends React.Component {
         />
         <SuccessModal
           show={this.state.modalSuccess}
+          close={modalSuccessClose}
           hash={this.state.hash}
         >
           Congratulations! Once your token has been mined, you will be able to see it in your wallet. <br />
-          Next Step: <Button onClick={this.gotoIco} bsStyle="info" bsSize="small">Launch a Crowdsale</Button>
+          Next Step: <Button onClick={this.props.gotoIco} bsStyle="info" bsSize="small">Launch a Crowdsale</Button>
         </SuccessModal>
       </div>
     );
@@ -248,8 +254,9 @@ const CreateToken = connect(
           .then(resolver(resolve));
       });
     },
-    gotoIco: () => 
-        dispatch(gotoTab('ico'))
+    gotoIco: () => {
+      dispatch(gotoTab('ico'));
+    }
   })
 )(CreateTokenForm)
 

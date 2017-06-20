@@ -85,6 +85,7 @@ class RenderIco extends React.Component {
   render() {
     
     let modalClose = () => this.setState({ modalShow: false });
+    let modalSuccessClose = () => this.setState({ modalSuccess: false });
     let cost = this.props.price * this.state.amount;
     let costUSD = (this.props.usdRate && cost) ? toFiat(cost, "ether", this.props.usdRate.rate) : "0.00";
     let fundingGoalUSD = (this.props.usdRate && this.props.fundingGoal) ? 
@@ -236,10 +237,12 @@ class RenderIco extends React.Component {
           token={this.props.ico.get("symbol")}
           />}
         <SuccessModal
-          show={this.state.modalSuccess}
+          show={true}
+          close={modalSuccessClose}
           hash={this.state.hash}
         >
-          Congratulations! Once your transaction has been processed, the tokens will be in your account.<br />
+          Congratulations! Once your transaction has been processed, the tokens will be in your account.
+          <p>Next: <a href="/">Create your own Token</a></p>
         </SuccessModal>  
       </Grid>
     );
