@@ -10,6 +10,7 @@ import { toFiat, toEther } from '../../lib/etherUnits';
 import { decimalToHex } from '../../lib/convert';
 import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
+import { number } from '../../lib/valid';
 import { CustomHead, CustomAbout } from './custom';
 
 const DefaultGas = 100000;
@@ -81,6 +82,9 @@ class RenderIco extends React.Component {
           })
       })
 
+  getValid = () => {
+    return (number(this.state.amount)) ? true : false;
+  }
 
   render() {
     
@@ -146,6 +150,7 @@ class RenderIco extends React.Component {
                       <Row>
                         <Col sm={2}>
                           <Button 
+                            disabled={this.getValid()}
                             bsStyle="success"
                             onClick={this.selectETC} >
                             PAY WITH ETC
@@ -153,6 +158,7 @@ class RenderIco extends React.Component {
                         </Col>
                         {false && <Col>
                           <Button 
+                            disabled={this.getValid()}
                             bsStyle="success"
                             onClick={this.buyIco} >
                             PAY WITH ANOTHER CURRENCY
@@ -237,7 +243,7 @@ class RenderIco extends React.Component {
           token={this.props.ico.get("symbol")}
           />}
         <SuccessModal
-          show={true}
+          show={this.state.modalShow}
           close={modalSuccessClose}
           hash={this.state.hash}
         >
