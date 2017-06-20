@@ -3,7 +3,6 @@ node_js:
   - "6"
 env:
   - FULL_CHECK=false
-  - FULL_CHECK=true
 matrix:
   allow_failures:
     - env: FULL_CHECK=true
