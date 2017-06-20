@@ -61,9 +61,9 @@ export function estimateTokenGas(token, wallet) {
     return (dispatch) => {
         const data = functionToData(CreateTokenFunc, 
             { initialSupply: token.totalSupply || 0, 
-            tokenName: token.token || "elaine", 
-            decimals: token.decimals,
-            symbol: token.symbol });
+            tokenName: token.token || "TokenMint", 
+            decimals: token.decimals || 8,
+            symbol: token.symbol || "TOKN" });
         return rpc.call("eth_estimateGas", [{
             from: wallet.getAddressString(),
             to: IcoMachineAddress,
@@ -102,9 +102,9 @@ export function generateTokenTransaction(token, wallet) {
     const addr = wallet.getAddressString();
     const data = functionToData(CreateTokenFunc, 
             { initialSupply: token.totalSupply || 0, 
-            tokenName: token.token || "elaine", 
-            decimals: token.decimals,
-            symbol: token.symbol });
+            tokenName: token.token || "TokenMint", 
+            decimals: token.decimals || 8,
+            symbol: token.symbol || "TOKN"});
     const tx = Object.assign(initialTx, { 
         gasLimit: token.gasLimit,
         data: data,

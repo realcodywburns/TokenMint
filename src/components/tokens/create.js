@@ -7,6 +7,7 @@ import { gotoTab } from '../../store/tabActions';
 import { CreateTxModal, SuccessModal } from '../transaction/modals';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
+import { required, number } from '../../lib/valid';
 import { ToolPopup } from '../../elements/tooltip';
 
 const DefaultGas = "0x11a7a7";
@@ -29,11 +30,6 @@ class CreateTokenForm extends React.Component {
       gas: DefaultGas,
       tx: {},
     };
-  }
-
-  getRequiredValidation(key) {
-    if (this.state.key) return 'success';
-    else return 'warning';
   }
 
   handleChange(e) {
@@ -95,6 +91,10 @@ class CreateTokenForm extends React.Component {
     this.setState({ modalSuccess: false });
   }
 
+  getValid = () => {
+    return (required(this.state.token) || number(this.state.totalSupply)) ? true : false;
+  }
+
   render() {
     let modalClose = () => this.setState({ modalShow: false });
     let modalSuccessClose = () => this.setState({ modalSuccess: false });
@@ -107,7 +107,7 @@ class CreateTokenForm extends React.Component {
         <Form>
           <FormGroup
             controlId="token"
-            validationState={this.getRequiredValidation('token')}
+            validationState={required(this.state.token)}
           >
             <ControlLabel>Token Name</ControlLabel>
             <ToolPopup title="Pick a great name for your new token that is easy to remember.">
@@ -121,7 +121,7 @@ class CreateTokenForm extends React.Component {
           </FormGroup>
          <FormGroup
             controlId="totalSupply"
-            validationState={this.getRequiredValidation('totalSupply')}
+            validationState={required(this.state.totalSupply) || number(this.state.totalSupply)}
           >
             <ControlLabel>Total Supply</ControlLabel>
             <ToolPopup title="This is the total amount of tokens that will ever exist.">
@@ -180,6 +180,7 @@ class CreateTokenForm extends React.Component {
         <Col sm={12}>
         {this.props.wallet &&
           <Button
+            disabled={this.getValid()}
             bsStyle="primary"
             onClick={this.estimateGas} >
             MINT A TOKEN
