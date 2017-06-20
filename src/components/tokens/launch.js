@@ -93,6 +93,7 @@ class LaunchForm extends React.Component {
 
   render() {
     let modalClose = () => this.setState({ modalShow: false });
+    let modalSuccessClose = () => this.setState({ modalSuccess: false });
 
     let priceUSD = (this.state.price && this.props.usdRate) ? toFiat(this.state.price, "ether", this.props.usdRate.rate) : "0.00";
     let priceBTC = (this.state.price && this.props.btcRate) ? toFiat(this.state.price, "ether", this.props.btcRate.rate) : "0";
@@ -193,6 +194,7 @@ class LaunchForm extends React.Component {
           />
         <SuccessModal
           show={this.state.modalSuccess}
+          close={modalSuccessClose}
           hash={this.state.hash}
         >
           Congratulations! Once your transaction has been processed, you will find the crowdsale link in your <Button onClick={this.gotoWallet} bsStyle="info" bsSize="small">wallet.</Button> <br />
