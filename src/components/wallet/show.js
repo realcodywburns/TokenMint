@@ -14,16 +14,16 @@ class RenderWallet extends React.Component {
       privKey: '',
     };
   }
- 
+
 
 
   render() {
     return (
       <Grid>
-        <Row>            
+        <Row>
           <Col sm={8} md={6}>
             <Panel>
-              
+
               <Panel header="Account Address" bsStyle="success">
                 {this.props.wallet.getAddressString()}
               </Panel>
@@ -33,24 +33,24 @@ class RenderWallet extends React.Component {
               </Panel>
               <Panel bsStyle="success">
                 <ListGroup>
-                  {this.props.token && 
+                  {this.props.token &&
                     <ListGroupItem header={`${this.props.token.get("name")}(${this.props.token.get("symbol")})`}>
-                    Token Contract: 
-                    <a href={`http://gastracker.io/addr/${this.props.token.get("tokenAddress")}`} 
+                    Token Contract:
+                    <a href={`http://gastracker.io/addr/${this.props.token.get("tokenAddress")}`}
                       rel="noopener noreferrer"
                       target="_blank">
                       {this.props.token.get("tokenAddress")}
                     </a><hr />
-                    Crowdsale Status: 
-                    {this.props.token.get("saleAddress") && 
+                    Crowdsale Status:
+                    {this.props.token.get("saleAddress") &&
                       <Button bsSize="small" bsStyle="info" href={`/ico/${this.props.token.get("saleAddress")}`}>
                       Active
                     </Button>}
-                    {!this.props.token.get("saleAddress") && 
+                    {!this.props.token.get("saleAddress") &&
                       <Button bsSize="small" bsStyle="success" onClick={this.props.gotoIco}>Launch ICO
                       </Button>}
                   </ListGroupItem>}
-                  {this.props.ico && 
+                  {this.props.ico &&
                     <ListGroupItem header={`${this.props.token.get("name")} Crowdsale`}>
                     Funding Goal: {this.props.ico.get("fundingGoal")}
                     <hr />
@@ -60,13 +60,19 @@ class RenderWallet extends React.Component {
               </Panel>
               <Panel>
                 <h4>Equivalent Values</h4>
-                <hr />  
+                <hr />
                 {this.props.fiatValues.map((v) =>
                   <Row key={v.currency}><Col smOffset={1}>{v.value} {v.currency.toUpperCase()}</Col>
                   </Row>)}
               </Panel>
               <Panel bsStyle="warning">
                 <h4>Tokens</h4>
+                <ListGroup>
+                {this.props.token &&
+                  <ListGroupItem header={`${this.props.token.get("name")}(${this.props.token.get("symbol")})`}>
+                  </ListGroupItem>}
+                  </ListGroup>
+
                 Coming soon...
               </Panel>
               {this.props.showClose && <Button onClick={this.props.closeWallet}>Close Wallet</Button>}
@@ -81,13 +87,13 @@ class RenderWallet extends React.Component {
 const ShowWallet = connect(
   (state, ownProps) => {
     const rates = state.wallet.get('rates');
-    const balance = state.transaction.get('data')  && 
+    const balance = state.transaction.get('data')  &&
       toEther(state.transaction.get('data').get('balance'), 'wei');
     let fiatValues = [];
     if (rates && balance)
       fiatValues = rates.map((r) => {
-        return { 
-          currency: r.currency, 
+        return {
+          currency: r.currency,
           value: toFiat(balance, 'ether', r.rate)
         }
       });
@@ -100,7 +106,7 @@ const ShowWallet = connect(
     };
   },
   (dispatch, ownProps) => ({
-    gotoIco: () => 
+    gotoIco: () =>
       dispatch(gotoTab('ico'))
   })
 )(RenderWallet)

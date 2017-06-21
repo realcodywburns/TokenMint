@@ -40,7 +40,6 @@ contract smartmanager is priced, owned {
   uint public pendingReturns;           //  returns amount available for withdrawl
   uint public adminCount;               // check count of admins
   uint public price;                    // the cost of each ticket is n ether.
-
   struct admin {
     address adminAddr;                  // store an admins address
     string aName;                       // assign a human readable name to an admin
@@ -55,7 +54,6 @@ contract smartmanager is priced, owned {
       string tType;   // the type of token
       string tIcon;   // url of image file for token if any
 // admin items
-      string memo;            // notes on the token
       uint dateChanged;     // last changed on
       address changedBy;    // last changed by
       string changeReason;  // notes on change
@@ -81,7 +79,7 @@ function register(address _tAddr, address _tSale, string _tName, string _tSymbol
 }
 
 function  logCoin(address _tAddr, address _tSale, string _tName, string _tSymbol, uint _tDecimal, string _tType, string _tIcon) internal {
-    uint id = aCount++;    
+    uint id = aCount++;
     token t = tokens[id];                                   // assigns the incoming token to the next available address
     t.tAddr = _tAddr;                                       // address of the main token contract
     t.tSale = _tSale;                                       // address of the crowd sale
@@ -168,7 +166,7 @@ function modCategory(
      //  }
 
 //this is the function allows to change a specific field in a contract from the list, TODO add all fields
- 
+
 //this is the function sets the listing price
     if (_action == 4){
       price = _reprice;
