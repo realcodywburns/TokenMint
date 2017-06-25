@@ -10,3 +10,8 @@ export const code = {
     maxHeight: '250px',
 };
 
+export const wrap = {
+    whiteSpace: 'pre-wrap',
+    wordWrap: 'break-word',
+    overflow: 'auto',
+};
