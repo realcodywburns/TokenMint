@@ -1,7 +1,8 @@
 import { rpc } from '../lib/rpc';
 import { generateTx } from '../lib/transaction';
 import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
-import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc, TokensFunc, CrowdSaleFuncs } from '../lib/contract';
+import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc, TokensFunc } from '../lib/contract';
+import { ERC20Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
 
 const initialTx = {
     to: IcoMachineAddress,
@@ -33,6 +34,28 @@ export function readTokens(address) {
     }
 }
     
+
+export function loadCustomToken(address) {
+    return (dispatch) => {
+        let data;
+        for (const c of ERC20Funcs) {
+            data = functionToData(c, {});
+            rpc.call("eth_call", [{
+                to: address,
+                data: data,
+            }]).then((result) => {
+                const params = dataToParams(c, result);
+                const outputs = paramsToToken(params);
+                dispatch({
+                    type: 'TOKEN/CUSTOM_TOKEN',
+                    name: c.get('name'),
+                    value: outputs[""],
+                    address,
+                });
+            })
+        }
+    }
+}
 
 export function loadCrowdSale(address) {
     return (dispatch) => {
@@ -161,6 +184,32 @@ export function generateBuyIco(data, wallet) {
         data: "",
         value: data.value,
         from: addr };
+    return (dispatch, getState) => {
+        const transaction = getState().transaction;
+        if (!transaction.get('busy')) {
+            tx.gasPrice = transaction.get('data').get('gasPrice');
+            tx.nonce = transaction.get('data').get('nonce');
+        }
+        return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/GENERATE',
+                raw: result.rawTx,
+                signed: result.signedTx,
+            });
+            return result;
+        });
+    }
+}
+
+export function generateSendTokenTransaction(tokenAddress, send, wallet) {
+    const addr = wallet.getAddressString();
+    const data = functionToData(TransferTokensFunc, 
+            { _to: send.to, 
+            _value: send.value });
+    const tx = Object.assign(initialTx, { 
+        gasLimit: send.gasLimit,
+        data: data,
+        from: addr });
     return (dispatch, getState) => {
         const transaction = getState().transaction;
         if (!transaction.get('busy')) {
