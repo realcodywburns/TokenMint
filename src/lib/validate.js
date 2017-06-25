@@ -22,3 +22,20 @@ export function validateHexString(str) {
     var re = /[0-9A-Fa-f]+$/g;
     return re.test(str);
 }
+
+
+/*
+    Form Validation
+*/
+
+export function required(value) {
+  return value ? null : 'error';
+}
+
+export function number(value) {
+    return parseInt(value, 10) > 0 ? null : 'error';
+}
+
+export function address(value) {
+    return validateEtherAddress(value) ? null : 'error';
+}

@@ -10,7 +10,7 @@ import { toFiat, toEther } from '../../lib/etherUnits';
 import { decimalToHex } from '../../lib/convert';
 import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
-import { number } from '../../lib/valid';
+import { number } from '../../lib/validate';
 import { CustomHead, CustomAbout } from './custom';
 
 const DefaultGas = 100000;

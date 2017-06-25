@@ -7,7 +7,7 @@ import { gotoTab } from '../../store/tabActions';
 import { CreateTxModal, SuccessModal } from '../transaction/modals';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
-import { required, number } from '../../lib/valid';
+import { required, number } from '../../lib/validate';
 import { ToolPopup } from '../../elements/tooltip';
 
 const DefaultGas = "0x11a7a7";

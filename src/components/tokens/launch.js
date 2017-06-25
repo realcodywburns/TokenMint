@@ -9,7 +9,7 @@ import { sendTransaction } from '../../store/transactionActions';
 import { toFiat } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
 import { hexToDecimal } from '../../lib/convert';
-import { number } from '../../lib/valid';
+import { number } from '../../lib/validate';
 import { toWei } from '../../lib/etherUnits';
 
 const DefaultGas = "0x94da7";
