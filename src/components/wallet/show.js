@@ -30,7 +30,7 @@ class RenderWallet extends React.Component {
                 rel="noopener noreferrer"
                 target="_blank">
                 <span style={wrap}>{this.props.token.get("tokenAddress")}</span>
-              </a><hr />
+              </a>
               Crowdsale Status: 
               {this.props.token.get("saleAddress") && 
                 <Button bsSize="small" bsStyle="info" href={`/ico/${this.props.token.get("saleAddress")}`}>
@@ -43,7 +43,6 @@ class RenderWallet extends React.Component {
             {this.props.ico && 
               <ListGroupItem header={`${this.props.token.get("name")} Crowdsale`}>
               Funding Goal: {this.props.ico.get("fundingGoal")}
-              <hr />
               Amount Raised: {this.props.ico.get("amountRaised")}
             </ListGroupItem>}
           </ListGroup>
