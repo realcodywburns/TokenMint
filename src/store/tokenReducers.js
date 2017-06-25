@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 const initial = Immutable.fromJS({
     token:null,
     ico: null,
+    custom: [],
 });
 
 const initToken = Immutable.fromJS({
@@ -22,6 +23,12 @@ const initIco = Immutable.fromJS({
     tokenPrice: null,
     saleTx: null,
     amountRaised: null,
+});
+
+const customToken = Immutable.fromJS({
+    name: null,
+    decimals: 8,
+    symbol: null,
 });
 
 function onTokenCreate(state, action) {
@@ -87,11 +94,33 @@ function onCrowdsaleLoad(state, action) {
     return state;    
 }
 
+function updateCustomToken(state, address, f) {
+    return state.update('custom', (custom) => {
+        const pos = custom.findKey((tok) => tok.get('address') === address);
+        if (pos >= 0) {
+            return custom.update(pos, f);
+        } else {
+            return custom.push(f(customToken.set('address', address)));
+        }
+    });
+}
+
+
+function onCustomToken(state, action) {
+    if (action.type === 'TOKEN/CUSTOM_TOKEN') {
+        return updateCustomToken(state, action.address, (tok) =>
+            tok.set(action.name, action.value)
+        );
+    }
+    return state;    
+}
+
 export default function tokenReducers(state, action) {
     state = state || initial;
     state = onTokenCreate(state, action);
     state = onIcoCreate(state, action);
     state = onTokenLoad(state, action);
     state = onCrowdsaleLoad(state, action);
+    state = onCustomToken(state, action);
     return state;
 }
