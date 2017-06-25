@@ -6,18 +6,12 @@ import { Form, FormGroup, FormControl, Radio, Button } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
 import ShowWallet from './show';
+import SendWallet from './send';
 
 class WalletForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.openWallet = this.openWallet.bind(this);
-    this.closeWallet = this.closeWallet.bind(this);
-    this.handlePrivKey = this.handlePrivKey.bind(this);
-    this.handlePassword = this.handlePassword.bind(this);
-    this.handleFormat = this.handleFormat.bind(this);
-    this.resetState = this.resetState.bind(this);
-    this.onDrop = this.onDrop.bind(this);
     this.state = {
       privKey: '',
       showFileKey: false,
@@ -32,7 +26,7 @@ class WalletForm extends React.Component {
     };
   }
 
-  resetState() {
+  resetState = () => {
     this.setState({
       error: null,
       file: null,
@@ -44,7 +38,7 @@ class WalletForm extends React.Component {
     });
   }
 
-  openWallet() {
+  openWallet = () => {
     if (this.state.showTextKey)
         this.props.openWallet(this.state.privKey, this.state.password)
           .then((result) => {
@@ -64,15 +58,15 @@ class WalletForm extends React.Component {
     this.resetState();
   }
 
-  closeWallet() {
+  closeWallet = () => {
     this.resetState();
   }
 
-  handlePassword(e) {
+  handlePassword = (e) => {
     this.setState({ [e.target.id]: e.target.value, showRequirePass: true });
   }
 
-  handlePrivKey(e) {
+  handlePrivKey = (e) => {
     this.resetState();
     this.setState({ [e.target.id]: e.target.value });
     if (e.target.value.length === 64)
@@ -82,7 +76,7 @@ class WalletForm extends React.Component {
 
   }
 
-  handleFormat(e) {
+  handleFormat = (e) => {
     if (e.target.value === "file")
       this.setState({ showFileKey: true, showTextKey: false });
     else if (e.target.value === "text")
@@ -90,7 +84,7 @@ class WalletForm extends React.Component {
     this.resetState();
   }
 
-  onDrop(acceptedFiles, rejectedFiles) {
+  onDrop = (acceptedFiles, rejectedFiles) => {
         const reader = new FileReader();
         reader.readAsText(acceptedFiles[0]);
         this.setState({ fileName: acceptedFiles[0].name });
@@ -103,7 +97,7 @@ class WalletForm extends React.Component {
           }
         };
     }
-  showIntroText(){
+  showIntroText = () =>{
       this.setState({ showIntro: true });
     }
 
@@ -186,7 +180,15 @@ class WalletForm extends React.Component {
             </Col>
         </Row>
           {this.props.wallet && this.state.showBalance &&
-          <ShowWallet showClose={true} closeWallet={this.closeWallet}/>}
+            <Row>            
+              <Col sm={6} md={4}>
+                <ShowWallet showClose={true} closeWallet={this.closeWallet}/>
+              </Col>
+              <Col sm={6} md={8}>
+                <SendWallet/>
+              </Col>
+            </Row>
+          }
       </Panel>
     );
   }
