@@ -106,6 +106,33 @@ export const BuyTokenModal = (props) => {
     );
 };
 
+export const SendTxModal = (props) => {
+    const { show, close, showTx } = props;
+    const { rawTx, signedTx, submitTx } = props;
+
+    return (
+      <Modal show={show} onHide={close} bsSize="large">
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-lg">Send Transaction</Modal.Title>
+          </Modal.Header>
+          {showTx && <Modal.Body>
+            <p>You are about to send {props.amount} {props.token} on the Ethereum Classic chain.</p>
+          </Modal.Body>}
+          {showTx && <Modal.Body>
+              <FormGroup>
+                <ControlLabel>Raw Transaction</ControlLabel>
+                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+              </FormGroup>
+              <FormGroup>
+                <ControlLabel>Signed Transaction</ControlLabel>
+                <Well bsSize="sm" style={code}>{signedTx}</Well>
+              </FormGroup>
+            <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
+          </Modal.Body>}
+        </Modal>
+    );
+};
+
 export const SuccessModal = (props) => {
     const { show, close } = props;
     const { hash } = props;
