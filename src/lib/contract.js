@@ -36,6 +36,12 @@ export const BalanceOfFunc = Immutable.fromJS({
     outputs:[{name:'balance',type:'uint256'}]
 });
 
+export const TransferTokensFunc = Immutable.fromJS({
+    name:'transfer',
+    inputs:[{ name:'_to', type:'address' },
+            { name:'_value', type:'uint256' }]
+    });
+
 export const CrowdSaleFuncs = [
     Immutable.fromJS({
         name: "amountRaised",
