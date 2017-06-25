@@ -63,3 +63,26 @@ export const CrowdSaleFuncs = [
         outputs:[{ name: '', type: 'address'}]
     })
 ]
+
+export const ERC20Funcs = [
+    Immutable.fromJS({
+        name: "name",
+        inputs:[],
+        outputs:[{ name: '', type: 'string'}]
+    }),
+    Immutable.fromJS({
+        name: "symbol",
+        inputs:[],
+        outputs:[{ name: '', type: 'string'}]
+    }),
+    Immutable.fromJS({
+        name: "decimals",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint8'}]
+    }),
+    Immutable.fromJS({
+        name: "totalSupply",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint256'}]
+    }),
+]
