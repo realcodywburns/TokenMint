@@ -22,8 +22,7 @@ class RenderWallet extends React.Component {
             <h4>Balance</h4>
             {this.props.balance || '?'} ETC
           </Panel>
-          <ListGroup>
-            {this.props.token && 
+          {this.props.token && <ListGroup>            
               <ListGroupItem header={`${this.props.token.get("name")}(${this.props.token.get("symbol")})`}>
               Token Contract: 
               <a href={`http://gastracker.io/addr/${this.props.token.get("tokenAddress")}`} 
@@ -31,6 +30,8 @@ class RenderWallet extends React.Component {
                 target="_blank">
                 <span style={wrap}>{this.props.token.get("tokenAddress")}</span>
               </a>
+              </ListGroupItem>
+              <ListGroupItem>
               Crowdsale Status: 
               {this.props.token.get("saleAddress") && 
                 <Button bsSize="small" bsStyle="info" href={`/ico/${this.props.token.get("saleAddress")}`}>
@@ -39,13 +40,16 @@ class RenderWallet extends React.Component {
               {!this.props.token.get("saleAddress") && 
                 <Button bsSize="small" bsStyle="success" onClick={this.props.gotoIco}>Launch ICO
                 </Button>}
-            </ListGroupItem>}
+            </ListGroupItem>
             {this.props.ico && 
               <ListGroupItem header={`${this.props.token.get("name")} Crowdsale`}>
               Funding Goal: {this.props.ico.get("fundingGoal")}
+              </ListGroupItem>}
+            {this.props.ico && 
+            <ListGroupItem>
               Amount Raised: {this.props.ico.get("amountRaised")}
             </ListGroupItem>}
-          </ListGroup>
+          </ListGroup>}
           <Panel>
             <h4>Equivalent Values</h4>
             <hr />  
