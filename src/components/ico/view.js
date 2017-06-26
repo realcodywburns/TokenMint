@@ -175,7 +175,7 @@ class RenderIco extends React.Component {
                 onChange={this.handleChange}
               />
               <HelpBlock>{`Total cost: ${cost} ETC  ($${costUSD} USD).`} You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
-              {this.props.wallet &&
+              {this.props.wallet && this.props.ico &&
               <FormGroup>
                 <Button 
                   bsStyle="primary"
@@ -187,7 +187,7 @@ class RenderIco extends React.Component {
           </Panel>
 
 
-          {this.props.wallet && 
+          {this.props.wallet && this.props.ico && 
             <Panel bsStyle="success"> 
               {this.props.ico.get('tokenName')}s Owned: &nbsp; 
               {this.props.balance} 

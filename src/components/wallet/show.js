@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Row, Col, Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
@@ -34,9 +35,9 @@ class RenderWallet extends React.Component {
               <ListGroupItem>
               Crowdsale Status: 
               {this.props.token.get("saleAddress") && 
-                <Button bsSize="small" bsStyle="info" href={`/ico/${this.props.token.get("saleAddress")}`}>
-                Active
-              </Button>}
+                <Link to={`/ico/${this.props.token.get("saleAddress")}`}>
+                <Button bsSize="small" bsStyle="info">Active</Button>
+                </Link>}
               {!this.props.token.get("saleAddress") && 
                 <Button bsSize="small" bsStyle="success" onClick={this.props.gotoIco}>Launch ICO
                 </Button>}
