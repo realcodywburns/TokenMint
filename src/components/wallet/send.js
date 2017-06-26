@@ -134,7 +134,7 @@ class RenderWallet extends React.Component {
           {(this.state.tokenUnit !== 'ETC') && (!custom) && <FormGroup
             controlId="tokenAddress"
           >
-            <ControlLabel>Token Address</ControlLabel>
+            <ControlLabel>Send Custom Token</ControlLabel>
             <InputGroup>
               <FormControl
                 type="text"
