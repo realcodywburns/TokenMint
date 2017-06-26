@@ -1,7 +1,12 @@
 import { rpc } from '../lib/rpc';
 import { generateTx } from '../lib/transaction';
 import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
+<<<<<<< HEAD
 import { IcoMachineAddress, RegContractAddress, regCount, CreateTokenFunc, CreateSaleFunc, TokensFunc, CrowdSaleFuncs } from '../lib/contract';
+=======
+import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc, TokensFunc } from '../lib/contract';
+import { ERC20Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
+>>>>>>> master
 
 const initialTx = {
     to: IcoMachineAddress,
@@ -30,6 +35,28 @@ export function readTokens(address) {
   }
 
 
+export function loadCustomToken(address) {
+    return (dispatch) => {
+        let data;
+        for (const c of ERC20Funcs) {
+            data = functionToData(c, {});
+            rpc.call("eth_call", [{
+                to: address,
+                data: data,
+            }]).then((result) => {
+                const params = dataToParams(c, result);
+                const outputs = paramsToToken(params);
+                dispatch({
+                    type: 'TOKEN/CUSTOM_TOKEN',
+                    name: c.get('name'),
+                    value: outputs[""],
+                    address,
+                });
+            })
+        }
+    }
+}
+
 export function loadCrowdSale(address) {
     return (dispatch) => {
         let data;
@@ -55,11 +82,19 @@ export function loadCrowdSale(address) {
 
 export function estimateTokenGas(token, wallet) {
     return (dispatch) => {
+<<<<<<< HEAD
         const data = functionToData(CreateTokenFunc,
             { initialSupply: token.totalSupply || 0,
             tokenName: token.token || "elaine",
             decimals: token.decimals,
             symbol: token.symbol });
+=======
+        const data = functionToData(CreateTokenFunc, 
+            { initialSupply: token.totalSupply || 0, 
+            tokenName: token.token || "TokenMint", 
+            decimals: token.decimals || 8,
+            symbol: token.symbol || "TOKN" });
+>>>>>>> master
         return rpc.call("eth_estimateGas", [{
             from: wallet.getAddressString(),
             to: IcoMachineAddress,
@@ -96,12 +131,21 @@ export function estimateIcoGas(ico, wallet) {
 
 export function generateTokenTransaction(token, wallet) {
     const addr = wallet.getAddressString();
+<<<<<<< HEAD
     const data = functionToData(CreateTokenFunc,
             { initialSupply: token.totalSupply || 0,
             tokenName: token.token || "elaine",
             decimals: token.decimals,
             symbol: token.symbol });
     const tx = Object.assign(initialTx, {
+=======
+    const data = functionToData(CreateTokenFunc, 
+            { initialSupply: token.totalSupply || 0, 
+            tokenName: token.token || "TokenMint", 
+            decimals: token.decimals || 8,
+            symbol: token.symbol || "TOKN"});
+    const tx = Object.assign(initialTx, { 
+>>>>>>> master
         gasLimit: token.gasLimit,
         data: data,
         from: addr });
@@ -157,6 +201,32 @@ export function generateBuyIco(data, wallet) {
         data: "",
         value: data.value,
         from: addr };
+    return (dispatch, getState) => {
+        const transaction = getState().transaction;
+        if (!transaction.get('busy')) {
+            tx.gasPrice = transaction.get('data').get('gasPrice');
+            tx.nonce = transaction.get('data').get('nonce');
+        }
+        return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/GENERATE',
+                raw: result.rawTx,
+                signed: result.signedTx,
+            });
+            return result;
+        });
+    }
+}
+
+export function generateSendTokenTransaction(tokenAddress, send, wallet) {
+    const addr = wallet.getAddressString();
+    const data = functionToData(TransferTokensFunc, 
+            { _to: send.to, 
+            _value: send.value });
+    const tx = Object.assign(initialTx, { 
+        gasLimit: send.gasLimit,
+        data: data,
+        from: addr });
     return (dispatch, getState) => {
         const transaction = getState().transaction;
         if (!transaction.get('busy')) {

@@ -11,8 +11,8 @@ const initial = Immutable.fromJS({
 const txData = Immutable.fromJS({
     address: null,
     balance: null,
-    gasPrice: null,
-    nonce: null,
+    gasPrice: "0x04a817c800",
+    nonce: "0x00",
 });
 
 function onLoading(state, action) {

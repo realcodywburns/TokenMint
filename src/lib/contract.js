@@ -38,6 +38,7 @@ export const BalanceOfFunc = Immutable.fromJS({
     outputs:[{name:'balance',type:'uint256'}]
 });
 
+<<<<<<< HEAD
 export const joinTheReg =  Immutable.fromJS({
   name: 'register',
   inputs:[{name:"_tAddr", type : "address"},
@@ -48,6 +49,13 @@ export const joinTheReg =  Immutable.fromJS({
           {name:"_tType",type:"string"},
           {name:"_tIcon",type:"string"}]
 });
+=======
+export const TransferTokensFunc = Immutable.fromJS({
+    name:'transfer',
+    inputs:[{ name:'_to', type:'address' },
+            { name:'_value', type:'uint256' }]
+    });
+>>>>>>> master
 
 export const CrowdSaleFuncs = [
     Immutable.fromJS({
@@ -76,6 +84,7 @@ export const CrowdSaleFuncs = [
         outputs:[{ name: '', type: 'address'}]
     })
 ]
+<<<<<<< HEAD
 export const regCount =  Immutable.fromJS({
         name: "Count",
         inputs:[],
@@ -92,3 +101,28 @@ export const regData =  Immutable.fromJS({
                 { name: 'tType', type: 'string'},
                 { name: 'tIcon', type: 'string'}]
     });
+=======
+
+export const ERC20Funcs = [
+    Immutable.fromJS({
+        name: "name",
+        inputs:[],
+        outputs:[{ name: '', type: 'string'}]
+    }),
+    Immutable.fromJS({
+        name: "symbol",
+        inputs:[],
+        outputs:[{ name: '', type: 'string'}]
+    }),
+    Immutable.fromJS({
+        name: "decimals",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint8'}]
+    }),
+    Immutable.fromJS({
+        name: "totalSupply",
+        inputs:[],
+        outputs:[{ name: '', type: 'uint256'}]
+    }),
+]
+>>>>>>> master

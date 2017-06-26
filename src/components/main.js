@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Grid, Row, Col, Image, Nav, NavItem, NavDropdown, MenuItem, Radio,FormGroup } from 'react-bootstrap';
+import { Tabs, Tab, Grid, Row, Col, Image, Nav, NavItem } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
-import BuyIco from './tokens/buy';
 import ToSmodal from './info/ToS';
 import logo from '../img/logo.png';
 

@@ -5,6 +5,7 @@ export function isNumeric(n) {
 }
 
 export function validateEtherAddress(address) {
+    if (!address) return false;
     if (address.substring(0, 2) !== "0x") return false;
     else if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) return false;
     else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) return true;
@@ -21,4 +22,21 @@ export function validateHexString(str) {
     str = str.substring(0, 2) === '0x' ? str.substring(2) : str;
     var re = /[0-9A-Fa-f]+$/g;
     return re.test(str);
+}
+
+
+/*
+    Form Validation
+*/
+
+export function required(value) {
+  return value ? null : 'error';
+}
+
+export function number(value) {
+    return parseInt(value, 10) > 0 ? null : 'error';
+}
+
+export function address(value) {
+    return validateEtherAddress(value) ? null : 'error';
 }

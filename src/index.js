@@ -5,12 +5,12 @@ import {start as startStore} from './store/store.js';
 import registerServiceWorker from './registerServiceWorker';
 import './index.scss';
 
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 
 ReactDOM.render((
-  <BrowserRouter>
+  <HashRouter>
     <TokenApp/>
-  </BrowserRouter>
+  </HashRouter>
     ), document.getElementById('root'));
 startStore();
 registerServiceWorker();

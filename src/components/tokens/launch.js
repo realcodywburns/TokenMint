@@ -9,6 +9,7 @@ import { sendTransaction } from '../../store/transactionActions';
 import { toFiat } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
 import { hexToDecimal } from '../../lib/convert';
+import { number } from '../../lib/validate';
 import { toWei } from '../../lib/etherUnits';
 
 const DefaultGas = "0x94da7";
@@ -17,15 +18,7 @@ class LaunchForm extends React.Component {
   
   constructor(props) {
     super(props);
-    this.initIco = this.initIco.bind(this);
-    this.estimateGas = this.estimateGas.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.gotoToken = this.gotoToken.bind(this);
-    this.submitTx = this.submitTx.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.state = {
-      price: 1,
-      fundingGoal: 10000000,
       modalShow: false, 
       modalSuccess: false,
       hash: null,
@@ -35,20 +28,15 @@ class LaunchForm extends React.Component {
     };
   }
 
-  gotoToken() {
+  gotoToken = () => {
     this.props.gotoToken();
   }
 
-  getRequiredValidation(key) {
-    if (this.state[key]!=="") return null;
-    else return 'warning';
-  }
-
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   }
 
-  estimateGas() {
+  estimateGas = () => {
     const data = {
       price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
@@ -62,7 +50,7 @@ class LaunchForm extends React.Component {
       })
   }
 
-  initIco() {
+  initIco = () => {
     const data = {
       price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
@@ -77,7 +65,7 @@ class LaunchForm extends React.Component {
       })
   }
 
-  submitTx() {
+  submitTx = () => {
     this.props.sendTransaction(
         this.state.tx.signedTx, 
         this.state,
@@ -89,6 +77,10 @@ class LaunchForm extends React.Component {
             hash: result,
             modalSuccess: true })
       })
+  }
+
+  getValid = () => {
+    return (number(this.state.price) || number(this.state.fundingGoal)) ? true : false;
   }
 
   render() {
@@ -143,7 +135,7 @@ class LaunchForm extends React.Component {
         {this.props.token && <Form>
           <FormGroup
             controlId="price"
-            validationState={this.getRequiredValidation('price')}
+            validationState={number(this.state.price)}
           >
             <ControlLabel>Price per Token (in ether)</ControlLabel>
             <FormControl
@@ -158,7 +150,7 @@ class LaunchForm extends React.Component {
 
           <FormGroup
             controlId="fundingGoal"
-            validationState={this.getRequiredValidation('fundingGoal')}
+            validationState={number(this.state.fundingGoal)}
           >
             <ControlLabel>Funding Goal (sale will end when goal is reached)</ControlLabel>
             <FormControl
@@ -174,6 +166,7 @@ class LaunchForm extends React.Component {
           <FormGroup>
             {this.props.wallet &&
             <Button 
+              disabled={this.getValid()}
               bsStyle="primary"
               onClick={this.estimateGas} >
               START THE ICO

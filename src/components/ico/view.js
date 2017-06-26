@@ -10,6 +10,7 @@ import { toFiat, toEther } from '../../lib/etherUnits';
 import { decimalToHex } from '../../lib/convert';
 import { fetchIco, getBalanceOf } from '../../store/icoActions';
 import logo from '../../img/logo.png';
+import { number } from '../../lib/validate';
 import { CustomHead, CustomAbout } from './custom';
 
 const DefaultGas = 100000;
@@ -81,6 +82,9 @@ class RenderIco extends React.Component {
           })
       })
 
+  getValid = () => {
+    return (number(this.state.amount)) ? true : false;
+  }
 
   render() {
     
@@ -146,6 +150,7 @@ class RenderIco extends React.Component {
                       <Row>
                         <Col sm={2}>
                           <Button 
+                            disabled={this.getValid()}
                             bsStyle="success"
                             onClick={this.selectETC} >
                             PAY WITH ETC
@@ -153,6 +158,7 @@ class RenderIco extends React.Component {
                         </Col>
                         {false && <Col>
                           <Button 
+                            disabled={this.getValid()}
                             bsStyle="success"
                             onClick={this.buyIco} >
                             PAY WITH ANOTHER CURRENCY
@@ -169,7 +175,7 @@ class RenderIco extends React.Component {
                 onChange={this.handleChange}
               />
               <HelpBlock>{`Total cost: ${cost} ETC  ($${costUSD} USD).`} You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
-              {this.props.wallet &&
+              {this.props.wallet && this.props.ico &&
               <FormGroup>
                 <Button 
                   bsStyle="primary"
@@ -181,7 +187,7 @@ class RenderIco extends React.Component {
           </Panel>
 
 
-          {this.props.wallet && 
+          {this.props.wallet && this.props.ico && 
             <Panel bsStyle="success"> 
               {this.props.ico.get('tokenName')}s Owned: &nbsp; 
               {this.props.balance} 
@@ -237,7 +243,7 @@ class RenderIco extends React.Component {
           token={this.props.ico.get("symbol")}
           />}
         <SuccessModal
-          show={true}
+          show={this.state.modalSuccess}
           close={modalSuccessClose}
           hash={this.state.hash}
         >

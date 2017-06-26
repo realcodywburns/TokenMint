@@ -296,6 +296,8 @@ function parseType (type) {
       case 'string':
         rawType = 'bytes'
         break
+      default:
+        rawType = 'bytes'
     }
     ret = {
       rawType: rawType,
@@ -303,7 +305,7 @@ function parseType (type) {
       memoryUsage: 32
     }
 
-    if (type.startsWith('bytes') && type !== 'bytes' || type.startsWith('uint') || type.startsWith('int')) {
+    if ((type.startsWith('bytes') && (type !== 'bytes')) || type.startsWith('uint') || type.startsWith('int')) {
       ret.size = parseTypeN(type)
     } else if (type.startsWith('ufixed') || type.startsWith('fixed')) {
       ret.size = parseTypeNxM(type)
@@ -405,15 +407,18 @@ function stringify (type, value) {
 ABI.stringify = function (types, values) {
   var ret = []
 
+  function moveMap(v, t) {
+    var val = v.map((item) => stringify(t, item));
+    return val.join(', ');
+  }
+
   for (var i in types) {
     var type = types[i]
     var value = values[i]
 
     // if it is an array type, concat the items
-    if (/^[^\[]+\[.*\]$/.test(type)) {
-      value = value.map(function (item) {
-        return stringify(type, item)
-      }).join(', ')
+    if (/^[^[]+\[.*\]$/.test(type)) {
+      value = moveMap(value, type);
     } else {
       value = stringify(type, value)
     }
