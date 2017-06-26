@@ -44,7 +44,10 @@ export const TransferTokensFunc = Immutable.fromJS({
             { name:'_value', type:'uint256' }]
     });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 export const CrowdSaleFuncs = [
     Immutable.fromJS({
         name: "amountRaised",
@@ -95,6 +98,7 @@ export const ERC20Funcs = [
         outputs:[{ name: '', type: 'uint256'}]
     }),
 ]
+<<<<<<< HEAD
 
 export const joinTheReg =  Immutable.fromJS({
   name: 'register',
@@ -124,3 +128,5 @@ export const regData =  Immutable.fromJS({
                 { name: 'tType', type: 'string'},
                 { name: 'tIcon', type: 'string'}]
     });
+=======
+>>>>>>> master

@@ -1,6 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { toFiat, toEther } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
@@ -8,6 +8,7 @@ import { gotoTab } from '../../store/tabActions';
 
 class RenderWallet extends React.Component {
 
+<<<<<<< HEAD
   constructor(props) {
     super(props);
     this.state = {
@@ -80,6 +81,8 @@ class RenderWallet extends React.Component {
           </Col>
         </Row>
       </Grid>
+=======
+>>>>>>> master
     );
   }
 }
