@@ -243,7 +243,7 @@ class RenderIco extends React.Component {
           token={this.props.ico.get("symbol")}
           />}
         <SuccessModal
-          show={this.state.modalShow}
+          show={this.state.modalSuccess}
           close={modalSuccessClose}
           hash={this.state.hash}
         >
