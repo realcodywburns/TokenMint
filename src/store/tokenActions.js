@@ -1,8 +1,14 @@
 import { rpc } from '../lib/rpc';
 import { generateTx } from '../lib/transaction';
 import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
+<<<<<<< HEAD
+import { IcoMachineAddress, RegContractAddress, regCount, CreateTokenFunc, CreateSaleFunc, TokensFunc, CrowdSaleFuncs } from '../lib/contract';
+import { ERC20Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
+
+=======
 import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc, TokensFunc } from '../lib/contract';
 import { ERC20Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
+>>>>>>> master
 
 const initialTx = {
     to: IcoMachineAddress,
@@ -13,27 +19,23 @@ const initialTx = {
     data: '0x',
 };
 
+
 export function readTokens(address) {
     return (dispatch) => {
         const data = functionToData(TokensFunc, { '': address });
-        return rpc.call("eth_call", [{ 
+        return rpc.call("eth_call", [{
             to: IcoMachineAddress,
             data: data,
         }]).then((result) => {
-            const params = dataToParams(TokensFunc, result);
-            const outputs = paramsToToken(params);
-            console.log(outputs)
-            if(outputs.tokenAddress==="0x00")
-                return;
-            outputs.owner = address;
-            dispatch({
-                type: 'TOKEN/LOAD',
-                token: outputs,
-            })
-        })
-    }
-}
-    
+            console.log(result);
+            return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
+          });
+      }
+  }
+
 
 export function loadCustomToken(address) {
     return (dispatch) => {
@@ -82,9 +84,15 @@ export function loadCrowdSale(address) {
 
 export function estimateTokenGas(token, wallet) {
     return (dispatch) => {
+<<<<<<< HEAD
+        const data = functionToData(CreateTokenFunc,
+            { initialSupply: token.totalSupply || 0,
+            tokenName: token.token || "TokenMint",
+=======
         const data = functionToData(CreateTokenFunc, 
             { initialSupply: token.totalSupply || 0, 
             tokenName: token.token || "TokenMint", 
+>>>>>>> master
             decimals: token.decimals || 8,
             symbol: token.symbol || "TOKN" });
         return rpc.call("eth_estimateGas", [{
@@ -104,7 +112,7 @@ export function estimateTokenGas(token, wallet) {
 export function estimateIcoGas(ico, wallet) {
     const addr =  wallet.getAddressString();
     return (dispatch) => {
-        const data = functionToData(CreateSaleFunc, 
+        const data = functionToData(CreateSaleFunc,
             { fundingGoal: ico.fundingGoal,
                 costOfEachToken: ico.price});
         return rpc.call("eth_estimateGas", [{
@@ -123,12 +131,21 @@ export function estimateIcoGas(ico, wallet) {
 
 export function generateTokenTransaction(token, wallet) {
     const addr = wallet.getAddressString();
+<<<<<<< HEAD
+    const data = functionToData(CreateTokenFunc,
+            { initialSupply: token.totalSupply || 0,
+            tokenName: token.token || "TokenMint",
+            decimals: token.decimals || 8,
+            symbol: token.symbol || "TOKN"});
+    const tx = Object.assign(initialTx, {
+=======
     const data = functionToData(CreateTokenFunc, 
             { initialSupply: token.totalSupply || 0, 
             tokenName: token.token || "TokenMint", 
             decimals: token.decimals || 8,
             symbol: token.symbol || "TOKN"});
     const tx = Object.assign(initialTx, { 
+>>>>>>> master
         gasLimit: token.gasLimit,
         data: data,
         from: addr });
@@ -151,10 +168,10 @@ export function generateTokenTransaction(token, wallet) {
 
 export function generateIcoTransaction(ico, wallet) {
     const addr = wallet.getAddressString();
-    const data = functionToData(CreateSaleFunc, 
+    const data = functionToData(CreateSaleFunc,
             { fundingGoal: ico.fundingGoal,
                 costOfEachToken: ico.price });
-    const tx = Object.assign(initialTx, { 
+    const tx = Object.assign(initialTx, {
         gasLimit: ico.gasLimit,
         data: data,
         from: addr });
@@ -179,7 +196,7 @@ export function generateIcoTransaction(ico, wallet) {
 export function generateBuyIco(data, wallet) {
     const addr = wallet.getAddressString();
     const tx = {
-        to: data.to, 
+        to: data.to,
         gasLimit: data.gasLimit,
         data: "",
         value: data.value,
@@ -203,10 +220,17 @@ export function generateBuyIco(data, wallet) {
 
 export function generateSendTokenTransaction(tokenAddress, send, wallet) {
     const addr = wallet.getAddressString();
+<<<<<<< HEAD
+    const data = functionToData(TransferTokensFunc,
+            { _to: send.to,
+            _value: send.value });
+    const tx = Object.assign(initialTx, {
+=======
     const data = functionToData(TransferTokensFunc, 
             { _to: send.to, 
             _value: send.value });
     const tx = Object.assign(initialTx, { 
+>>>>>>> master
         gasLimit: send.gasLimit,
         data: data,
         from: addr });
@@ -230,7 +254,7 @@ export function generateSendTokenTransaction(tokenAddress, send, wallet) {
 export function createToken(token) {
     return (dispatch) => {
         dispatch({
-            type: 'TOKEN/CREATE', 
+            type: 'TOKEN/CREATE',
             token,
         });
     }
@@ -240,7 +264,7 @@ export function createToken(token) {
 export function createIco(ico) {
     return (dispatch) => {
         dispatch({
-            type: 'TOKEN/ICO', 
+            type: 'TOKEN/ICO',
             ico,
         });
     }
