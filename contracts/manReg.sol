@@ -8,7 +8,7 @@ pragma solidity ^0.4.11;
 // license: Apache 2.0
 
 // usage:
-// NOT PRODUCTION READY! DO NOT USE THIS FOR REAL WORLD YET! (or do it, works .....okay)
+//
 // This managing contract is a general purpose token. Users can register the token address, symbol. decimal, type, and icon location(url for a set fee)
 // It needs an owner who can assign Managers. Managers can edit token details. Output is all meta token data by item.
 // still needs: improved item editing management, test framework, access levels for admins, all outputs for meta data, externalize admin to onlyAdmin contract
@@ -34,15 +34,15 @@ contract priced {
 contract smartmanager is priced, owned {
 
 //Global vars
-
+  enum modActions { add, del, change, reprice, rename } // 0,1,2,3,4
+  modActions choice;
   string public nameTag;                // public contract name
-  uint aCount;                          // running account check
+  uint64 aCount;                         // running account check
   uint public pendingReturns;           //  returns amount available for withdrawl
-  uint public adminCount;               // check count of admins
+  uint8 public adminCount;               // check count of admins
   uint public price;                    // the cost of each ticket is n ether.
   struct admin {
     address adminAddr;                  // store an admins address
-    string aName;                       // assign a human readable name to an admin
    }
 
    struct token{
@@ -53,11 +53,15 @@ contract smartmanager is priced, owned {
       uint tDecimal;  // how many decimal places
       string tType;   // the type of token
       string tIcon;   // url of image file for token if any
-// admin items
+      string tURL;    // team website
+      string tBlerb;   // about token
       uint dateChanged;     // last changed on
       address changedBy;    // last changed by
       string changeReason;  // notes on change
     }
+
+
+
 
 //mapping
   mapping(uint => token) tokens;
@@ -74,11 +78,11 @@ contract smartmanager is priced, owned {
 
 // anyone can add a token to the registry if the price is paid
 
-function register(address _tAddr, address _tSale, string _tName, string _tSymbol, uint _tDecimal, string _tType, string _tIcon) public payable costs(price){
-    logCoin(_tAddr,_tSale,_tName,  _tSymbol, _tDecimal,  _tType, _tIcon);
+function register(address _tAddr, address _tSale, string _tName, string _tSymbol, uint _tDecimal, string _tType, string _tIcon, string _tUrl, string _tBlerb) public payable costs(price){
+    logCoin(_tAddr,_tSale,_tName,  _tSymbol, _tDecimal,  _tType, _tIcon, _tUrl, _tBlerb);
 }
 
-function  logCoin(address _tAddr, address _tSale, string _tName, string _tSymbol, uint _tDecimal, string _tType, string _tIcon) internal {
+function  logCoin(address _tAddr, address _tSale, string _tName, string _tSymbol, uint _tDecimal, string _tType, string _tIcon, string _tUrl, string _tBlerb) internal {
     uint id = aCount++;
     token t = tokens[id];                                   // assigns the incoming token to the next available address
     t.tAddr = _tAddr;                                       // address of the main token contract
@@ -88,6 +92,8 @@ function  logCoin(address _tAddr, address _tSale, string _tName, string _tSymbol
     t.tDecimal = _tDecimal;                                 // how many places
     t.tType =  _tType;                                      // erc20 or erc223
     t.tIcon = _tIcon;                                       // should be a url to the token image
+    t.tURL = _tUrl;
+    t.tBlerb = _tBlerb;
     t.dateChanged = now;                                    // updates the modlog
     pendingReturns += msg.value;                            // increases the owners balance
     newToken(_tAddr, _tSale, _tName,  _tSymbol);            // announce token logged with an event
@@ -110,17 +116,17 @@ function withdraw() onlyOwner returns (bool) {
 
 // only the owner can add and remove the admins
 
-function modAdmin(address _admin, uint _action, uint _index) onlyOwner{
-//options are 1 add, 2 del, 3 mod
-    if (_action == 1){
+function modAdmin(address _admin, modActions _action, uint8 _index) onlyOwner{
+//options are  add,  del, change
+    if (_action == modActions.add){
       uint id = adminCount++;
       adminList[id].adminAddr = _admin;
     }
-    if (_action == 2){
+    if (_action == modActions.del){
       delete adminList[_index].adminAddr;
       adminCount = adminCount -1;
     }
-    if (_action == 3){
+    if (_action == modActions.change){
       adminList[_index].adminAddr = _admin;
     }
   }
@@ -129,7 +135,7 @@ function modAdmin(address _admin, uint _action, uint _index) onlyOwner{
 // admin managed functions
   //manage the list in case something goes wrong (1)add (2)delete (3)change (4) ticketPrice (5) change the nametag
 function modCategory(
-      uint _action,
+      modActions _action,
       uint _index,
       address _tAddr,
       address _tSale,
@@ -138,20 +144,20 @@ function modCategory(
       uint _tDecimal,
       string _tType,
       string _tIcon,
-      string _memo,
-      string _reason,
+      string _tUrl,
+      string _tBlerb,
       uint _reprice,
       string _newName
       ) onlyAdmin {
 //this is the function adds contracts from the list for free
-     if (_action == 1){
-     logCoin(_tAddr,_tSale, _tName,  _tSymbol, _tDecimal,  _tType, _tIcon);
+     if (_action == modActions.add){
+     logCoin(_tAddr,_tSale, _tName,  _tSymbol, _tDecimal,  _tType, _tIcon,_tUrl, _tBlerb);
        }
 
 
 //this is the function removes contracts from the list and saves the meta data of who pulled it
-     //if (_action == 2){
-     // token t = tokens[_index];
+     if (_action == modActions.del){
+     delete tokens[_index];
      // delToken(msg.sender, t.tName);                   // announce that the token is being killed
      // delete t.tAddr;                                  // zeroize all fields
      // delete t.tSale;
@@ -163,17 +169,17 @@ function modCategory(
      // delete t.dateChanged;
      // t.dateChanged = now;                             // update the date that the change happened
      //t.changedBy = msg.sender;                        // name the person who changed it
-     //  }
+       }
 
 //this is the function allows to change a specific field in a contract from the list, TODO add all fields
 
 //this is the function sets the listing price
-    if (_action == 4){
+    if (_action == modActions.reprice){
       price = _reprice;
     }
 
 //this is the function labels the Manager contract , may not be needed unless you are hosting more than one reg contract and need to identify them quickly
-    if (_action == 5){
+    if (_action == modActions.rename){
       nameTag = _newName;
     }
 }
@@ -182,12 +188,12 @@ function modCategory(
 
 //Outputs
 
-function Count() constant returns (uint){
+function Count() constant returns (uint64){
 return aCount;
 }
 
-function aList(uint _index) constant returns (address){
-  return tokens[_index].tAddr;
+function modList(uint8 _index) constant returns (address){
+  return adminList[_index].adminAddr;
   }
 
 function returnCheck() constant returns (uint){
@@ -198,20 +204,24 @@ function ownerCheck() constant returns(address){
   return owner;
 }
 
-function getArray(uint _index) constant returns (address,address,string,string,uint,string,string)  // NOTE 3 see below
+function getArray(uint _index) constant returns (address,address,string,string,uint,string,string,string,string)  // NOTE 3 see below
     {
         token t = tokens[_index];
-    	return (t.tAddr,t.tSale,t.tName,t.tSymbol, t.tDecimal, t.tType,t.tIcon);
+    	return (t.tAddr,t.tSale,t.tName,t.tSymbol, t.tDecimal, t.tType,t.tIcon, t.tURL,t.tBlerb);
     }
 
-
+function getQuick(uint _index) constant returns (address, string, string, string)
+    {
+        token t = tokens[_index];
+    	return (t.tAddr, t.tName, t.tSymbol, t.tIcon);
+    }
 
 //modifiers
 modifier onlyAdmin{
       uint adminCheck = 0;
       for(uint i; i < aCount; i ++){
         if (msg.sender == adminList[i].adminAddr){adminCheck = 1;}
-        if (adminCheck != 1){_;}
+        if (adminCheck != 1){throw;  _;}
         }
     }
 
