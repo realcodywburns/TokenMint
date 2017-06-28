@@ -1,0 +1,397 @@
+[
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "pendingReturns",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "ownerCheck",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "adminCount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "withdraw",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "kill",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "nameTag",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_admin",
+        "type": "address"
+      },
+      {
+        "name": "_action",
+        "type": "uint8"
+      },
+      {
+        "name": "_index",
+        "type": "uint8"
+      }
+    ],
+    "name": "modAdmin",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "Count",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_tAddr",
+        "type": "address"
+      },
+      {
+        "name": "_tSale",
+        "type": "address"
+      },
+      {
+        "name": "_tName",
+        "type": "string"
+      },
+      {
+        "name": "_tSymbol",
+        "type": "string"
+      },
+      {
+        "name": "_tDecimal",
+        "type": "uint256"
+      },
+      {
+        "name": "_tType",
+        "type": "string"
+      },
+      {
+        "name": "_tIcon",
+        "type": "string"
+      },
+      {
+        "name": "_tUrl",
+        "type": "string"
+      },
+      {
+        "name": "_tBlerb",
+        "type": "string"
+      }
+    ],
+    "name": "register",
+    "outputs": [],
+    "payable": true,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "price",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getArray",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getQuick",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_action",
+        "type": "uint8"
+      },
+      {
+        "name": "_index",
+        "type": "uint256"
+      },
+      {
+        "name": "_tAddr",
+        "type": "address"
+      },
+      {
+        "name": "_tSale",
+        "type": "address"
+      },
+      {
+        "name": "_tName",
+        "type": "string"
+      },
+      {
+        "name": "_tSymbol",
+        "type": "string"
+      },
+      {
+        "name": "_tDecimal",
+        "type": "uint256"
+      },
+      {
+        "name": "_tType",
+        "type": "string"
+      },
+      {
+        "name": "_tIcon",
+        "type": "string"
+      },
+      {
+        "name": "_tUrl",
+        "type": "string"
+      },
+      {
+        "name": "_tBlerb",
+        "type": "string"
+      },
+      {
+        "name": "_reprice",
+        "type": "uint256"
+      },
+      {
+        "name": "_newName",
+        "type": "string"
+      }
+    ],
+    "name": "modCategory",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "returnCheck",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "tAddr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "tSale",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "tName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "tSymbol",
+        "type": "string"
+      }
+    ],
+    "name": "newToken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "modName",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "tAddr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "tSale",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "tName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "name": "tSymbol",
+        "type": "string"
+      }
+    ],
+    "name": "modToken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "modName",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "tokenName",
+        "type": "string"
+      }
+    ],
+    "name": "delToken",
+    "type": "event"
+  }
+]
