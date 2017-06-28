@@ -126,14 +126,14 @@ export const regData =  Immutable.fromJS({
                 { name: 'tDecimal', type: 'uint'},
                 { name: 'tType', type: 'string'},
                 { name: 'tIcon', type: 'string'},
-                {name:"_tURL",type:"string"},
-                {name:"_tBlerb",type:"string"}]
+                {name:'tURL',type:'string'},
+                {name:'tBlerb',type:'string'}]
     });
-export const regData =  Immutable.fromJS({
-        name: "getArray",
+export const regQuick =  Immutable.fromJS({
+        name: "getQuick",
         inputs:[{name:"_index", type:"uint"}],
         outputs:[{ name: 'tAddr', type: 'address'},
                 { name: 'tName', type: 'string'},
-                { name: 'tSymbol', type: 'string'},          
+                { name: 'tSymbol', type: 'string'},
                 { name: 'tIcon', type: 'string'}]
         });
