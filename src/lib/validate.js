@@ -34,7 +34,7 @@ export function required(value) {
 }
 
 export function number(value) {
-    return parseInt(value, 10) > 0 ? null : 'error';
+    return isNumeric(value) ? null : 'error';
 }
 
 export function address(value) {
