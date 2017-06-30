@@ -1,8 +1,8 @@
 pragma solidity ^0.4.11;
 
 
-// Managed registery
-// a registery for tracking items that an admin can prune as required
+// Managed registry
+// a registry for tracking items that an admin can prune as required
 // @authors:
 // Cody Burns <dontpanic@codywburns.com>
 // license: Apache 2.0
