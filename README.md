@@ -16,3 +16,7 @@ npm start
 ```
 
 Go to `http://localhost:3000` in your web browser.
+
+## Server
+
+Database manager currently under development here: https://github.com/elaineo/token-rs
