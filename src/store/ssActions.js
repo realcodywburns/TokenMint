@@ -28,15 +28,19 @@ export function getMarketData(coinIn) {
         });
 }
 
-export function shiftIt(withdrawal, pair, amount) {
+export function shiftIt(withdrawal, returnAddress, pair, amount) {
     const data = {
         withdrawal,
+        returnAddress,
         pair,
         amount,
     }
+    ss.FixedAmountTx(data);
     return (dispatch) =>
         new Promise((resolve, reject) => {
             ss.FixedAmountTx(data, (result) => {
+                if (result.error)
+                    reject(result);
                 dispatch({
                     type: 'SHAPESHIFT/SHIFT_IT',
                     shift: result,
