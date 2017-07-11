@@ -16,7 +16,7 @@ class RenderSS extends React.Component {
             exchangeRate: 1, // XBT/ETC
             coin: 'ETC',
             returnAddress: null,
-            newWallet: null,
+            wallet: null,
             tx: {},
             error: null,
         };
@@ -46,15 +46,32 @@ class RenderSS extends React.Component {
     generateReceiver = () => {
         const pair = this.state.coin.toLowerCase() + '_etc';
         const wallet = Wallet.generate(false);
-        this.setState({ newWallet: wallet });
+        this.setState({ wallet });
         this.props.dispatch(
             shiftIt(wallet, this.state.returnAddress, pair, this.props.amount))
                 .then((result) => {
                   console.log(result);
                   this.setState({ tx: result, showSS: true })
-                  // download wallet
                 })
                 .catch((e) => this.setState({ error: e.error }));
+    }
+
+    exportWallet = () => {
+      const json = this.state.wallet.toJSON();
+      const address = this.state.wallet.getAddressString();
+      const fileData = {
+                  filename: `${address}.json`,
+                  mime: 'text/plain',
+                  contents: json,
+            }
+      const blob = new Blob([fileData.contents], {type: fileData.mime});
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      document.body.appendChild(link); 
+      link.download = fileData.filename;
+      link.href = url;
+      link.click()
+      document.body.removeChild(link) // remove the link when done
     }
 
     render() {
@@ -106,6 +123,13 @@ class RenderSS extends React.Component {
                         <p>Deposit Type: {this.state.coin}</p>
                         <p>Deposit Amount: {this.state.depositAmount}</p>
                         <p>Expires: {this.state.expiration}</p>
+                      </Col>
+                      <Col sm={4}>
+                        <Button 
+                          bsStyle="primary"
+                          onClick={this.exportWallet} >
+                          Export Wallet
+                        </Button>
                       </Col>
                     </Row>
               </Modal.Body>}
