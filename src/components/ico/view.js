@@ -156,14 +156,13 @@ class RenderIco extends React.Component {
                             PAY WITH ETC
                           </Button>
                         </Col>
-                        {false && <Col>
+                        <Col>
                           <Button 
-                            disabled={this.getValid()}
                             bsStyle="success"
                             onClick={this.buyIco} >
                             PAY WITH ANOTHER CURRENCY
                           </Button>
-                        </Col>}
+                        </Col>
                       </Row>}>
             <FormGroup
               controlId="amount"

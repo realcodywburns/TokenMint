@@ -28,6 +28,7 @@ export function getMarketData(coinIn) {
         });
 }
 
+
 export function shiftIt(withdrawal, returnAddress, pair, amount) {
     const data = {
         withdrawal,
@@ -35,7 +36,6 @@ export function shiftIt(withdrawal, returnAddress, pair, amount) {
         pair,
         amount,
     }
-    ss.FixedAmountTx(data);
     return (dispatch) =>
         new Promise((resolve, reject) => {
             ss.FixedAmountTx(data, (result) => {
