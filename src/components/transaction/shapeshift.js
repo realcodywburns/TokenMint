@@ -1,9 +1,11 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { FormGroup, FormControl, HelpBlock, ControlLabel, DropdownButton, Button } from 'react-bootstrap';
 import { Grid, Row, Col, Modal, MenuItem } from 'react-bootstrap';
 import { loadSSCoins, getMarketData, shiftIt } from '../../store/ssActions';
 import { Wallet } from '../../lib/wallet';
+import PrintWallet from '../wallet/print';
 import QRCode from 'qrcode.react';
 
 class RenderSS extends React.Component {
@@ -74,6 +76,24 @@ class RenderSS extends React.Component {
       document.body.removeChild(link) // remove the link when done
     }
 
+    printWallet = () => {
+      const address = this.state.wallet.getAddressString();
+      const key = this.state.wallet.getPrivateKeyString();
+      const printWindow = window.open('#/blank');
+
+      const onloadHandler = () => {
+        printWindow.document.title = 'TokenMint Wallet';
+        
+        ReactDOM.render((
+          <PrintWallet address={address} privKey={key} />
+          ), printWindow.document.getElementById('root'));
+      };
+
+      printWindow.onload = onloadHandler;
+      // Just in case 
+      printWindow.document.readyState === 'complete' && onloadHandler();
+    }    
+
     render() {
         return (
             <Grid>
@@ -129,6 +149,11 @@ class RenderSS extends React.Component {
                           bsStyle="primary"
                           onClick={this.exportWallet} >
                           Export Wallet
+                        </Button>
+                        <Button 
+                          bsStyle="primary"
+                          onClick={this.printWallet} >
+                          Print Paper Wallet
                         </Button>
                       </Col>
                     </Row>

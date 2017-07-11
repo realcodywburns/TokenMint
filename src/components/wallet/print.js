@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Row, Col, Image } from 'react-bootstrap';
+import { Grid, Image } from 'react-bootstrap';
 import QRCode from 'qrcode.react';
 import logo1 from '../../img/logo-1.png';
 import logo2 from '../../img/logo-2.png';
