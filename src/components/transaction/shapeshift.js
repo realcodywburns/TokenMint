@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormGroup, FormControl, ControlLabel, DropdownButton, Button } from 'react-bootstrap';
-import { Grid, Modal, MenuItem } from 'react-bootstrap';
+import { FormGroup, FormControl, HelpBlock, ControlLabel, DropdownButton, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Modal, MenuItem } from 'react-bootstrap';
 import { loadSSCoins, getMarketData, shiftIt } from '../../store/ssActions';
+import { Wallet } from '../../lib/wallet';
+import QRCode from 'qrcode.react';
 
 class RenderSS extends React.Component {
 
@@ -14,6 +16,9 @@ class RenderSS extends React.Component {
             exchangeRate: 1, // XBT/ETC
             coin: 'ETC',
             returnAddress: null,
+            newWallet: null,
+            tx: {},
+            error: null,
         };
     }
 
@@ -37,9 +42,19 @@ class RenderSS extends React.Component {
             });
     }
 
-    getShapeShift = () => {
+    // set up new wallet to transfer tokens into
+    generateReceiver = () => {
         const pair = this.state.coin.toLowerCase() + '_etc';
-        shiftIt(this.state.returnAddress, pair, this.props.amount)
+        const wallet = Wallet.generate(false);
+        this.setState({ newWallet: wallet });
+        this.props.dispatch(
+            shiftIt(wallet, this.state.returnAddress, pair, this.props.amount))
+                .then((result) => {
+                  console.log(result);
+                  this.setState({ tx: result, showSS: true })
+                  // download wallet
+                })
+                .catch((e) => this.setState({ error: e.error }));
     }
 
     render() {
@@ -57,7 +72,7 @@ class RenderSS extends React.Component {
             </DropdownButton>
             
             <Modal show={this.state.modalShow} bsSize="large">
-                <Modal.Header closebutton>
+                <Modal.Header closeButton>
                     <Modal.Title>Buy {this.props.amount} {this.props.tokenName}s 
                         ({this.props.price} per {this.props.symbol})</Modal.Title>
                 </Modal.Header>
@@ -73,34 +88,26 @@ class RenderSS extends React.Component {
 
                     <FormGroup controlId="returnAddress" >
                         <ControlLabel>Return Address (for refunds)</ControlLabel>
-                        <FormControl type="text"/>
+                        <FormControl type="text" onChange={this.handleChange}/>
+                        <HelpBlock>{this.state.error}</HelpBlock>
                     </FormGroup>
                     <Button 
                       bsStyle="primary"
-                      onClick={this.getShapeShift} >
+                      onClick={this.generateReceiver} >
                       OKAY
                     </Button>
                 </Modal.Body>
-                {showSS && <Modal.Body>
-{/*<div ng-if="depositInfo" class="row">
-    <div class="col-md-12">
-        {{DepositStatus.status}}
-    </div>
-    <div class="col-md-3">
-        <qrcode version="20" error-correction-level="H" size=200 data="{{depositInfo.depositQR}}"></qrcode>
-    </div>
-    <div class="col-md-5">
-        <div>Deposit Type: {{depositInfo.depositType}}</div>
-        <div ng-if="depositInfo.depositAmount">Deposit Amount: {{depositInfo.depositAmount}}</div>
-        <div>Deposit Address: {{depositInfo.deposit}}</div>
-        <div>Withdrawal Type: {{depositInfo.withdrawalType}}</div>
-        <div>Withdrawal Address: {{depositInfo.withdrawal}}</div>
-        <div ng-if="depositInfo.withdrawalAmount">Withdrawal Amount: {{depositInfo.withdrawalAmount}}</div>
-        <div ng-if="depositInfo.quotedRate">Quoted Rate: {{depositInfo.quotedRate}}</div>
-        <div ng-if="depositInfo.minerFee">Miner Fee: {{depositInfo.minerFee}}</div>
-        <div ng-if="depositInfo.expiration">Expires: {{depositInfo.expiration}}</div>
-    </div>
-</div>*/}
+                {this.state.showSS && <Modal.Body>
+                    <Row>
+                      <Col sm={4}>
+                        <QRCode value={this.state.tx.deposit} level="H" />
+                      </Col>
+                      <Col sm={4}>
+                        <p>Deposit Type: {this.state.coin}</p>
+                        <p>Deposit Amount: {this.state.depositAmount}</p>
+                        <p>Expires: {this.state.expiration}</p>
+                      </Col>
+                    </Row>
               </Modal.Body>}
             </Modal>
           </Grid>
