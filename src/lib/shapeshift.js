@@ -16,8 +16,8 @@ export const ShapeShift = (function() {
         }
 
         xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4) {
-                if (xmlhttp.status == 200) {
+            if (xmlhttp.readyState === 4) {
+                if (xmlhttp.status === 200) {
                     var parsedResponse = JP(xmlhttp.responseText);
                     cb.apply(null, [parsedResponse]);
                 } else {
@@ -219,9 +219,10 @@ export const ShapeShift = (function() {
     };
 
     function FixedAmountValidate(data, ss) {
-        if(data.withdrawal === undefined) throw new Error('no withdrawal address');
-        if(data.pair === undefined) throw new Error('no pair given');
-        if(data.amount === undefined) throw new Error('no amount given');
+        console.log(data)
+        if(data.withdrawal === undefined) return new Error('no withdrawal address');
+        if(data.pair === undefined) return new Error('no pair given');
+        if(data.amount === undefined) return new Error('no amount given');
         //TODO check if valid pair
         //TODO check if any other data in there is valid
 
@@ -239,11 +240,9 @@ export const ShapeShift = (function() {
     };
 
     SS.FixedAmountTx = function(data, cb) {
-        //TODO validateData(data);
         data = FixedAmountValidate(data, this);
         var apiEp = getArgsAdder(endPoints.FixedAmountTx);
         var xmlhttp = CreateXmlHttp();
-        console.log(data);
         AjaxRequest(xmlhttp, apiEp, data, function(response) {
             cbProtector(cb, response);
         });
@@ -272,7 +271,7 @@ export const ShapeShift = (function() {
     function CancelPendingValidate(data, ss) {
         if(typeof(data) === 'object') return data;
         if(data.address === undefined) throw new Error('no address given');
-        if(typeof(data) === 'String') {
+        if(typeof(data) === 'string') {
             var address = data;
             data = { address : address }
         }
