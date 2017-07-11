@@ -21,7 +21,7 @@ const print = {
         width:'auto',
     },
     text: {
-        color:'#449d44',
+        color:'#272b30',
         textTransform:'uppercase',
         letterSpacing:'.05em',
         transform: 'rotate(-90deg)', 
@@ -38,7 +38,7 @@ const print = {
         padding:'20px',
     },
     text1: {
-        //right:'-35px',
+        right:'-35px',
         bottom:'69px',
     },
     qrCode2: {
@@ -57,7 +57,7 @@ const print = {
         padding:'0 25px',
         fontSize:'14px',
         fontFamily:'Menlo,Monaco,Consolas,Courier New,monospace',
-        color: '#000',
+        color: '#272b30',
     },
     logo1: {
         position:'absolute',
@@ -78,34 +78,29 @@ const print = {
 }
 
 const PrintWallet = (props) => {
+    const { address, privKey } = props;
 
-    return (        
-        <Grid>
-          <Row>
-            <Col style={print.container}>
-              <Image src={logo1} style={print.logo1} />
-              <Image src={logo2} style={print.logo2} />
-              <Image src={title} style={print.title} />
-              <div style={print.qrCode1}>
-                  <QRCode value="test" level="H" />
-                  <p style={Object.assign(print.text,print.text1)}>YOUR ADDRESS</p>
-              </div>
-              <div style={print.qrCode2}>
-                  <Image src={notes} style={print.notes} />
-                  <p style={Object.assign(print.text,print.text2)}>AMOUNT / NOTES</p>
-              </div>
-              <div style={print.qrCode2}>
-                  <QRCode value="test" level="Q" />
-                  <p style={Object.assign(print.text,print.text2)}>YOUR PRIVATE KEY</p>
-              </div>
-              <div style={print.address}>
-                  <p><strong>Your Address:</strong><br />            
-                  blah          </p>          
-                  <p><strong>Your Private Key:</strong><br />
-                  blah        </p> 
-              </div>
-            </Col>
-          </Row>
+    return (
+        <Grid style={print.container}>
+            <Image src={logo1} style={print.logo1} />
+            <Image src={logo2} style={print.logo2} />
+            <Image src={title} style={print.title} />
+            <div style={print.qrCode1}>
+                <QRCode value={address} level="H" />
+                <p style={Object.assign(print.text,print.text1)}>YOUR ADDRESS</p>
+            </div>
+            <div style={print.qrCode2}>
+                <Image src={notes} style={print.notes} />
+                <p style={Object.assign(print.text,print.text2)}>AMOUNT / NOTES</p>
+            </div>
+            <div style={print.qrCode2}>
+                <QRCode value="test" level="Q" />
+                <p style={Object.assign(print.text,print.text2)}>YOUR PRIVATE KEY</p>
+            </div>
+            <div style={print.address}>
+                <p><strong>Your Address:</strong><br />{address}</p>          
+                <p><strong>Your Private Key:</strong><br />{privKey}</p>
+            </div>
         </Grid>
     );
 }
