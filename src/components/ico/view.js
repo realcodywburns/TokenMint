@@ -1,36 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel, PageHeader } from 'react-bootstrap';
-import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
-import { BuyTokenModal, SuccessModal } from '../transaction/modals';
-import { generateBuyIco } from '../../store/tokenActions';
-import OpenWallet from '../wallet/open';
-import { sendTransaction } from '../../store/transactionActions';
+import BuyIco from './buy';
 import { toFiat, toEther } from '../../lib/etherUnits';
-import { decimalToHex } from '../../lib/convert';
-import { fetchIco, getBalanceOf } from '../../store/icoActions';
+import { fetchIco } from '../../store/icoActions';
 import logo from '../../img/logo.png';
-import { number } from '../../lib/validate';
 import { CustomHead, CustomAbout } from './custom';
-
-const DefaultGas = 100000;
 
 class RenderIco extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      modalShow: false, 
-      modalSuccess: false,
-      hash: null,      
-      showTx: false,
-      gas: decimalToHex(DefaultGas),
-      tx: {},
       id: this.props.match.params.id,
-      amount: 1,
       custom: false,
-      payETC: false,
-      paySS: false,
     };
   }
 
@@ -40,58 +23,9 @@ class RenderIco extends React.Component {
         this.setState({ custom: true });
   }
 
-  handleChange = (e) => 
-    this.setState({ [e.target.id]: e.target.value });
 
-
-  buyIco = () => {
-    const value = this.props.price * this.state.amount;
-    const data = {
-      to: this.state.id,
-      value,
-      gasLimit: this.state.gas,
-    }
-    this.setState({ modalShow: true, 
-                    showTx: false
-                  });
-    this.props.buyIco(data, this.props.wallet)
-      .then((result) => {
-        this.setState({ modalShow: true,
-                        showTx: true,
-                        tx: result
-                      });
-      })
-  }
-
-  selectETC = () => {
-    this.setState({ payETC: true, paySS: false });
-  }
-
-  submitTx = () => 
-    this.props.sendTransaction(
-        this.state.tx.signedTx, 
-        this.state,
-        this.props.wallet.getAddressString()
-        ).then((result) => {
-          this.setState({ 
-            modalShow: false, 
-            showTx: false, 
-            amount: 0,
-            hash: result,
-            modalSuccess: true
-          })
-      })
-
-  getValid = () => {
-    return (number(this.state.amount)) ? true : false;
-  }
 
   render() {
-    
-    let modalClose = () => this.setState({ modalShow: false });
-    let modalSuccessClose = () => this.setState({ modalSuccess: false });
-    let cost = this.props.price * this.state.amount;
-    let costUSD = (this.props.usdRate && cost) ? toFiat(cost, "ether", this.props.usdRate.rate) : "0.00";
     let fundingGoalUSD = (this.props.usdRate && this.props.fundingGoal) ? 
       toFiat(this.props.fundingGoal, "ether", this.props.usdRate.rate) : "0.00";
     let amountRaisedUSD = (this.props.usdRate && this.props.amountRaised) ? 
@@ -143,64 +77,7 @@ class RenderIco extends React.Component {
             <h1>Loading...</h1>
           </Panel>}
 
-
-        <Panel bsStyle="success" 
-          header="Buy Tokens" 
-          footer={!this.props.wallet && 
-                      <Row>
-                        <Col sm={2}>
-                          <Button 
-                            disabled={this.getValid()}
-                            bsStyle="success"
-                            onClick={this.selectETC} >
-                            PAY WITH ETC
-                          </Button>
-                        </Col>
-                        <Col>
-                          <Button 
-                            bsStyle="success"
-                            onClick={this.buyIco} >
-                            PAY WITH ANOTHER CURRENCY
-                          </Button>
-                        </Col>
-                      </Row>}>
-            <FormGroup
-              controlId="amount"
-            >
-              <ControlLabel>Number of Tokens to Buy</ControlLabel>
-              <FormControl
-                type="number"
-                placeholder="1"
-                onChange={this.handleChange}
-              />
-              <HelpBlock>{`Total cost: ${cost} ETC  ($${costUSD} USD).`} You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
-              {this.props.wallet && this.props.ico &&
-              <FormGroup>
-                <Button 
-                  bsStyle="primary"
-                  onClick={this.buyIco} >
-                  BUY {this.props.ico.get('symbol')}
-                </Button>
-              </FormGroup>}
-            </FormGroup>
-          </Panel>
-
-
-          {this.props.wallet && this.props.ico && 
-            <Panel bsStyle="success"> 
-              {this.props.ico.get('tokenName')}s Owned: &nbsp; 
-              {this.props.balance} 
-                &nbsp; <Button 
-                        bsStyle="danger"
-                        onClick={this.props.getBalance(this.props.ico.get('tokenAddress'), this.props.wallet)}
-                        bsSize="xs" >
-                        Check Balance
-                      </Button>
-            </Panel>}
-
-            {!this.props.wallet && this.state.payETC &&
-                <OpenWallet />
-              }
+        <BuyIco {...this.props} />
 
         <hr />
         {this.props.ico && <Row>
@@ -230,25 +107,6 @@ class RenderIco extends React.Component {
             </Panel>
           </Col>
         </Row>}
-        
-        {this.props.ico &&
-        <BuyTokenModal 
-          show={this.state.modalShow} 
-          close={modalClose} 
-          showTx={this.state.showTx}
-          rawTx={this.state.tx.rawTx}
-          signedTx={this.state.tx.signedTx}
-          submitTx={this.submitTx}
-          token={this.props.ico.get("symbol")}
-          />}
-        <SuccessModal
-          show={this.state.modalSuccess}
-          close={modalSuccessClose}
-          hash={this.state.hash}
-        >
-          Congratulations! Once your transaction has been processed, the tokens will be in your account.
-          <p>Next: <a href="/">Create your own Token</a></p>
-        </SuccessModal>  
       </Grid>
     );
 
@@ -268,7 +126,6 @@ const ViewIco = connect(
       const balance = state.ico.get('balance').toString(10);
       return {
         ico: state.ico.get('ico'),
-        wallet: state.wallet.get('wallet'),
         fundingGoal,
         amountRaised,
         price,
@@ -278,22 +135,6 @@ const ViewIco = connect(
     },
     (dispatch, ownProps) => ({
       dispatch,
-      getBalance: (token, wallet) => {
-        dispatch(getBalanceOf(token, wallet.getAddressString()));
-      },
-      buyIco: (data, wallet) => {
-        return new Promise((resolve, reject) => {
-          dispatch(
-            generateBuyIco( data, wallet )
-          ).then((result) => resolve(result))
-        })
-      },
-      sendTransaction: (tx, data, address) => {
-        return new Promise((resolve, reject) => {
-          dispatch(sendTransaction( tx ))
-            .then((hash)=>resolve(hash));
-        });
-      },
     })
 )(RenderIco);
 
