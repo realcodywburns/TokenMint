@@ -33,5 +33,6 @@ export default function ssReducers(state, action) {
     state = state || initial;
     state = onLoadCoins(state, action);
     state = onExchangeRate(state, action);
+    state = onAddDeposit(state, action);
     return state;
 }
