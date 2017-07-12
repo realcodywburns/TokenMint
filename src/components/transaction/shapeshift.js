@@ -32,9 +32,10 @@ class RenderSS extends React.Component {
     generateReceiver = () => {
         const pair = this.props.coin.toLowerCase() + '_etc';
         const wallet = Wallet.generate(false);
+        const total = this.props.amount * this.props.price;
         this.setState({ wallet });
         this.props.dispatch(
-            shiftIt(wallet, this.state.returnAddress, pair, this.props.amount))
+            shiftIt(wallet, this.state.returnAddress, pair, total))
                 .then((result) => {
                   console.log(result);
                   this.setState({ tx: result, showSS: true })
@@ -83,21 +84,23 @@ class RenderSS extends React.Component {
         const expTime = new Date(expiration).toJSON();
         const tokenName = this.props.ico.get('tokenName');
         const symbol = this.props.ico.get('symbol');
+        const total = this.props.amount * this.props.price / this.props.exchangeRate;
         return (
             <Panel 
               bsStyle="success"
-              header={`Buy ${this.props.amount} ${tokenName}s`}>
+              header={`Pay with ${this.props.coinName}`}>
                 <Row>
                   <Col sm={12} md={6} lg={6}>
-                  <h4>{this.props.price} ETC per {symbol}</h4>
+                  <h4>{`Buy ${this.props.amount} ${tokenName}s`}</h4>
                     {/* 
                         TODO: Error checking
                         Deposit Limit: {this.state.rate.limit}
                         Minimum Amount: {this.state.rate.minimum}
                         MinerFee: {this.state.rate.minerFee}   
                     */}
-                    <p>Pay with <strong>{this.props.coinName}</strong></p>
-                    <p>Exchange Rate: {this.props.exchangeRate} ({this.props.coin}/ETC)</p>
+                    <p>Exchange Rate: {this.props.exchangeRate} ({this.props.coin}/ETC)<br />
+                    Total: {total} {this.props.coin}
+                    </p>
 
                     {!this.state.showSS && 
                     <FormGroup controlId="returnAddress" >
