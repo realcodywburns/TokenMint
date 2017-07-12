@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Panel } from 'react-bootstrap';
+import { Row, Col, Panel } from 'react-bootstrap';
 import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal, SuccessModal } from '../transaction/modals';
 import AltcoinButton from '../transaction/altcoin';
+import ShapeShift from '../transaction/shapeshift';
 import { generateBuyIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
@@ -29,6 +30,9 @@ class RenderIco extends React.Component {
       amount: 1,
       custom: false,
       payETC: false,
+      exchangeRate: 1, // XBT/ETC
+      coin: 'ETC',
+      coinName: 'Ethereum Classic',
     };
   }
 
@@ -56,7 +60,7 @@ class RenderIco extends React.Component {
   }
 
   selectETC = () => {
-    this.setState({ payETC: true });
+    this.setState({ payETC: true, coin: 'ETC' });
   }
 
   getExchangeRate = (coin) => {
@@ -65,6 +69,7 @@ class RenderIco extends React.Component {
               console.log(result)
               if (result.rate)
                   this.setState({ 
+                      payETC: false,
                       coin: coin.get('symbol'),
                       coinName: coin.get('name'),
                       exchangeRate: result.rate
@@ -99,7 +104,7 @@ class RenderIco extends React.Component {
     let costUSD = (this.props.usdRate && cost) ? toFiat(cost, "ether", this.props.usdRate.rate) : "0.00";
 
     return (
-      <Grid>
+      <div>
         <Panel bsStyle="success" 
           header="Buy Tokens" 
           footer={!this.props.wallet && 
@@ -154,6 +159,14 @@ class RenderIco extends React.Component {
             {!this.props.wallet && this.state.payETC &&
                 <OpenWallet />
               }
+            {!this.props.wallet && this.state.coin !=='ETC' &&
+                <ShapeShift 
+                  amount={this.state.amount}
+                  coin={this.state.coin}
+                  coinName={this.state.coinName}
+                  exchangeRate={this.state.exchangeRate}
+                  {...this.props} />
+              }
 
         
         {this.props.ico &&
@@ -174,7 +187,7 @@ class RenderIco extends React.Component {
           Congratulations! Once your transaction has been processed, the tokens will be in your account.
           <p>Next: <a href="/">Create your own Token</a></p>
         </SuccessModal>  
-      </Grid>
+      </div>
     );
 
   }
