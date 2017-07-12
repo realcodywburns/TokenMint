@@ -144,7 +144,7 @@ class RenderSS extends React.Component {
                     <h4>Please send {depositAmount} {this.state.coin} to {deposit}</h4>
                     <Row>
                       <Col sm={2}>
-                        <QRCode value={this.state.tx.deposit} level="H" style="width:100%" />
+                        <QRCode value={this.state.tx.deposit} level="H" />
                       </Col>
                       <Col sm={4}>
                         <p>
