@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { FormGroup, FormControl, HelpBlock, ControlLabel, DropdownButton, Button } from 'react-bootstrap';
-import { Grid, Row, Col, Modal, MenuItem } from 'react-bootstrap';
+import { Grid, Row, Col, Panel, MenuItem, Image, Alert } from 'react-bootstrap';
 import { loadSSCoins, getMarketData, shiftIt } from '../../store/ssActions';
 import { Wallet } from '../../lib/wallet';
 import PrintWallet from '../wallet/print';
@@ -17,6 +17,7 @@ class RenderSS extends React.Component {
             showSS: false, 
             exchangeRate: 1, // XBT/ETC
             coin: 'ETC',
+            coinName: 'Ethereum Classic',
             returnAddress: null,
             wallet: null,
             tx: {},
@@ -32,12 +33,13 @@ class RenderSS extends React.Component {
         this.setState({ [e.target.id]: e.target.value });    
 
     getExchangeRate = (coin) => {
-        this.props.dispatch(getMarketData(coin))
+        this.props.dispatch(getMarketData(coin.get('symbol')))
             .then((result) => {
                 console.log(result)
                 if (result.rate)
                     this.setState({ 
-                        coin,
+                        coin: coin.get('symbol'),
+                        coinName: coin.get('name'),
                         modalShow: true,
                         exchangeRate: result.rate
                     });
@@ -95,6 +97,8 @@ class RenderSS extends React.Component {
     }    
 
     render() {
+        const { deposit, depositAmount, expiration } = this.state.tx;
+        const expTime = new Date(expiration).toJSON();
         return (
             <Grid>
             <DropdownButton 
@@ -102,63 +106,71 @@ class RenderSS extends React.Component {
                 bsStyle="success"
                 title="PAY WITH...">
                 {this.props.coins.valueSeq().map((coin) => 
-                    <MenuItem key={coin.get('symbol')} onClick={(e)=>this.getExchangeRate(coin.get('symbol'))}>
+                    <MenuItem key={coin.get('symbol')} onClick={(e)=>this.getExchangeRate(coin)}>
+                        <Image src={coin.get('imageSmall')} /> 
                         {coin.get('name')}
                     </MenuItem>)
                 }
             </DropdownButton>
             
-            <Modal show={this.state.modalShow} bsSize="large">
-                <Modal.Header closeButton>
-                    <Modal.Title>Buy {this.props.amount} {this.props.tokenName}s 
-                        ({this.props.price} per {this.props.symbol})</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+            <Panel header={`Buy ${this.props.amount} ${this.props.tokenName}s`}>
+                <Row>
+                  <Col sm={12} md={6} lg={6}>
+                  ({this.props.price} per {this.props.symbol})
+
                     {/* 
                         TODO: Error checking
                         Deposit Limit: {this.state.rate.limit}
                         Minimum Amount: {this.state.rate.minimum}
                         MinerFee: {this.state.rate.minerFee}   
                     */}
-                    <h3>Pay with {this.state.coin}</h3>
+                    <h3>Pay with {this.state.coinName}</h3>
                     <p>Exchange Rate: {this.state.exchangeRate} ({this.state.coin}/ETC)</p>
 
+                    {!this.state.showSS && 
                     <FormGroup controlId="returnAddress" >
-                        <ControlLabel>Return Address (for refunds)</ControlLabel>
+                        <ControlLabel>Return Address for Refunds (if wrong amount is received)</ControlLabel>
                         <FormControl type="text" onChange={this.handleChange}/>
-                        <HelpBlock>{this.state.error}</HelpBlock>
-                    </FormGroup>
-                    <Button 
-                      bsStyle="primary"
-                      onClick={this.generateReceiver} >
-                      OKAY
-                    </Button>
-                </Modal.Body>
-                {this.state.showSS && <Modal.Body>
+                        <HelpBlock bsClass="error">{this.state.error}</HelpBlock>
+                        <Button 
+                          bsStyle="info"
+                          onClick={this.generateReceiver} >
+                          OKAY
+                        </Button>                    
+                    </FormGroup>}
+                  </Col>
+                </Row>
+                {this.state.showSS && <div>
+                    <h4>Please send {depositAmount} {this.state.coin} to {deposit}</h4>
                     <Row>
-                      <Col sm={4}>
-                        <QRCode value={this.state.tx.deposit} level="H" />
+                      <Col sm={2}>
+                        <QRCode value={this.state.tx.deposit} level="H" style="width:100%" />
                       </Col>
                       <Col sm={4}>
-                        <p>Deposit Type: {this.state.coin}</p>
-                        <p>Deposit Amount: {this.state.depositAmount}</p>
-                        <p>Expires: {this.state.expiration}</p>
+                        <p>
+                        Deposit Type: {this.state.coinName}<br />
+                        Deposit Amount: {depositAmount}<br />
+                        Expires: {expTime}
+                        </p>
                       </Col>
-                      <Col sm={4}>
-                        <Button 
-                          bsStyle="primary"
-                          onClick={this.exportWallet} >
-                          Export Wallet
-                        </Button>
-                        <Button 
-                          bsStyle="primary"
-                          onClick={this.printWallet} >
-                          Print Paper Wallet
-                        </Button>
+                      <Col sm={6}>
+                        <Alert bsStyle="danger">
+                          We have generated a new wallet for your {this.props.tokenName}. The tokens will be sent to this wallet when payment is received. You <strong>must</strong> save this wallet in order to access your tokens.<br />
+                          <Button 
+                            bsStyle="primary"
+                            onClick={this.exportWallet} >
+                            Export Wallet
+                          </Button>
+                          <Button 
+                            bsStyle="primary"
+                            onClick={this.printWallet} >
+                            Print Paper Wallet
+                          </Button>
+                        </Alert>
                       </Col>
                     </Row>
-              </Modal.Body>}
-            </Modal>
+                    </div>}
+              </Panel>
           </Grid>
 
         );
@@ -168,7 +180,7 @@ class RenderSS extends React.Component {
 
 const ShapeShift = connect(
     (state, ownProps) => {
-        const coins = state.shapeshift.get('coins');
+        const coins = state.shapeshift.get('coins').sort();
         return {
             coins,
         }
