@@ -1,5 +1,6 @@
 const MarketApi = "https://coinmarketcap-nexuist.rhcloud.com/api/";
-const ServerApi = "https://mewapi.epool.io";
+const NodeApi = "https://mewapi.epool.io";
+const ServerApi = "http://tokenmint.io";
 const Currency = "etc";
 
 const headers = {
@@ -61,7 +62,7 @@ export class RpcApi {
             params,
             id: this.dataId++,
         };
-        return fetch(ServerApi, {
+        return fetch(NodeApi, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(data),
@@ -69,7 +70,7 @@ export class RpcApi {
     }
 
     batchPost(data) {
-        return fetch(ServerApi, {
+        return fetch(NodeApi, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(data),
@@ -97,6 +98,14 @@ export class RpcApi {
         return fetch(MarketApi + Currency, {
             method: 'GET',
             headers: headers,
+        }).then((response) => response.json());
+    }
+
+    postDeposit(data) {
+        return fetch(ServerApi, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data),
         }).then((response) => response.json());
     }
 }

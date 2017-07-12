@@ -43,30 +43,20 @@ Wallet.prototype.getChecksumAddressString = function() {
 Wallet.fromPrivateKey = function(priv) {
     return new Wallet(priv)
 }
-Wallet.prototype.toV3 = function(password, opts) {
-    opts = opts || {}
-    var salt = opts.salt || crypto.randomBytes(32)
-    var iv = opts.iv || crypto.randomBytes(16)
+Wallet.prototype.toV3 = function(password) {
+    var salt = crypto.randomBytes(32)
+    var iv = crypto.randomBytes(16)
     var derivedKey
-    var kdf = opts.kdf || 'scrypt'
     var kdfparams = {
-        dklen: opts.dklen || 32,
+        dklen: 32,
         salt: salt.toString('hex')
     }
-    if (kdf === 'pbkdf2') {
-        kdfparams.c = opts.c || 262144
-        kdfparams.prf = 'hmac-sha256'
-        derivedKey = crypto.pbkdf2Sync(new Buffer(password), salt, kdfparams.c, kdfparams.dklen, 'sha256')
-    } else if (kdf === 'scrypt') {
-        // FIXME: support progress reporting callback
-        kdfparams.n = opts.n || 262144
-        kdfparams.r = opts.r || 8
-        kdfparams.p = opts.p || 1
-        derivedKey = scrypt(new Buffer(password), salt, kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen)
-    } else {
-        throw new Error('Unsupported kdf')
-    }
-    var cipher = crypto.createCipheriv(opts.cipher || 'aes-128-ctr', derivedKey.slice(0, 16), iv)
+    kdfparams.n = 1024
+    kdfparams.r = 8
+    kdfparams.p = 1
+    derivedKey = scrypt(new Buffer(password), salt, kdfparams.n, kdfparams.r, kdfparams.p, kdfparams.dklen)
+
+    var cipher = crypto.createCipheriv('aes-128-ctr', derivedKey.slice(0, 16), iv)
     if (!cipher) {
         throw new Error('Unsupported cipher')
     }
@@ -75,7 +65,7 @@ Wallet.prototype.toV3 = function(password, opts) {
     return {
         version: 3,
         id: ethUtil.uuid.v4({
-            random: opts.uuid || crypto.randomBytes(16)
+            random: crypto.randomBytes(16)
         }),
         address: this.getAddress().toString('hex'),
         Crypto: {
@@ -83,8 +73,8 @@ Wallet.prototype.toV3 = function(password, opts) {
             cipherparams: {
                 iv: iv.toString('hex')
             },
-            cipher: opts.cipher || 'aes-128-ctr',
-            kdf: kdf,
+            cipher: 'aes-128-ctr',
+            kdf: 'scrypt',
             kdfparams: kdfparams,
             mac: mac.toString('hex')
         }
@@ -96,7 +86,7 @@ Wallet.prototype.toJSON = function() {
         checksumAddress: this.getChecksumAddressString(),
         privKey: this.getPrivateKeyString(),
         pubKey: this.getPublicKeyString(),
-        publisher:"MyEtherWallet",
+        publisher:"TokenMint",
         encrypted:false,
         version:2
     }
