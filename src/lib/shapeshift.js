@@ -219,7 +219,6 @@ export const ShapeShift = (function() {
     };
 
     function FixedAmountValidate(data, ss) {
-        console.log(data)
         if(data.withdrawal === undefined) return new Error('no withdrawal address');
         if(data.pair === undefined) return new Error('no pair given');
         if(data.amount === undefined) return new Error('no amount given');

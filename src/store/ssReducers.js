@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 const initial = Immutable.fromJS({
     coins: [],
     rate: null,
-    depositStatus: null,
+    deposits: [],
 });
 
 function onLoadCoins(state, action) {
@@ -20,8 +20,18 @@ function onExchangeRate(state, action) {
     return state;
 }
 
+function onAddDeposit(state, action) {
+    if (action.type === 'SHAPESHIFT/ADD_DEPOSIT') {
+        return state.update('deposits', (deposits) => 
+            deposits.push(Immutable.fromJS(state.deposit))
+            );
+    }
+    return state;
+}
+
 export default function ssReducers(state, action) {
     state = state || initial;
     state = onLoadCoins(state, action);
+    state = onExchangeRate(state, action);
     return state;
 }
