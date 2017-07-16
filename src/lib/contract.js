@@ -4,7 +4,7 @@ export const TokenMintAddress = "0x0023BEBee6FAE12E3b387497300FEd1316e6905e";
 
 export const IcoMachineAddress = "0x2f846034a256f51ae51249b61f4c92bcf4b0a3d8";
 
-export const RegContractAddress = '0x0c33c443f4e01c52e411ae3e165f99934ba43ac5';
+export const RegistryAddress = '0xf4d139fE4f73725dcc6eb364e4593a00F07DC0a9';
 
 export const CreateTokenFunc = Immutable.fromJS({
     name:'createToken',
