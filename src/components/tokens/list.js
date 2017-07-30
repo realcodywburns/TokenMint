@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Media, Button, Grid, Row, Col } from 'react-bootstrap';
+import RegisterToken from './register';
 import TOKENS from '../../TOKENS';
 import DefaultIcon from '../../img/default-icon.png';
 
@@ -23,7 +24,7 @@ class ListRender extends React.Component {
         <Col>
           <h2>TokenMint Tokens</h2>
           {TOKENS.map((token) => 
-            <Media>
+            <Media key={token.address}>
               <Media.Left align="top">
                 {token.icon && <img width={80} height={80} src={token.icon} alt={token.name} />}
                 {!token.icon && <img width={80} height={80} src={DefaultIcon} alt={token.name} />}
@@ -47,6 +48,12 @@ class ListRender extends React.Component {
               )}
         </Col>
       </Row>
+      <Row style={{minHeight:'40px'}} />
+      <Row>
+        <Col>
+          <RegisterToken />
+        </Col>
+      </Row>          
     </Grid>
     );
   }
