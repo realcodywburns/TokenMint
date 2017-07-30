@@ -3,6 +3,7 @@ import { generateTx } from '../lib/transaction';
 import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
 import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc, TokensFunc } from '../lib/contract';
 import { ERC20Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
+import { RegistryAddress, RegisterFunc } from '../lib/contract';
 
 const initialTx = {
     to: IcoMachineAddress,
@@ -121,6 +122,33 @@ export function estimateIcoGas(ico, wallet) {
     }
 }
 
+export function estimateRegisterGas(token, wallet) {
+    const addr =  wallet.getAddressString();
+    return (dispatch) => {
+        const data = functionToData(RegisterFunc, 
+            { _tAddr: token.address || "",
+             _tSale: token.crowdsale || "",
+             _tName: token.name || "",
+             _tSymbol: token.symbol || "",
+             _tDecimal: token.decimal || 8,
+             _tType: token.type || "ERC20",
+             _tIcon: token.icon || "",
+             _tURL: token.url || "",
+             _tBlerb: token.blerb || "" });
+        return rpc.call("eth_estimateGas", [{
+            from: addr,
+            to: RegistryAddress,
+            data: data,
+        }]).then((result) => {
+            console.log(result);
+            return result;
+        }).catch((error) => {
+            console.error(error);
+            return null;
+        });
+    }
+}
+
 export function generateTokenTransaction(token, wallet) {
     const addr = wallet.getAddressString();
     const data = functionToData(CreateTokenFunc, 
@@ -156,6 +184,39 @@ export function generateIcoTransaction(ico, wallet) {
                 costOfEachToken: ico.price });
     const tx = Object.assign(initialTx, { 
         gasLimit: ico.gasLimit,
+        data: data,
+        from: addr });
+    return (dispatch, getState) => {
+        const transaction = getState().transaction;
+        if (!transaction.get('busy')) {
+            tx.gasPrice = transaction.get('data').get('gasPrice');
+            tx.nonce = transaction.get('data').get('nonce');
+        }
+        return generateTx(tx, wallet.getPrivateKey()).then((result) => {
+            dispatch({
+                type: 'TRANSACTION/GENERATE',
+                raw: result.rawTx,
+                signed: result.signedTx,
+            });
+            return result;
+        });
+    }
+}
+
+export function generateRegisterTransaction(token, wallet) {
+    const addr = wallet.getAddressString();
+        const data = functionToData(RegisterFunc, 
+            { _tAddr: token.address || "",
+             _tSale: token.crowdsale || "",
+             _tName: token.name || "",
+             _tSymbol: token.symbol || "",
+             _tDecimal: token.decimal || 8,
+             _tType: token.type || "ERC20",
+             _tIcon: token.icon || "",
+             _tURL: token.url || "",
+             _tBlerb: token.blerb || "" });
+    const tx = Object.assign(initialTx, { 
+        gasLimit: token.gasLimit,
         data: data,
         from: addr });
     return (dispatch, getState) => {

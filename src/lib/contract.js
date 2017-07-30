@@ -97,7 +97,7 @@ export const ERC20Funcs = [
 ]
 
 
-export const joinTheReg =  Immutable.fromJS({
+export const RegisterFunc =  Immutable.fromJS({
   name: 'register',
   inputs:[{name:"_tAddr", type : "address"},
           {name:"_tSale", type: "address"},
@@ -107,7 +107,8 @@ export const joinTheReg =  Immutable.fromJS({
           {name:"_tType",type:"string"},
           {name:"_tIcon",type:"string"},
           {name:"_tURL",type:"string"},
-          {name:"_tBlerb",type:"string"}]
+          {name:"_tBlerb",type:"string"}],
+  outputs:[]
 });
 
 export const regCount =  Immutable.fromJS({
