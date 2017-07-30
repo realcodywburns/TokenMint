@@ -1,11 +1,14 @@
 {
-  "main.js": "static/js/main.11d19b20.js",
-  "main.js.map": "static/js/main.11d19b20.js.map",
+  "main.js": "static/js/main.3288e88a.js",
+  "main.js.map": "static/js/main.3288e88a.js.map",
   "static/media/1.jpg": "static/media/1.6d638541.jpg",
   "static/media/2.jpg": "static/media/2.c3cb5187.jpg",
   "static/media/3.jpg": "static/media/3.039be891.jpg",
   "static/media/4.jpg": "static/media/4.ca827610.jpg",
   "static/media/custom-ico.png": "static/media/custom-ico.306b4e1a.png",
+  "static/media/default-icon.png": "static/media/default-icon.ddb08a52.png",
+  "static/media/ether-title.png": "static/media/ether-title.012e5939.png",
   "static/media/index.scss": "static/media/index.589b50ef.scss",
+  "static/media/logo-1.png": "static/media/logo-1.7b3397ee.png",
   "static/media/logo.png": "static/media/logo.1ea9b3b7.png"
 }
