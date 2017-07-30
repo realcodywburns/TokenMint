@@ -2,9 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import { Row, Col, Accordion, Panel } from 'react-bootstrap';
-import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
+import { generateRegisterTransaction, estimateRegisterGas } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
-import { gotoTab } from '../../store/tabActions';
 import { RegisterTxModal, SuccessModal } from '../transaction/modals';
 import OpenWallet from '../wallet/open';
 import { hexToDecimal } from '../../lib/convert';
@@ -16,8 +15,6 @@ class RegisterForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      symbol: 'TOKN',
-      decimals: 8,
       modalShow: false,
       modalSuccess: false,
       hash: null,
@@ -25,12 +22,6 @@ class RegisterForm extends React.Component {
       gas: DefaultGas,
       tx: {},
     };
-  }
-
-
-  handleSelect = (e) => {
-    console.log('select')
-    this.setState({ open: !this.state.open });
   }
 
   handleChange = (e) => {
@@ -43,10 +34,13 @@ class RegisterForm extends React.Component {
 
   estimateGas = () => {
     const data = {
-      token: this.state.token,
+      address: this.state.address,
+      crowdsale: this.state.crowdsale,
+      name: this.state.name,
       symbol: this.state.symbol,
-      totalSupply: this.state.totalSupply,
-      decimals: this.state.decimals,
+      url: this.state.url,
+      icon: this.state.icon,
+      blerb: this.state.blerb,
     }
     this.props.estimateGas(data, this.props.wallet)
       .then((result) => {
@@ -57,15 +51,18 @@ class RegisterForm extends React.Component {
       })
   }
 
-  initToken = () => {
+  initReg = () => {
     const data = {
-      token: this.state.token,
+      address: this.state.address,
+      crowdsale: this.state.crowdsale,
+      name: this.state.name,
       symbol: this.state.symbol,
-      totalSupply: this.state.totalSupply,
-      decimals: this.state.decimals,
+      url: this.state.url,
+      icon: this.state.icon,
+      blerb: this.state.blerb,
       gasLimit: this.state.gas,
     }
-    this.props.initToken(data, this.props.wallet)
+    this.props.initReg(data, this.props.wallet)
       .then((result) => {
         this.setState({ modalShow: true,
                         showTx: true,
@@ -86,10 +83,6 @@ class RegisterForm extends React.Component {
             hash: result,
             modalSuccess: true })
       })
-  }
-
-  gotoIco = () => {
-    this.setState({ modalSuccess: false });
   }
 
   getValid = () => {
@@ -117,6 +110,7 @@ class RegisterForm extends React.Component {
         </FormGroup>
         <FormGroup
           controlId="crowdsale"
+          validationState={(this.state.crowdsale) ? address(this.state.crowdsale) : null}
         >
           <ControlLabel>Crowdsale Address</ControlLabel>
           <FormControl
@@ -198,7 +192,7 @@ class RegisterForm extends React.Component {
           signedTx={this.state.tx.signedTx}
           gas={hexToDecimal(this.state.gas || DefaultGas)}
           changeGas={this.changeGas}
-          onGenerate={this.initToken}
+          onGenerate={this.initReg}
           submitTx={this.submitTx}
         />
         <SuccessModal
@@ -224,28 +218,19 @@ const RegisterToken = connect(
   (dispatch, ownProps) => ({
     estimateGas: (data, wallet) => {
       return new Promise((resolve, reject) => {
-        dispatch(estimateTokenGas( data, wallet ))
+        dispatch(estimateRegisterGas( data, wallet ))
         .then((result) => resolve(result));
       })
     },
-    initToken: (data, wallet) => {
+    initReg: (data, wallet) => {
       return new Promise((resolve, reject) => {
         dispatch(
-          generateTokenTransaction( data, wallet )
+          generateRegisterTransaction( data, wallet )
         ).then((result) => resolve(result))
       })
     },
     sendTransaction: (tx, data, address) => {
       const resolver = (resolve, f) => (txhash) => {
-         const token = {
-            owner: address,
-            initialSupply: data.totalSupply,
-            name: data.token,
-            decimals: data.decimals,
-            symbol: data.symbol,
-            tokenTx: txhash,
-        };
-        dispatch(createToken(token));
         resolve(txhash);
       };
 
@@ -254,9 +239,6 @@ const RegisterToken = connect(
           .then(resolver(resolve));
       });
     },
-    gotoIco: () => {
-      dispatch(gotoTab('ico'));
-    }
   })
 )(RegisterForm)
 
