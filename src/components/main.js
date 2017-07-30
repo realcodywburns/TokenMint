@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Tabs, Tab, Grid, Row, Col, Image, Nav, NavItem } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
+import TokenList from './tokens/list';
 import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
 import OpenWallet from './wallet/open';
@@ -26,9 +27,9 @@ const Render = ({...props}) => (
                 <NavItem onClick={() => props.handleSelect("ico")}>
                   Launch an ICO
                 </NavItem>
-                {/*<NavItem onClick={() => props.handleSelect("buy")}>
+                <NavItem onClick={() => props.handleSelect("browse")}>
                   Token Browser
-                </NavItem>*/}
+                </NavItem>
                 <NavItem onClick={() => props.handleSelect("wallet")}>
                   Wallet Manager
                 </NavItem>
@@ -76,9 +77,9 @@ const Render = ({...props}) => (
           <Tab eventKey={"ico"}>
             <LaunchIco />
           </Tab>
-          {/*<Tab eventKey={"buy"}>
-            <BuyIco />
-          </Tab>*/}
+          <Tab eventKey={"browse"}>
+            <TokenList />
+          </Tab>
           <Tab eventKey={"wallet"}>
             <OpenWallet />
           </Tab>
