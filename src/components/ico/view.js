@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel, PageHeader } from 'react-bootstrap';
+import TOKENS from '../../TOKENS';
 import BuyIco from './buy';
 import { toFiat, toEther } from '../../lib/etherUnits';
 import { fetchIco } from '../../store/icoActions';
@@ -11,16 +12,16 @@ class RenderIco extends React.Component {
 
   constructor(props) {
     super(props);
+    const token = TOKENS.filter((t)=>t.crowdsale===this.props.match.params.id)[0];
     this.state = {
       id: this.props.match.params.id,
-      custom: false,
+      custom: (token),
+      token
     };
   }
 
   componentWillMount = () => {
     this.props.dispatch(fetchIco(this.state.id));
-    if(this.state.id==="0x59153bcf752b4e1ef294b370d635ce320bfdac08")    
-        this.setState({ custom: true });
   }
 
 
@@ -43,9 +44,9 @@ class RenderIco extends React.Component {
           </Col>
         </Row>
         
-        {this.props.ico && this.state.custom && 
-            <CustomHead name={this.props.ico.get("tokenName")}
-              symbol={this.props.ico.get("symbol")} />
+        {this.state.custom && 
+            <CustomHead name={this.state.token.name}
+              symbol={this.state.token.symbol} />
         }
         {this.props.ico && !this.state.custom && 
           <PageHeader>{this.props.ico.get("tokenName")}
