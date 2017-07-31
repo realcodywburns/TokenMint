@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Row, Col, Panel, Alert } from 'react-bootstrap';
 import { loadSSCoins, shiftIt } from '../../store/ssActions';
 import { Wallet } from '../../lib/wallet';
@@ -102,17 +102,11 @@ class RenderSS extends React.Component {
                     Total: {total} {this.props.coin}
                     </p>
 
-                    {!this.state.showSS && 
-                    <FormGroup controlId="returnAddress" >
-                        <ControlLabel>Return Address for Refunds (if wrong amount is received)</ControlLabel>
-                        <FormControl type="text" onChange={this.handleChange}/>
-                        <HelpBlock bsClass="error">{this.state.error}</HelpBlock>
-                        <Button 
-                          bsStyle="primary"
-                          onClick={this.generateReceiver} >
-                          BUY {symbol}
-                        </Button>                    
-                    </FormGroup>}
+                    <Button 
+                      bsStyle="primary"
+                      onClick={this.generateReceiver} >
+                      BUY {symbol}
+                    </Button>                    
                   </Col>
                 </Row>
                 {this.state.showSS && <div>

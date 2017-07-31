@@ -11,12 +11,10 @@ import { CustomHead, CustomAbout } from './custom';
 class RenderIco extends React.Component {
 
   constructor(props) {
-    super(props);
-    const token = TOKENS.filter((t)=>t.crowdsale===this.props.match.params.id)[0];
+    super(props);    
     this.state = {
       id: this.props.match.params.id,
-      custom: (token),
-      token
+      custom: (this.props.token),
     };
   }
 
@@ -127,6 +125,7 @@ const ViewIco = connect(
       const price = state.ico.get('ico') && 
         toEther((state.ico.get('ico').get('price') || 0), 'wei');
       const balance = state.ico.get('balance').toString(10);
+      const token = TOKENS.filter((t)=>t.crowdsale===ownProps.match.params.id)[0];
       return {
         ico: state.ico.get('ico'),
         fundingGoal,
@@ -134,6 +133,7 @@ const ViewIco = connect(
         price,
         usdRate,
         balance,
+        token,
       }
     },
     (dispatch, ownProps) => ({

@@ -12,7 +12,6 @@ class RenderButton extends React.Component {
     render() {
         return (
             <DropdownButton 
-                disabled={true}
                 id="ssCoins"
                 bsStyle="success"
                 title="PAY WITH...">
