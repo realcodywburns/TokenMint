@@ -12,6 +12,7 @@ contract Crowdsale {
     bool fundingGoalReached = false;
     event GoalReached(address beneficiary, uint amountRaised);
     event FundTransfer(address backer, uint amount, bool isContribution);
+    event IcoLaunch(address from, uint value, bytes data);
     bool crowdsaleClosed = false;
 
     /*  at initialization, setup the owner */
@@ -78,5 +79,9 @@ contract Crowdsale {
                 fundingGoalReached = false;
             }
         }
+    }
+
+    function tokenFallback(address _from, uint _value, bytes _data){
+        IcoLaunch(_from, _value, _data);
     }
 }
