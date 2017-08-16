@@ -23,6 +23,9 @@ contract IcoMachine {
     mapping (address => Ico) public tokens; // map creator address to token address
     mapping (uint => Ico) public icos; // list of everything created
 
+    event TokenCreation(address token);
+    event CrowdsaleCreation(address crowdsale);
+
     function IcoMachine() {
         owner = msg.sender;
     }
@@ -39,6 +42,8 @@ contract IcoMachine {
         tokens[msg.sender].tokenName = tokenName;
         tokens[msg.sender].decimals = decimals;
         tokens[msg.sender].symbol = symbol;
+
+        TokenCreation(newToken);
     } 
 
     function createSale(
@@ -55,7 +60,9 @@ contract IcoMachine {
         Token tokenReward = Token(tokenAddress);
         tokenReward.transfer(msg.sender, premine); 
         // Transfer tokens to sale address
-        tokenReward.transfer(saleAddress, tokens[msg.sender].initialSupply - premine);   
+        tokenReward.transfer(saleAddress, tokens[msg.sender].initialSupply - premine);
+
+        CrowdsaleCreation(saleAddress);
     }
  
     function kill() 
