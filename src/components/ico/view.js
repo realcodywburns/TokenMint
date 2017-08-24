@@ -80,7 +80,7 @@ class RenderIco extends React.Component {
             <h1>Loading...</h1>
           </Panel>}
 
-        <BuyIco {...this.props} />
+        <BuyIco {...this.props} id={this.state.id} />
 
         <hr />
         {this.props.ico && <Row>
