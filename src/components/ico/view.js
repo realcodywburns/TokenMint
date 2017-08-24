@@ -46,7 +46,9 @@ class RenderIco extends React.Component {
         
         {this.state.custom && 
             <CustomHead name={this.state.token.name}
-              symbol={this.state.token.symbol} />
+              symbol={this.state.token.symbol}
+              icon = {this.state.token.icon}
+              blerb = {this.state.token.blerb} />
         }
         {this.props.ico && !this.state.custom && 
           <PageHeader>{this.props.ico.get("tokenName")}
