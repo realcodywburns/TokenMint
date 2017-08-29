@@ -50,6 +50,7 @@ contract IcoMachine {
         TokenCreation(msg.sender, newToken, count);
     } 
 
+    /* total supply must be greater than funding goal */
     function createSale(
         uint fundingGoal,
         uint costOfEachToken,
