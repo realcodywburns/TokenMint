@@ -26,7 +26,7 @@ contract Token {
     uint8 public decimals;
     uint256 public totalSupply;
 
-    event Transfer(address indexed from, address indexed to, uint value);
+    event Transfer(address indexed from, address indexed to, uint value, bytes indexed data);
 
     /* Initializes contract with initial supply tokens to the creator of the contract */
     function Token(
