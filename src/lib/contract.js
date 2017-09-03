@@ -25,8 +25,8 @@ export const CreateSaleFunc = Immutable.fromJS({
 
 export const TokensFunc = Immutable.fromJS({
     name:'tokens',
-    inputs:[{ name: '', type: 'address' },
-            { name: '', type: 'uint256' }],
+    inputs:[{ name: 'address', type: 'address' },
+            { name: 'index', type: 'uint256' }],
     outputs:[{name:"tokenAddress","type":"address"},
             {name:"saleAddress","type":"address"},
             {name:"initialSupply","type":"uint256"},
