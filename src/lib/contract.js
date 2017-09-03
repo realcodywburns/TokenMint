@@ -86,7 +86,7 @@ export const CrowdSaleFuncs = [
     })
 ]
 
-export const ERC20Funcs = [
+export const ERC223Funcs = [
     Immutable.fromJS({
         name: "name",
         inputs:[],

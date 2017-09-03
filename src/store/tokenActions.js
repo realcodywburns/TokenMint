@@ -2,7 +2,7 @@ import { rpc } from '../lib/rpc';
 import { generateTx } from '../lib/transaction';
 import { functionToData, dataToParams, paramsToToken, hexToDecimal } from '../lib/convert';
 import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc } from '../lib/contract';
-import { ERC20Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
+import { ERC223Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
 import { RegistryAddress, RegisterFunc } from '../lib/contract';
 import { TokensFunc, TokenIndex } from '../lib/contract';
 
@@ -57,7 +57,7 @@ export function fetchOwnToken(address, index) {
 export function loadCustomToken(address) {
     return (dispatch) => {
         let data;
-        for (const c of ERC20Funcs) {
+        for (const c of ERC223Funcs) {
             data = functionToData(c, {});
             rpc.call("eth_call", [{
                 to: address,
