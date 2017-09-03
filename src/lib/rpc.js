@@ -102,7 +102,6 @@ export class RpcApi {
     }
 
     postDeposit(data) {
-        data.id = this.dataId++;
         return fetch(ServerApi, {
             method: 'POST',
             headers: headers,
