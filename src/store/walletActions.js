@@ -1,7 +1,7 @@
 import { rpc } from '../lib/rpc';
 import { Wallet } from '../lib/wallet';
 import { getTransactionData } from './transactionActions';
-import { readTokens } from './tokenActions';
+import { loadOwnTokens } from './tokenActions';
 
 export function openWallet(key, password = null) {
     return (dispatch) => {
@@ -22,7 +22,7 @@ export function openWallet(key, password = null) {
         const address = wallet.getAddressString()
         dispatch(getTransactionData(address)); 
         // Look up user tokens in registry
-        dispatch(readTokens(address));
+        dispatch(loadOwnTokens(address));
         return wallet;     
     };
 }
@@ -37,7 +37,7 @@ export function openWalletFile(file, password = null) {
         });
         const address = wallet.getAddressString()
         dispatch(getTransactionData(address)); 
-        dispatch(readTokens(address));
+        dispatch(loadOwnTokens(address));
         return wallet;
     };
 }
