@@ -2,7 +2,8 @@ import Immutable from 'immutable';
 
 export const TokenMintAddress = "0x0023BEBee6FAE12E3b387497300FEd1316e6905e";
 
-export const IcoMachineAddress = "0x2f846034a256f51ae51249b61f4c92bcf4b0a3d8";
+// export const IcoMachineAddress = "0x2f846034a256f51ae51249b61f4c92bcf4b0a3d8";
+export const IcoMachineAddress = "0xD459e10654a2387Fc6ab2040627febEbEa682C56"; //testnet
 
 export const RegistryAddress = '0xf4d139fE4f73725dcc6eb364e4593a00F07DC0a9';
 
@@ -17,19 +18,27 @@ export const CreateTokenFunc = Immutable.fromJS({
 export const CreateSaleFunc = Immutable.fromJS({
     name:'createSale',
     inputs:[{ name:'fundingGoal', type:'uint' },
-            { name:'costOfEachToken', type:'uint' }],
-    outputs:[{ name:'_saleAddress', type:'address' }]
+            { name:'costOfEachToken', type:'uint' },
+            { name:'premine', type:'uint256' },
+            { name:'index', type: 'uint256' }]
     });
 
 export const TokensFunc = Immutable.fromJS({
     name:'tokens',
-    inputs:[{ name: '', type: 'address' }],
+    inputs:[{ name: '', type: 'address' },
+            { name: '', type: 'uint256' }],
     outputs:[{name:"tokenAddress","type":"address"},
             {name:"saleAddress","type":"address"},
             {name:"initialSupply","type":"uint256"},
             {name:"tokenName","type":"string"},
             {name:"decimals","type":"uint8"},
             {name:"symbol","type":"string"}]
+});
+
+export const TokenIndex = Immutable.fromJS({
+    name:'tokenIndex',
+    inputs:[{ name: '', type: 'address' }],
+    outputs:[{"name":"","type":"uint256"}]
 });
 
 export const BalanceOfFunc = Immutable.fromJS({
@@ -44,6 +53,10 @@ export const TransferTokensFunc = Immutable.fromJS({
             { name:'_value', type:'uint256' }]
     });
 
+export const BuyTokensFunc = Immutable.fromJS({
+    name:'buyTokens',
+    inputs:[{ name: 'buyer', type: 'address' }]
+    });
 
 export const CrowdSaleFuncs = [
     Immutable.fromJS({
@@ -93,6 +106,11 @@ export const ERC20Funcs = [
         name: "totalSupply",
         inputs:[],
         outputs:[{ name: '', type: 'uint256'}]
+    }),
+    Immutable.fromJS({
+        name: "standard",
+        inputs:[],
+        outputs:[{ name: '', type: 'string'}]
     }),
 ]
 
