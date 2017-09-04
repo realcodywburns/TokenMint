@@ -20,7 +20,7 @@ export const CreateTxModal = (props) => {
               <ControlLabel>Gas</ControlLabel>
               <FormControl
                 type="number"
-                value={gas}
+                defaultValue={gas}
                 onChange={changeGas}
               />
             </FormGroup>
@@ -58,7 +58,7 @@ export const LaunchICOModal = (props) => {
               <ControlLabel>Gas</ControlLabel>
               <FormControl
                 type="number"
-                value={gas}
+                defaultValue={gas}
                 onChange={changeGas}
               />
             </FormGroup>
@@ -150,7 +150,7 @@ export const RegisterTxModal = (props) => {
               <ControlLabel>Gas</ControlLabel>
               <FormControl
                 type="number"
-                value={gas}
+                defaultValue={gas}
                 onChange={changeGas}
               />
             </FormGroup>

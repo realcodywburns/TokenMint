@@ -12,7 +12,7 @@ import { hexToDecimal } from '../../lib/convert';
 import { number } from '../../lib/validate';
 import { toWei } from '../../lib/etherUnits';
 
-const DefaultGas = "0x94da7";
+const DefaultGas = "0x0d082a";
 
 class LaunchForm extends React.Component {
   
@@ -56,7 +56,7 @@ class LaunchForm extends React.Component {
         this.setState({ modalShow: true, 
                         showTx: false
                       });
-        this.setState({ gas: result || DefaultGas});
+        this.setState({ gas: result || (!result && DefaultGas)});
       })
   }
 
@@ -217,7 +217,7 @@ class LaunchForm extends React.Component {
           showTx={this.state.showTx}
           rawTx={this.state.tx.rawTx}
           signedTx={this.state.tx.signedTx}
-          gas={hexToDecimal(this.state.gas || DefaultGas)}
+          gas={hexToDecimal(this.state.gas || (!this.state.gas && DefaultGas))}
           changeGas={this.handleChange}
           onGenerate={this.initIco}
           submitTx={this.submitTx}
