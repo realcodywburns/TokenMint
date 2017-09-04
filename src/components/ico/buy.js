@@ -166,7 +166,7 @@ class RenderIco extends React.Component {
 
           {this.props.wallet && this.props.ico && 
             <Panel bsStyle="success"> 
-              {this.props.ico.get('tokenName')}s Owned: &nbsp; 
+              {this.props.ico.get('name')}s Owned: &nbsp; 
               {this.props.balance} 
                 &nbsp; <Button 
                         bsStyle="danger"

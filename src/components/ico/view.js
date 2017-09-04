@@ -51,7 +51,7 @@ class RenderIco extends React.Component {
               blerb = {this.state.token.blerb} />
         }
         {this.props.ico && !this.state.custom && 
-          <PageHeader>{this.props.ico.get("tokenName")}
+          <PageHeader>{this.props.ico.get("name")}
               &nbsp;<small>({this.props.ico.get("symbol")})</small>
           </PageHeader>
         }
@@ -67,11 +67,12 @@ class RenderIco extends React.Component {
                 <Col sm={4}>Token Price</Col>
                 <Col sm={8}>{this.props.price} ETC (${priceUSD}) </Col>
               </Row>
+              {/* TODO: Deal with possible token limits, fundraising limits, premine
               <hr />
               <Row>
                 <Col sm={4}>Number of Tokens Available</Col>
                 <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}</Col>
-              </Row>                        
+              </Row>*/}
             </Panel>
         }
 
@@ -90,10 +91,10 @@ class RenderIco extends React.Component {
               <Row>
                 <Col sm={4}>Token Contract</Col>
                 <Col sm={8}>
-                  <a href={`http://gastracker.io/addr/${this.props.ico.get("tokenAddress")}`} 
+                  <a href={`http://gastracker.io/addr/${this.props.ico.get("tokenReward")}`} 
                     rel="noopener noreferrer"
                     target="_blank">
-                    {this.props.ico.get("tokenAddress")}
+                    {this.props.ico.get("tokenReward")}
                   </a>
                 </Col>
               </Row>
