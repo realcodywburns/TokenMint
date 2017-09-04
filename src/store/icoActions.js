@@ -1,24 +1,27 @@
 import { rpc } from '../lib/rpc';
 import { functionToData, dataToParams, paramsToToken } from '../lib/convert';
-import { IcoMachineAddress, BalanceOfFunc, TokensFunc, CrowdSaleFuncs } from '../lib/contract';
+import { BalanceOfFunc, CrowdSaleFuncs } from '../lib/contract';
+import { ERC223Funcs } from '../lib/contract';
+
 
 export function fetchToken(address) {
     return (dispatch) => {
-        const data = functionToData(TokensFunc, { '': address });
-        return rpc.call("eth_call", [{ 
-            to: IcoMachineAddress,
-            data: data,
-        }]).then((result) => {
-            const params = dataToParams(TokensFunc, result);
-            const outputs = paramsToToken(params);
-            for (var o of Object.keys(outputs)) {
+        let data;
+        for (const c of ERC223Funcs) {
+            data = functionToData(c, {});
+            rpc.call("eth_call", [{
+                to: address,
+                data: data,
+            }, "latest"]).then((result) => {
+                const params = dataToParams(c, result);
+                const outputs = paramsToToken(params);
                 dispatch({
                     type: 'ICO/ICO_INFO',
-                    name: o,
-                    value: outputs[o],
-                })
-            }
-        })
+                    name: c.get('name'),
+                    value: outputs[""],
+                });
+            })
+        }
     }
 }
 
@@ -28,10 +31,9 @@ export function getBalanceOf(token, address) {
         return rpc.call("eth_call", [{ 
             to: token,
             data: data,
-        }]).then((result) => {
+        }, "latest"]).then((result) => {
             const params = dataToParams(BalanceOfFunc, result);
             const outputs = paramsToToken(params);
-            console.log(outputs)
             for (var o of Object.keys(outputs)) {
                 dispatch({
                     type: 'ICO/BALANCE_OF',
@@ -56,7 +58,7 @@ export function fetchIco(address) {
             rpc.call("eth_call", [{
                 to: address,
                 data: data,
-            }]).then((result) => {
+            }, "latest"]).then((result) => {
                 const params = dataToParams(c, result);
                 const outputs = paramsToToken(params);
                 dispatch({
@@ -64,7 +66,7 @@ export function fetchIco(address) {
                     name: c.get('name'),
                     value: outputs[""],
                 });
-                if (c.get('name') === 'beneficiary')
+                if (c.get('name') === 'tokenReward')
                    dispatch(fetchToken(outputs[""]));
             })
         }
