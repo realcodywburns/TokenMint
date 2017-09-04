@@ -1,8 +1,8 @@
 import { ShapeShift } from '../lib/shapeshift';
 import { rpc } from '../lib/rpc';
 
-const SS_KEY = "3f9428e9a11ca687086ba998ccba095e64332c1d3915592c152fefc6a76de025abe2454330ae48ff57c20a416e0c5ab25623905f9c2600b07cc68e23d189b40d";
-const ss = new ShapeShift.ShapeShiftApi(SS_KEY);
+const API_KEY = "3f9428e9a11ca687086ba998ccba095e64332c1d3915592c152fefc6a76de025abe2454330ae48ff57c20a416e0c5ab25623905f9c2600b07cc68e23d189b40d";
+const ss = new ShapeShift.ShapeShiftApi(API_KEY);
 
 const RELAY_ACCOUNT = "0xE4cf8aE5E9Cdc78d0d339877f05CD190Cc6f4d54";
 
@@ -35,6 +35,7 @@ export function getMarketData(coinIn) {
 export function shiftIt(wallet, returnAddress, pair, amount = 1) {
     const data = {
         withdrawal: RELAY_ACCOUNT,
+        apiKey: API_KEY,
         returnAddress,
         pair,
         amount,
@@ -46,6 +47,7 @@ export function shiftIt(wallet, returnAddress, pair, amount = 1) {
                     reject(result);
                 // dispatch to tokenmint server
                 const deposit = result.success;
+                deposit.depositType = deposit.pair.substring(0,3);
                 deposit.address = wallet.getAddressString();
                 rpc.postDeposit(deposit).then((result) => {
                     console.log(result);

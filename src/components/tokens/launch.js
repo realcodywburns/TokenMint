@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Panel } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Radio, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
@@ -12,7 +12,7 @@ import { hexToDecimal } from '../../lib/convert';
 import { number } from '../../lib/validate';
 import { toWei } from '../../lib/etherUnits';
 
-const DefaultGas = "0x94da7";
+const DefaultGas = "0x0d082a";
 
 class LaunchForm extends React.Component {
   
@@ -25,28 +25,38 @@ class LaunchForm extends React.Component {
       showTx: false,
       gas: DefaultGas,
       tx: {},
+      token: null,
+      index: 0,
+      premine: 0,
     };
   }
 
   gotoToken = () => {
-    this.props.gotoToken();
+    this.props.dispatch(gotoTab('token'));
   }
 
   handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
   }
 
+  handleToken = (e) => {
+    const token = this.props.tokenList.get(e.target.value);
+    this.setState({ index: e.target.value, token});
+  }
+
   estimateGas = () => {
     const data = {
       price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
+      premine: this.state.premine,
+      index: this.state.index,
     }
     this.props.estimateGas(data, this.props.wallet)
       .then((result) => { 
         this.setState({ modalShow: true, 
                         showTx: false
                       });
-        this.setState({ gas: result || DefaultGas});
+        this.setState({ gas: result || (!result && DefaultGas)});
       })
   }
 
@@ -55,6 +65,8 @@ class LaunchForm extends React.Component {
       price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
       gasLimit: this.state.gas,
+      premine: this.state.premine,
+      index: this.state.index,      
     }
     this.props.initIco(data, this.props.wallet)
       .then((result) => { 
@@ -96,10 +108,10 @@ class LaunchForm extends React.Component {
       <Grid>
         <Row>
           <Col>
-          <h4>Start your Crowdsale!</h4>
+          <h2>Start your Crowdsale!</h2>
           </Col>
         </Row>
-        {!this.props.token &&  <Row>
+        {(this.props.tokenList.size === 0) &&  <Row>
           <Col>
             <p>
               Did you already create a token? If not, 
@@ -113,26 +125,40 @@ class LaunchForm extends React.Component {
             
           </Col>
         </Row>}
-        {this.props.token && <Row>
-          <h4>{this.props.token.get("name")}({this.props.token.get("symbol")})</h4>
-          
-          <Row>
-            <Col sm={4}>Token Contract</Col>
-            <Col sm={8}>
-              <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} 
-                rel="noopener noreferrer"
-                target="_blank">
-                {this.props.token.get("tokenAddress")}
-              </a>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={4}>Token Supply</Col>
-            <Col sm={8}>{this.props.token.get("initialSupply")}</Col>
-          </Row>
+        {(this.props.tokenList.size > 0) && <Row>
+          <h4>Select a Token</h4>
+          <FormGroup
+            controlId="index"
+          >
+            {this.props.tokenList.map((token, i) =>
+            <Radio 
+              name="tokenIndex" 
+              key={token.get("tokenAddress")} 
+              onChange={this.handleToken} 
+              value={i}>
+               <Panel 
+                bsStyle="info" 
+                header={<h5>{`${token.get("name")}(${token.get("symbol")})`}</h5>}>
+               <Row>
+                <Col sm={4}>Token Contract</Col>
+                <Col sm={8}>
+                  <a href={`"http://gastracker.io/addr/${token.get("tokenAddress")}"`} 
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    {token.get("tokenAddress")}
+                  </a>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={4}>Token Supply</Col>
+                <Col sm={8}>{token.get("initialSupply")}</Col>
+              </Row>
+              </Panel>
+            </Radio>)}
+          </FormGroup>
         </Row>}
         <hr />
-        {this.props.token && <Form>
+        {this.state.token && <Form>
           <FormGroup
             controlId="price"
             validationState={number(this.state.price)}
@@ -162,7 +188,18 @@ class LaunchForm extends React.Component {
             <HelpBlock>{`$${goalUSD} USD`}<br />
             {`${goalBTC} BTC`}</HelpBlock>
           </FormGroup>
-
+          <FormGroup
+            controlId="premine"
+            validationState={number(this.state.premine)}
+          >
+            <ControlLabel>Premine (number of tokens to keep for yourself)</ControlLabel>
+            <FormControl
+              type="number"
+              placeholder="0"
+              onChange={this.handleChange}
+            />
+            <FormControl.Feedback />
+          </FormGroup>
           <FormGroup>
             {this.props.wallet &&
             <Button 
@@ -180,7 +217,7 @@ class LaunchForm extends React.Component {
           showTx={this.state.showTx}
           rawTx={this.state.tx.rawTx}
           signedTx={this.state.tx.signedTx}
-          gas={hexToDecimal(this.state.gas || DefaultGas)}
+          gas={hexToDecimal(this.state.gas || (!this.state.gas && DefaultGas))}
           changeGas={this.handleChange}
           onGenerate={this.initIco}
           submitTx={this.submitTx}
@@ -205,7 +242,7 @@ const LaunchIco = connect(
     const btcRate = rates.filter((r)=>r.currency==='btc')[0];
     return {
       wallet: state.wallet.get('wallet'),
-      token: state.tokens.get('token'),
+      tokenList: state.tokens.get('token'),
       usdRate,
       btcRate,
     }
@@ -232,6 +269,7 @@ const LaunchIco = connect(
               name: data.token,
               decimals: data.decimals,
               symbol: data.symbol,
+              index: data.index,
               tokenTx: txhash,
           };
           dispatch(createIco(token));
@@ -243,8 +281,7 @@ const LaunchIco = connect(
             .then(resolver(resolve));
         });
       },
-      gotoToken: () => 
-        dispatch(gotoTab('token')),
+      dispatch,
       gotoWallet: () => 
         dispatch(gotoTab('wallet'))
   })

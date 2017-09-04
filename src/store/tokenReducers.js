@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const initial = Immutable.fromJS({
-    token:null,
+    token:[],
     ico: null,
     custom: [],
 });
@@ -15,6 +15,7 @@ const initToken = Immutable.fromJS({
     decimals: 8,
     symbol: null,
     tokenTx: null,
+    index: 0,
 });
 
 const initIco = Immutable.fromJS({
@@ -30,22 +31,6 @@ const customToken = Immutable.fromJS({
     decimals: 8,
     symbol: null,
 });
-
-function onTokenCreate(state, action) {
-    if (action.type === 'TOKEN/CREATE') {
-        const t = action.token;
-        return state.set('token', initToken.merge({
-                owner: t.owner,
-                initialSupply: t.initialSupply,
-                name: t.name,
-                decimals: t.decimals,
-                symbol: t.symbol,
-                tokenTx: t.tokenTx,
-            })
-        );
-    }
-    return state;
-}
 
 function onIcoCreate(state, action) {
     if (action.type === 'TOKEN/ICO') {
@@ -64,20 +49,20 @@ function onIcoCreate(state, action) {
 function onTokenLoad(state, action) {
     if (action.type === 'TOKEN/LOAD') {
         const t = action.token;
-        if (!state.get('token') || 
-            (t.owner !== state.get('token').get('owner'))) {
-            return state.set('token', initToken.merge({
-                    owner: t.owner,
-                    initialSupply: t.initialSupply.toString(10),
-                    name: t.tokenName,
-                    saleAddress: t.saleAddress,
-                    tokenAddress: t.tokenAddress,
-                    decimals: t.decimals.toString(10),
-                    symbol: t.symbol,
-                    tokenTx: t.tokenTx,
-                })
+        return state.update('token', (token) => 
+            token.push(initToken.merge({
+                        owner: t.owner,
+                        initialSupply: t.initialSupply.toString(10),
+                        name: t.tokenName,
+                        saleAddress: t.saleAddress,
+                        tokenAddress: t.tokenAddress,
+                        decimals: t.decimals.toString(10),
+                        symbol: t.symbol,
+                        index: action.index,
+                        tokenTx: t.tokenTx,
+                    })
+                )
             );
-        }
     }
     return state;    
 }
@@ -117,7 +102,6 @@ function onCustomToken(state, action) {
 
 export default function tokenReducers(state, action) {
     state = state || initial;
-    state = onTokenCreate(state, action);
     state = onIcoCreate(state, action);
     state = onTokenLoad(state, action);
     state = onCrowdsaleLoad(state, action);

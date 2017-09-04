@@ -8,11 +8,12 @@ import ShapeShift from '../transaction/shapeshift';
 import { generateBuyIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
 import { sendTransaction } from '../../store/transactionActions';
-import { getMarketData } from '../../store/ssActions';
+import { getMarketData, shiftIt } from '../../store/ssActions';
 import { toFiat } from '../../lib/etherUnits';
 import { decimalToHex } from '../../lib/convert';
 import { getBalanceOf } from '../../store/icoActions';
 import { number } from '../../lib/validate';
+import { Wallet } from '../../lib/wallet';
 
 const DefaultGas = 100000;
 
@@ -23,6 +24,7 @@ class RenderIco extends React.Component {
     this.state = {
       modalShow: false, 
       modalSuccess: false,
+      showSS: false,
       hash: null,      
       showTx: false,
       gas: decimalToHex(DefaultGas),
@@ -69,12 +71,28 @@ class RenderIco extends React.Component {
               console.log(result)
               if (result.rate)
                   this.setState({ 
+                      showSS: false,
                       payETC: false,
                       coin: coin.get('symbol'),
                       coinName: coin.get('name'),
                       exchangeRate: result.rate
                   });
           });
+  }
+
+  // set up new wallet to transfer tokens into
+  generateReceiver = () => {
+      const pair = this.state.coin.toLowerCase() + '_etc';
+      const sswallet = Wallet.generate(false);
+      const total = this.state.amount * this.props.price;
+      this.setState({ sswallet });
+      this.props.dispatch(
+          shiftIt(sswallet, this.state.returnAddress, pair, total))
+              .then((result) => {
+                console.log(result);
+                this.setState({ tx: result, showSS: true })
+              })
+              .catch((e) => this.setState({ error: e.error }));
   }
 
   submitTx = () => 
@@ -102,6 +120,8 @@ class RenderIco extends React.Component {
     let modalSuccessClose = () => this.setState({ modalSuccess: false });
     let cost = this.props.price * this.state.amount;
     let costUSD = (this.props.usdRate && cost) ? toFiat(cost, "ether", this.props.usdRate.rate) : "0.00";
+
+    let total = this.state.amount * this.props.price / this.state.exchangeRate;
 
     return (
       <div>
@@ -146,7 +166,7 @@ class RenderIco extends React.Component {
 
           {this.props.wallet && this.props.ico && 
             <Panel bsStyle="success"> 
-              {this.props.ico.get('tokenName')}s Owned: &nbsp; 
+              {this.props.ico.get('name')}s Owned: &nbsp; 
               {this.props.balance} 
                 &nbsp; <Button 
                         bsStyle="danger"
@@ -160,12 +180,39 @@ class RenderIco extends React.Component {
                 <OpenWallet />
               }
             {!this.props.wallet && this.state.coin !=='ETC' &&
-                <ShapeShift 
-                  amount={this.state.amount}
-                  coin={this.state.coin}
-                  coinName={this.state.coinName}
-                  exchangeRate={this.state.exchangeRate}
-                  {...this.props} />
+                <Panel 
+                  bsStyle="success"
+                  header={`Pay with ${this.state.coinName}`}>
+                    <Row>
+                      <Col sm={12} md={6} lg={6}>
+                      <h4>{`Buy ${this.state.amount} ${this.props.ico.get('tokenName')}s`}</h4>
+                        {/* 
+                            TODO: Error checking
+                            Deposit Limit: {this.state.rate.limit}
+                            Minimum Amount: {this.state.rate.minimum}
+                            MinerFee: {this.state.rate.minerFee} 
+                            Return Address  
+                        */}
+                        <p>Exchange Rate: {this.state.exchangeRate} ({this.state.coin}/ETC)<br />
+                        Total: {total} {this.state.coin}
+                        </p>
+
+                        <Button 
+                          bsStyle="primary"
+                          onClick={this.generateReceiver} >
+                          BUY {this.props.ico.get('symbol')}
+                        </Button>                    
+                      </Col>
+                    </Row>
+                    {this.state.showSS && <ShapeShift 
+                      tx={this.state.tx}
+                      amount={this.state.amount}
+                      coin={this.state.coin}
+                      coinName={this.state.coinName}
+                      exchangeRate={this.state.exchangeRate}
+                      wallet={this.state.sswallet}
+                      {...this.props} />}
+                  </Panel>
               }
 
         

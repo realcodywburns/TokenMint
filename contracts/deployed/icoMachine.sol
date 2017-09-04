@@ -1,7 +1,7 @@
 pragma solidity ^0.4.0;
 
-import "./ERC20.sol";
-import "./crowdfund.sol";
+import "./ERC223.sol";
+import "./crowdsale.sol";
 
 /* 
     ICO Machine creates new token contracts and launches sales
@@ -19,8 +19,11 @@ contract IcoMachine {
         string symbol;
     }
 
-    mapping (address => Ico) public tokens; // map creator address to token address
-                                                // right now only one token per creator. fix later.
+    mapping (address => uint) public tokenIndex; // map creator address to token count
+    mapping (address => mapping(uint => Ico)) public tokens; // map creator address to tokens
+
+    event TokenCreation(address creator, address token, uint index);
+    event CrowdsaleCreation(address creator, address crowdsale, uint index);
 
     function IcoMachine() {
         owner = msg.sender;
@@ -32,25 +35,38 @@ contract IcoMachine {
         uint8 decimals,
         string symbol ) 
     {
-        address newToken = new CoinGenToken(initialSupply, tokenName, decimals, symbol);
-        tokens[msg.sender].tokenAddress = newToken;
-        tokens[msg.sender].initialSupply = initialSupply;
-        tokens[msg.sender].tokenName = tokenName;
-        tokens[msg.sender].decimals = decimals;
-        tokens[msg.sender].symbol = symbol;
+        address newToken = new Token(initialSupply, tokenName, decimals, symbol);
+        uint count = tokenIndex[msg.sender];
+        tokens[msg.sender][count] = Ico({
+            tokenAddress: newToken,
+            saleAddress: 0x0,
+            initialSupply: initialSupply,
+            tokenName: tokenName,
+            decimals: decimals,
+            symbol: symbol
+            });
+
+        tokenIndex[msg.sender] += 1;
+        TokenCreation(msg.sender, newToken, count);
     } 
 
+    /* total supply must be greater than funding goal */
     function createSale(
         uint fundingGoal,
-        uint costOfEachToken )
+        uint costOfEachToken,
+        uint256 premine,
+        uint index )
     {
-        if (tokens[msg.sender].tokenAddress == 0x0) throw;
-        address tokenAddress = tokens[msg.sender].tokenAddress;
+        assert(tokens[msg.sender][index].tokenAddress != 0x0);
+        address tokenAddress = tokens[msg.sender][index].tokenAddress;
         address saleAddress = new Crowdsale(msg.sender, fundingGoal, costOfEachToken, tokenAddress);
-        tokens[msg.sender].saleAddress = saleAddress;
+        tokens[msg.sender][index].saleAddress = saleAddress;
         Token tokenReward = Token(tokenAddress);
+        tokenReward.transfer(msg.sender, premine); 
         // Transfer tokens to sale address
-        tokenReward.transfer(saleAddress, tokens[msg.sender].initialSupply);   
+        tokenReward.transfer(saleAddress, tokens[msg.sender][index].initialSupply - premine);
+
+        CrowdsaleCreation(msg.sender, saleAddress, index);
     }
  
     function kill() 
