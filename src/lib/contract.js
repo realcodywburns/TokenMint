@@ -1,9 +1,6 @@
 import Immutable from 'immutable';
 
-export const TokenMintAddress = "0x0023BEBee6FAE12E3b387497300FEd1316e6905e";
-
-// export const IcoMachineAddress = "0x2f846034a256f51ae51249b61f4c92bcf4b0a3d8";
-export const IcoMachineAddress = "0xD459e10654a2387Fc6ab2040627febEbEa682C56"; //testnet
+export const IcoMachineAddress = "0xbebd7b2a9edb51b28854236041daec1f5e0f2398";
 
 export const RegistryAddress = '0xf4d139fE4f73725dcc6eb364e4593a00F07DC0a9';
 
