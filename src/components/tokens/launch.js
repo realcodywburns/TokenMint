@@ -26,6 +26,8 @@ class LaunchForm extends React.Component {
       gas: DefaultGas,
       tx: {},
       token: null,
+      index: 0,
+      premine: 0,
     };
   }
 
@@ -39,13 +41,15 @@ class LaunchForm extends React.Component {
 
   handleToken = (e) => {
     const token = this.props.tokenList.get(e.target.value);
-    this.setState({token});
+    this.setState({ index: e.target.value, token});
   }
 
   estimateGas = () => {
     const data = {
       price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
+      premine: this.state.premine,
+      index: this.state.index,
     }
     this.props.estimateGas(data, this.props.wallet)
       .then((result) => { 
@@ -61,6 +65,8 @@ class LaunchForm extends React.Component {
       price: toWei(this.state.price),
       fundingGoal: this.state.fundingGoal,
       gasLimit: this.state.gas,
+      premine: this.state.premine,
+      index: this.state.index,      
     }
     this.props.initIco(data, this.props.wallet)
       .then((result) => { 
@@ -105,7 +111,7 @@ class LaunchForm extends React.Component {
           <h2>Start your Crowdsale!</h2>
           </Col>
         </Row>
-        {(this.props.tokenList.size == 0) &&  <Row>
+        {(this.props.tokenList.size === 0) &&  <Row>
           <Col>
             <p>
               Did you already create a token? If not, 
@@ -120,7 +126,7 @@ class LaunchForm extends React.Component {
           </Col>
         </Row>}
         {(this.props.tokenList.size > 0) && <Row>
-          <b bsStyle="info">Select a Token</b>
+          <h4>Select a Token</h4>
           <FormGroup
             controlId="index"
           >
@@ -182,7 +188,18 @@ class LaunchForm extends React.Component {
             <HelpBlock>{`$${goalUSD} USD`}<br />
             {`${goalBTC} BTC`}</HelpBlock>
           </FormGroup>
-
+          <FormGroup
+            controlId="premine"
+            validationState={number(this.state.premine)}
+          >
+            <ControlLabel>Premine (number of tokens to keep for yourself)</ControlLabel>
+            <FormControl
+              type="number"
+              placeholder="0"
+              onChange={this.handleChange}
+            />
+            <FormControl.Feedback />
+          </FormGroup>
           <FormGroup>
             {this.props.wallet &&
             <Button 
@@ -252,6 +269,7 @@ const LaunchIco = connect(
               name: data.token,
               decimals: data.decimals,
               symbol: data.symbol,
+              index: data.index,
               tokenTx: txhash,
           };
           dispatch(createIco(token));
