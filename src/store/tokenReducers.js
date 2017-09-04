@@ -32,22 +32,6 @@ const customToken = Immutable.fromJS({
     symbol: null,
 });
 
-function onTokenCreate(state, action) {
-    if (action.type === 'TOKEN/CREATE') {
-        const t = action.token;
-        return state.set('token', initToken.merge({
-                owner: t.owner,
-                initialSupply: t.initialSupply,
-                name: t.name,
-                decimals: t.decimals,
-                symbol: t.symbol,
-                tokenTx: t.tokenTx,
-            })
-        );
-    }
-    return state;
-}
-
 function onIcoCreate(state, action) {
     if (action.type === 'TOKEN/ICO') {
         const t = action.ico;
@@ -118,7 +102,6 @@ function onCustomToken(state, action) {
 
 export default function tokenReducers(state, action) {
     state = state || initial;
-    state = onTokenCreate(state, action);
     state = onIcoCreate(state, action);
     state = onTokenLoad(state, action);
     state = onCrowdsaleLoad(state, action);

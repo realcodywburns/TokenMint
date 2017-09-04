@@ -62,7 +62,7 @@ export function loadCustomToken(address) {
             rpc.call("eth_call", [{
                 to: address,
                 data: data,
-            }]).then((result) => {
+            }, "latest"]).then((result) => {
                 const params = dataToParams(c, result);
                 const outputs = paramsToToken(params);
                 dispatch({
@@ -84,7 +84,7 @@ export function loadCrowdSale(address) {
             rpc.call("eth_call", [{
                 to: address,
                 data: data,
-            }]).then((result) => {
+            }, "latest"]).then((result) => {
                 const params = dataToParams(c, result);
                 const outputs = paramsToToken(params);
                 dispatch({
@@ -130,7 +130,7 @@ export function estimateIcoGas(ico, wallet) {
             from: addr,
             to: IcoMachineAddress,
             data: data,
-        }]).then((result) => {
+        }, "latest"]).then((result) => {
             console.log(result);
             return result;
         }).catch((error) => {
@@ -311,7 +311,7 @@ export function generateSendTokenTransaction(tokenAddress, send, wallet) {
 export function createToken(token) {
     return (dispatch) => {
         dispatch({
-            type: 'TOKEN/CREATE', 
+            type: 'TOKEN/LOAD', 
             token,
         });
     }
