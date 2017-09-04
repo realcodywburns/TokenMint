@@ -1,6 +1,6 @@
 pragma solidity ^0.4.2;
 
-import "./ERC20.sol";
+import "./ERC223.sol";
 
 contract Crowdsale {
     address public beneficiary;
@@ -12,6 +12,7 @@ contract Crowdsale {
     bool fundingGoalReached = false;
     event GoalReached(address beneficiary, uint amountRaised);
     event FundTransfer(address backer, uint amount, bool isContribution);
+    event IcoLaunch(address from, uint value, bytes data);
     bool crowdsaleClosed = false;
 
     /*  at initialization, setup the owner */
@@ -29,12 +30,22 @@ contract Crowdsale {
 
     /* The function without name is the default function that is called whenever anyone sends funds to a contract */
     function () payable {
-        if (crowdsaleClosed) throw;
+        require(!crowdsaleClosed);
         uint amount = msg.value; //in wei
         balanceOf[msg.sender] = amount;
         amountRaised += amount;
         tokenReward.transfer(msg.sender, amount/price);
         FundTransfer(msg.sender, amount, true);
+    }
+
+    /* Buy tokens for address */
+    function buyTokens(address buyer) payable {
+        require(!crowdsaleClosed);
+        uint amount = msg.value; //in wei
+        balanceOf[buyer] = amount;
+        amountRaised += amount;
+        tokenReward.transfer(buyer, amount/price);
+        FundTransfer(buyer, amount, true);
     }
 
     modifier afterFundingGoal() { if (amountRaised >= fundingGoal) _; }
@@ -68,5 +79,9 @@ contract Crowdsale {
                 fundingGoalReached = false;
             }
         }
+    }
+
+    function tokenFallback(address _from, uint _value, bytes _data){
+        IcoLaunch(_from, _value, _data);
     }
 }
