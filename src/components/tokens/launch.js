@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { Grid, Row, Col, Panel } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Radio, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
 import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
@@ -25,15 +25,21 @@ class LaunchForm extends React.Component {
       showTx: false,
       gas: DefaultGas,
       tx: {},
+      token: null,
     };
   }
 
   gotoToken = () => {
-    this.props.gotoToken();
+    this.props.dispatch(gotoTab('token'));
   }
 
   handleChange = (e) => {
     this.setState({ [e.target.id]: e.target.value });
+  }
+
+  handleToken = (e) => {
+    const token = this.props.tokenList.get(e.target.value);
+    this.setState({token});
   }
 
   estimateGas = () => {
@@ -96,10 +102,10 @@ class LaunchForm extends React.Component {
       <Grid>
         <Row>
           <Col>
-          <h4>Start your Crowdsale!</h4>
+          <h2>Start your Crowdsale!</h2>
           </Col>
         </Row>
-        {!this.props.token &&  <Row>
+        {(this.props.tokenList.size == 0) &&  <Row>
           <Col>
             <p>
               Did you already create a token? If not, 
@@ -113,26 +119,40 @@ class LaunchForm extends React.Component {
             
           </Col>
         </Row>}
-        {this.props.token && <Row>
-          <h4>{this.props.token.get("name")}({this.props.token.get("symbol")})</h4>
-          
-          <Row>
-            <Col sm={4}>Token Contract</Col>
-            <Col sm={8}>
-              <a href={`"http://gastracker.io/addr/${this.props.token.get("tokenAddress")}"`} 
-                rel="noopener noreferrer"
-                target="_blank">
-                {this.props.token.get("tokenAddress")}
-              </a>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={4}>Token Supply</Col>
-            <Col sm={8}>{this.props.token.get("initialSupply")}</Col>
-          </Row>
+        {(this.props.tokenList.size > 0) && <Row>
+          <b bsStyle="info">Select a Token</b>
+          <FormGroup
+            controlId="index"
+          >
+            {this.props.tokenList.map((token, i) =>
+            <Radio 
+              name="tokenIndex" 
+              key={token.get("tokenAddress")} 
+              onChange={this.handleToken} 
+              value={i}>
+               <Panel 
+                bsStyle="info" 
+                header={<h5>{`${token.get("name")}(${token.get("symbol")})`}</h5>}>
+               <Row>
+                <Col sm={4}>Token Contract</Col>
+                <Col sm={8}>
+                  <a href={`"http://gastracker.io/addr/${token.get("tokenAddress")}"`} 
+                    rel="noopener noreferrer"
+                    target="_blank">
+                    {token.get("tokenAddress")}
+                  </a>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={4}>Token Supply</Col>
+                <Col sm={8}>{token.get("initialSupply")}</Col>
+              </Row>
+              </Panel>
+            </Radio>)}
+          </FormGroup>
         </Row>}
         <hr />
-        {this.props.token && <Form>
+        {this.state.token && <Form>
           <FormGroup
             controlId="price"
             validationState={number(this.state.price)}
@@ -205,7 +225,7 @@ const LaunchIco = connect(
     const btcRate = rates.filter((r)=>r.currency==='btc')[0];
     return {
       wallet: state.wallet.get('wallet'),
-      token: state.tokens.get('token'),
+      tokenList: state.tokens.get('token'),
       usdRate,
       btcRate,
     }
@@ -243,8 +263,7 @@ const LaunchIco = connect(
             .then(resolver(resolve));
         });
       },
-      gotoToken: () => 
-        dispatch(gotoTab('token')),
+      dispatch,
       gotoWallet: () => 
         dispatch(gotoTab('wallet'))
   })
