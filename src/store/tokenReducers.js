@@ -15,6 +15,7 @@ const initToken = Immutable.fromJS({
     decimals: 8,
     symbol: null,
     tokenTx: null,
+    index: 0,
 });
 
 const initIco = Immutable.fromJS({
@@ -73,6 +74,7 @@ function onTokenLoad(state, action) {
                         tokenAddress: t.tokenAddress,
                         decimals: t.decimals.toString(10),
                         symbol: t.symbol,
+                        index: action.index,
                         tokenTx: t.tokenTx,
                     })
                 )

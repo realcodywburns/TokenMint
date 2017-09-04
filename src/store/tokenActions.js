@@ -123,7 +123,9 @@ export function estimateIcoGas(ico, wallet) {
     return (dispatch) => {
         const data = functionToData(CreateSaleFunc, 
             { fundingGoal: ico.fundingGoal,
-                costOfEachToken: ico.price});
+                costOfEachToken: ico.price,
+                premine: ico.premine || 0,
+                index: ico.index || 0});
         return rpc.call("eth_estimateGas", [{
             from: addr,
             to: IcoMachineAddress,
@@ -197,7 +199,9 @@ export function generateIcoTransaction(ico, wallet) {
     const addr = wallet.getAddressString();
     const data = functionToData(CreateSaleFunc, 
             { fundingGoal: ico.fundingGoal,
-                costOfEachToken: ico.price });
+                costOfEachToken: ico.price,
+                premine: ico.premine || 0,
+                index: ico.index || 0});                
     const tx = Object.assign(initialTx, { 
         gasLimit: ico.gasLimit,
         data: data,
