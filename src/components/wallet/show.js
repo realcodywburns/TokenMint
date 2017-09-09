@@ -16,7 +16,7 @@ class RenderWallet extends React.Component {
           
           <Panel header="Account Address" bsStyle="success">
             <span style={wrap}>
-              {this.props.wallet.getAddressString()}
+              {this.props.address}
             </span>
           </Panel>
           <Panel bsStyle="info">
@@ -25,16 +25,18 @@ class RenderWallet extends React.Component {
             <hr />
             <h6>Equivalent Values</h6>
             {this.props.fiatValues.map((v) =>
-              <Row key={v.currency}><Col smOffset={1}>{v.value} {v.currency.toUpperCase()}</Col>
-              </Row>)}
+              <span key={v.currency}>
+                {v.value} {v.currency.toUpperCase()}<br />
+              </span>)}
           </Panel>
           <Panel bsStyle="warning">
             <h4>Tokens</h4>
             <hr />
             {this.props.tokens.map((val, tok) => {
               return  (val > 0) && 
-                <Row key={tok}><Col smOffset={1}>{val.toString(10)} {tok.toUpperCase()}</Col>
-                </Row>
+                <span key={tok}>
+                  {val.toString(10)} {tok.toUpperCase()}
+                </span>
               })}
           </Panel>
           <ListGroup>
@@ -78,7 +80,7 @@ const ShowWallet = connect(
         }
       });
     return {
-      wallet: state.wallet.get('wallet'),
+      address: state.wallet.get('address'),
       balance,
       fiatValues,
       tokenList: state.tokens.get('token'),

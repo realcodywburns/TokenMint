@@ -22,7 +22,6 @@ class WalletForm extends React.Component {
       file: null,
       password: null,
       error: null,
-      showIntro: true,
     };
   }
 
@@ -34,7 +33,6 @@ class WalletForm extends React.Component {
       showBalance: false,
       showRequirePass: false,
       showAccessButton: false,
-      showIntro: false,
     });
   }
 
@@ -60,6 +58,7 @@ class WalletForm extends React.Component {
 
   closeWallet = () => {
     this.resetState();
+    this.props.closeWallet();
   }
 
   handlePassword = (e) => {
@@ -97,9 +96,6 @@ class WalletForm extends React.Component {
           }
         };
     }
-  showIntroText = () =>{
-      this.setState({ showIntro: true });
-    }
 
   render() {
     return (
@@ -111,7 +107,7 @@ class WalletForm extends React.Component {
           <Col sm={12} md={4} >
             <h4>Select the format of your private key.</h4>
             <Form>
-              <FormGroup onLoad={this.showIntroText}>
+              <FormGroup>
                 <Radio name="keyFormat" value="file" onChange={this.handleFormat}>
                   JSON or Keystore File</Radio>
                 <Radio name="keyFormat" value="text" onChange={this.handleFormat}>
@@ -119,13 +115,6 @@ class WalletForm extends React.Component {
               </FormGroup>
             </Form>
           </Col>
-          {this.state.showIntro && <Col sm={12} md={4} lg={4}>
-          <Well>
-          <p>
-          Please provide the private key for the address that you would like to use to create your tokens. The address you choose requires a minimum amount of ETC to pay for the Gas (Transaction Fee) necessary to execute the smart contract which creates the tokens you wish to create. We recommend having at least .1 ETC in order to execute the smart contract.
-          </p>
-          </Well>
-          </Col>}
         {this.state.showTextKey && <Col sm={12} md={6} lg={6}>
             <h4>Paste / type your private key.</h4>
             <Form>
