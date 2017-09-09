@@ -6,7 +6,7 @@ import CreateToken from './tokens/create';
 import TokenList from './tokens/list';
 import { Information } from './tokens/info';
 import LaunchIco from './tokens/launch';
-import OpenWallet from './wallet/open';
+import ManageWallet from './wallet/wallet';
 import ToSmodal from './info/ToS';
 import logo from '../img/logo.png';
 
@@ -33,31 +33,6 @@ const Render = ({...props}) => (
                 <NavItem onClick={() => props.handleSelect("wallet")}>
                   Wallet Manager
                 </NavItem>
-                { /*<NavDropdown eventKey={3} title={<i className="fa fa-cogs"></i>} id="basic-nav-dropdown">
-                  <MenuItem eventKey={3.1}>Your Wallets</MenuItem>
-                  <MenuItem eventKey={3.2}>Add Wallet</MenuItem>
-                  <MenuItem eventKey={"Wallets"}>Manage Wallets</MenuItem>
-                  <MenuItem divider />
-                   <FormGroup>
-                   {' '}
-                    <Radio name="radioGroup" inline>
-                    ETC
-                    </Radio>
-                    {' '}
-                    <Radio name="radioGroup" inline>
-                    ETH
-                    </Radio>
-                    {' '}
-                    <Radio name="radioGroup" inline>
-                    RSK
-                    </Radio>
-                    {' '}
-                    <Radio name="radioGroup" inline>
-                    Local
-                    </Radio>
-                    {' '}
-                  </FormGroup>
-                </NavDropdown>*/ }
               </Nav>
           </Col>
     </Row>
@@ -81,7 +56,7 @@ const Render = ({...props}) => (
             <TokenList />
           </Tab>
           <Tab eventKey={"wallet"}>
-            <OpenWallet />
+            <ManageWallet />
           </Tab>
         </Tabs>
       </Col>
