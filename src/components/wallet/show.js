@@ -32,7 +32,7 @@ class RenderWallet extends React.Component {
           <Panel bsStyle="warning">
             <h4>Tokens</h4>
             <hr />
-            {this.props.tokens.map((val, tok) => {
+            {this.props.tokens.valueSeq().map((val, tok) => {
               return  (val > 0) && 
                 <span key={tok}>
                   {val.toString(10)} {tok.toUpperCase()}
@@ -40,7 +40,7 @@ class RenderWallet extends React.Component {
               })}
           </Panel>
           <ListGroup>
-          {this.props.tokenList.map((token) => 
+          {this.props.tokenList.valueSeq().map((token) => 
             <div key={token.get("tokenAddress")}>
               <ListGroupItem header={`${token.get("name")}(${token.get("symbol")})`}>
               Token Contract: 

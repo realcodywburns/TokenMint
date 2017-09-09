@@ -130,7 +130,7 @@ class LaunchForm extends React.Component {
           <FormGroup
             controlId="index"
           >
-            {this.props.tokenList.map((token, i) =>
+            {this.props.tokenList.valueSeq().map((token, i) =>
             <Radio 
               name="tokenIndex" 
               key={token.get("tokenAddress")} 
