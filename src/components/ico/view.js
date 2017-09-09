@@ -1,12 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Grid, Row, Col, Panel, PageHeader } from 'react-bootstrap';
+import { ShareButtons, generateShareIcon } from 'react-share';
 import TOKENS from '../../TOKENS';
 import BuyIco from './buy';
 import { toFiat, toEther } from '../../lib/etherUnits';
 import { fetchIco } from '../../store/icoActions';
 import logo from '../../img/logo.png';
 import { CustomHead, CustomAbout } from './custom';
+
+const TwitterIcon = generateShareIcon('twitter');
 
 class RenderIco extends React.Component {
 
@@ -23,8 +26,6 @@ class RenderIco extends React.Component {
   componentWillMount = () => {
     this.props.dispatch(fetchIco(this.state.id));
   }
-
-
 
   render() {
     let fundingGoalUSD = (this.props.usdRate && this.props.fundingGoal) ? 
@@ -108,6 +109,12 @@ class RenderIco extends React.Component {
                   </a>
                 </Col>
               </Row>
+              <ShareButtons.TwitterShareButton 
+                url={window.location.href}
+                title={`Check out ${this.props.ico.get("name")} on TokenMint!`}
+              >
+                <TwitterIcon size={32} />
+              </ShareButtons.TwitterShareButton>
             </Panel>
           </Col>
         </Row>}
