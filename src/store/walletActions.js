@@ -1,7 +1,8 @@
 import { rpc } from '../lib/rpc';
 import { Wallet } from '../lib/wallet';
 import { getTransactionData } from './transactionActions';
-import { loadOwnTokens } from './tokenActions';
+import { loadOwnTokens, getBalanceOf } from './tokenActions';
+import TOKENS from '../TOKENS';
 
 export function openWallet(key, password = null) {
     return (dispatch) => {
@@ -23,6 +24,9 @@ export function openWallet(key, password = null) {
         dispatch(getTransactionData(address)); 
         // Look up user tokens in registry
         dispatch(loadOwnTokens(address));
+        for (var tok of TOKENS) {
+            dispatch(getBalanceOf(tok, address));
+        }
         return wallet;     
     };
 }

@@ -4,6 +4,7 @@ const initial = Immutable.fromJS({
     wallet: null,
     password: null,
     rates: [],
+    tokens: {},
 });
 
 function onExchangeRates(state, action) {
@@ -27,9 +28,19 @@ function onOpen(state, action) {
     return state;
 }
 
+function onTokenBalance(state, action) {
+    if (action.type === 'WALLET/TOKEN_BALANCE') {
+        return state.update('tokens', (tokens) => 
+            tokens.set(action.symbol, action.balance)
+        );
+    }
+    return state;
+}
+
 export default function walletReducers(state, action) {
     state = state || initial;
     state = onOpen(state, action);
     state = onExchangeRates(state, action);
+    state = onTokenBalance(state, action);
     return state;
 }
