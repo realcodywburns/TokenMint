@@ -140,9 +140,9 @@ class LaunchForm extends React.Component {
                 bsStyle="info" 
                 header={<h5>{`${token.get("name")}(${token.get("symbol")})`}</h5>}>
                <Row>
-                <Col sm={4}>Token Contract</Col>
-                <Col sm={8}>
-                  <a href={`"http://gastracker.io/addr/${token.get("tokenAddress")}"`} 
+                <Col sm={4} md={4}>Token Contract</Col>
+                <Col sm={8} md={8}>
+                  <a href={`http://gastracker.io/addr/${token.get("tokenAddress")}`} 
                     rel="noopener noreferrer"
                     target="_blank">
                     {token.get("tokenAddress")}
