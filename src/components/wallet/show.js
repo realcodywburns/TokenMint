@@ -5,10 +5,23 @@ import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { toFiat, toEther } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
+import { viewWallet } from '../../store/walletActions';
 import { wrap } from '../../lib/styles';
 
-
 class RenderWallet extends React.Component {
+
+  constructor(props) {
+    super(props);
+    const address = (this.props.match) ? this.props.match.params.addr : null;
+    this.state = {
+      address,
+    };
+  }
+
+  componentWillMount = () => {
+    if (this.state.address)
+      this.props.dispatch(viewWallet(this.state.address));
+  }
 
   render() {
     return (        
@@ -88,6 +101,7 @@ const ShowWallet = connect(
     };
   },
   (dispatch, ownProps) => ({
+    dispatch,
     gotoIco: () => 
       dispatch(gotoTab('ico'))
   })
