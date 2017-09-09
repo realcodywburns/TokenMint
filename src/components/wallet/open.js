@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import { Row, Col, Panel, Alert, Well } from 'react-bootstrap';
+import { Row, Col, Panel, Alert } from 'react-bootstrap';
 import { Form, FormGroup, FormControl, Radio, Button } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';

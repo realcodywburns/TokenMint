@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Row, Col, Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { toFiat, toEther } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
@@ -40,7 +40,7 @@ class RenderWallet extends React.Component {
               })}
           </Panel>
           <ListGroup>
-          {this.props.tokenList.map((token, i) => 
+          {this.props.tokenList.map((token) => 
             <div key={token.get("tokenAddress")}>
               <ListGroupItem header={`${token.get("name")}(${token.get("symbol")})`}>
               Token Contract: 
@@ -83,7 +83,7 @@ const ShowWallet = connect(
       address: state.wallet.get('address'),
       balance,
       fiatValues,
-      tokenList: state.tokens.get('token'),
+      tokenList: state.tokens.get('tokens'),
       tokens,
     };
   },
