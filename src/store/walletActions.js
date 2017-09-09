@@ -34,15 +34,39 @@ export function openWallet(key, password = null) {
 export function openWalletFile(file, password = null) {
     return (dispatch) => {
         const wallet = Wallet.getWalletFromPrivKeyFile(file, password);
+        const address = wallet.getAddressString();
         dispatch({
             type: 'WALLET/OPEN',
             wallet: wallet,
             password,
+            address,
         });
-        const address = wallet.getAddressString()
         dispatch(getTransactionData(address)); 
         dispatch(loadOwnTokens(address));
         return wallet;
+    };
+}
+
+export function viewWallet(address) {
+    return (dispatch) => {
+        dispatch({
+            type: 'WALLET/VIEW',
+            address,
+        });
+        dispatch(getTransactionData(address)); 
+        // Look up user tokens in registry
+        dispatch(loadOwnTokens(address));
+        for (var tok of TOKENS) {
+            dispatch(getBalanceOf(tok, address));
+        }
+    };
+}
+
+export function closeWallet() {
+    return (dispatch) => {
+        dispatch({
+            type: 'WALLET/CLOSE',
+        });
     };
 }
 
