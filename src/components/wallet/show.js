@@ -22,46 +22,41 @@ class RenderWallet extends React.Component {
           <Panel bsStyle="info">
             <h4>Balance</h4>
             {this.props.balance || '?'} ETC
-          </Panel>
-          {this.props.token && <ListGroup>            
-              <ListGroupItem header={`${this.props.token.get("name")}(${this.props.token.get("symbol")})`}>
-              Token Contract: 
-              <a href={`http://gastracker.io/addr/${this.props.token.get("tokenAddress")}`} 
-                rel="noopener noreferrer"
-                target="_blank">
-                <span style={wrap}>{this.props.token.get("tokenAddress")}</span>
-              </a>
-              </ListGroupItem>
-              <ListGroupItem>
-              Crowdsale Status: 
-              {this.props.token.get("saleAddress") && 
-                <Link to={`/ico/${this.props.token.get("saleAddress")}`}>
-                <Button bsSize="small" bsStyle="info">Active</Button>
-                </Link>}
-              {!this.props.token.get("saleAddress") && 
-                <Button bsSize="small" bsStyle="success" onClick={this.props.gotoIco}>Launch ICO
-                </Button>}
-            </ListGroupItem>
-            {this.props.ico && 
-              <ListGroupItem header={`${this.props.token.get("name")} Crowdsale`}>
-              Funding Goal: {this.props.ico.get("fundingGoal")}
-              </ListGroupItem>}
-            {this.props.ico && 
-            <ListGroupItem>
-              Amount Raised: {this.props.ico.get("amountRaised")}
-            </ListGroupItem>}
-          </ListGroup>}
-          <Panel>
-            <h4>Equivalent Values</h4>
-            <hr />  
+            <hr />
+            <h6>Equivalent Values</h6>
             {this.props.fiatValues.map((v) =>
               <Row key={v.currency}><Col smOffset={1}>{v.value} {v.currency.toUpperCase()}</Col>
               </Row>)}
           </Panel>
           <Panel bsStyle="warning">
             <h4>Tokens</h4>
-            Coming soon...
+            <hr />
+            {this.props.tokens.map((val, tok) => {
+              return  (val > 0) && 
+                <Row key={tok}><Col smOffset={1}>{val.toString(10)} {tok.toUpperCase()}</Col>
+                </Row>
+              })}
           </Panel>
+          <ListGroup>
+          {this.props.tokenList.map((token, i) => 
+            <div key={token.get("tokenAddress")}>
+              <ListGroupItem header={`${token.get("name")}(${token.get("symbol")})`}>
+              Token Contract: 
+              <a href={`http://gastracker.io/addr/${token.get("tokenAddress")}`} 
+                rel="noopener noreferrer"
+                target="_blank">
+                <span style={wrap}>{token.get("tokenAddress")}</span>
+              </a>
+              </ListGroupItem>
+              {token.get("saleAddress") && 
+              <ListGroupItem> 
+                <Link to={`/ico/${token.get("saleAddress")}`}>
+                <Button bsSize="small" bsStyle="info">Crowdsale</Button>
+                </Link>
+              </ListGroupItem>}
+          </div>)}
+          </ListGroup>
+
           {this.props.showClose && <Button onClick={this.props.closeWallet}>Close Wallet</Button>}
         </Panel>
     );
@@ -70,6 +65,7 @@ class RenderWallet extends React.Component {
 
 const ShowWallet = connect(
   (state, ownProps) => {
+    const tokens = state.wallet.get('tokens');
     const rates = state.wallet.get('rates');
     const balance = state.transaction.get('data')  && 
       toEther(state.transaction.get('data').get('balance'), 'wei');
@@ -85,8 +81,8 @@ const ShowWallet = connect(
       wallet: state.wallet.get('wallet'),
       balance,
       fiatValues,
-      token: state.tokens.get('token'),
-      ico: state.tokens.get('ico'),
+      tokenList: state.tokens.get('token'),
+      tokens,
     };
   },
   (dispatch, ownProps) => ({
