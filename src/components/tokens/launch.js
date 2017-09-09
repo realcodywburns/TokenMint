@@ -242,7 +242,7 @@ const LaunchIco = connect(
     const btcRate = rates.filter((r)=>r.currency==='btc')[0];
     return {
       wallet: state.wallet.get('wallet'),
-      tokenList: state.tokens.get('token'),
+      tokenList: state.tokens.get('tokens'),
       usdRate,
       btcRate,
     }
