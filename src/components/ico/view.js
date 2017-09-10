@@ -18,7 +18,7 @@ class RenderIco extends React.Component {
     const token = TOKENS.filter((t)=>t.crowdsale===this.props.match.params.id)[0];
     this.state = {
       id: this.props.match.params.id,
-      custom: (this.props.token),
+      custom: (token),
       token,
     };
   }

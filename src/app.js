@@ -5,6 +5,7 @@ import { store } from './store/store.js';
 import Main from './components/main';
 import About from './components/info/about';
 import ViewIco from './components/ico/view';
+import ShowWallet from './components/wallet/show';
 import ShapeShift from './components/transaction/shapeshift';
 import Blank from './components/blank';
 
@@ -18,6 +19,7 @@ class TokenApp extends Component {
             <Route path="/ss" component={ShapeShift}/>
             <Route path="/blank" component={Blank}/>
             <Route path="/ico/:id" component={ViewIco}/>
+            <Route path="/addr/:addr" component={ShowWallet}/>
         </div>
       </Provider>
     );

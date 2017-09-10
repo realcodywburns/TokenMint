@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 const initial = Immutable.fromJS({
-    token:[],
+    tokens: {},
     ico: null,
     custom: [],
 });
@@ -49,8 +49,8 @@ function onIcoCreate(state, action) {
 function onTokenLoad(state, action) {
     if (action.type === 'TOKEN/LOAD') {
         const t = action.token;
-        return state.update('token', (token) => 
-            token.push(initToken.merge({
+        return state.update('tokens', (tokens) => 
+            tokens.set(t.tokenAddress, initToken.merge({
                         owner: t.owner,
                         initialSupply: t.initialSupply.toString(10),
                         name: t.tokenName,

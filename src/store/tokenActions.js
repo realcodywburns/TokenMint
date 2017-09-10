@@ -4,7 +4,7 @@ import { functionToData, dataToParams, paramsToToken, hexToDecimal } from '../li
 import { IcoMachineAddress, CreateTokenFunc, CreateSaleFunc } from '../lib/contract';
 import { ERC223Funcs, TransferTokensFunc, CrowdSaleFuncs } from '../lib/contract';
 import { RegistryAddress, RegisterFunc } from '../lib/contract';
-import { TokensFunc, TokenIndex } from '../lib/contract';
+import { TokensFunc, TokenIndex, BalanceOfFunc } from '../lib/contract';
 
 const initialTx = {
     to: IcoMachineAddress,
@@ -305,6 +305,24 @@ export function generateSendTokenTransaction(tokenAddress, send, wallet) {
             });
             return result;
         });
+    }
+}
+
+export function getBalanceOf(token, address) {
+    return (dispatch) => {
+        const data = functionToData(BalanceOfFunc, { '_owner': address });
+        return rpc.call("eth_call", [{ 
+            to: token.address,
+            data: data,
+        }, "latest"]).then((result) => {
+            const params = dataToParams(BalanceOfFunc, result);
+            const outputs = paramsToToken(params);
+            dispatch({
+                type: 'WALLET/TOKEN_BALANCE',
+                symbol: token.symbol,
+                balance: outputs.balance
+            });
+        })
     }
 }
 

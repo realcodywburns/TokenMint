@@ -130,7 +130,7 @@ class LaunchForm extends React.Component {
           <FormGroup
             controlId="index"
           >
-            {this.props.tokenList.map((token, i) =>
+            {this.props.tokenList.valueSeq().map((token, i) =>
             <Radio 
               name="tokenIndex" 
               key={token.get("tokenAddress")} 
@@ -242,7 +242,7 @@ const LaunchIco = connect(
     const btcRate = rates.filter((r)=>r.currency==='btc')[0];
     return {
       wallet: state.wallet.get('wallet'),
-      tokenList: state.tokens.get('token'),
+      tokenList: state.tokens.get('tokens'),
       usdRate,
       btcRate,
     }
