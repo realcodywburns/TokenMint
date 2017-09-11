@@ -145,8 +145,9 @@ class WalletForm extends React.Component {
                 controlId="password"
               >
                 <FormControl
-                  componentClass="textarea"
+                  componentClass="input"
                   placeholder="Password"
+                  type="password"
                   bsSize="small"
                   onChange={this.handlePassword}
                 />
