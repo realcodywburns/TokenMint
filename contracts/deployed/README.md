@@ -6,6 +6,8 @@
 - Contract Addr: 0xbebd7b2a9edb51b28854236041daec1f5e0f2398
 - Contract owner: 0x3549ece915b8bd2485ea234f4745276aba91642d
 
+#### Registry
+- Contract Addr: 0xf4d139fE4f73725dcc6eb364e4593a00F07DC0a9
 
 ### Testnet 
 - Last Deployed Sat Sep 02  03:08:07 UTC 2017
