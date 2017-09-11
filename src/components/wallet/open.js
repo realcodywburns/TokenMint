@@ -40,20 +40,21 @@ class WalletForm extends React.Component {
     if (this.state.showTextKey)
         this.props.openWallet(this.state.privKey, this.state.password)
           .then((result) => {
-            if (typeof result === 'object')
+            if (!result instanceof Error) {
               this.setState({ showBalance: true });
-            else
+              this.resetState();
+            } else
               this.setState({ error: result });
           });
     else if (this.state.showRequirePass && this.state.showFileKey)
         this.props.openWalletFile(this.state.file, this.state.password)
           .then((result) => {
-            if (typeof result === 'object')
+            if (!result instanceof Error) {
               this.setState({ showBalance: true });
-            else
-              this.setState({ error: result });
+              this.resetState();
+            } else
+              this.setState({ error: result.toString() });
           });
-    this.resetState();
   }
 
   closeWallet = () => {
