@@ -34,7 +34,7 @@ class ListRender extends React.Component {
                 {token.name}
                     &nbsp; <small>({token.symbol})</small>
                 </Media.Heading>
-                Token Contract: <a href="https://gastracker.io/addr/{token.address}" rel="noopener noreferrer"
+                Token Contract: <a href={`https://gastracker.io/addr/${token.address}`} rel="noopener noreferrer"
                     target="_blank">
                   {token.address}</a><br />
                 {token.crowdsale &&
