@@ -33,7 +33,12 @@ export function openWallet(key, password = null) {
 
 export function openWalletFile(file, password = null) {
     return (dispatch) => {
-        const wallet = Wallet.getWalletFromPrivKeyFile(file, password);
+        let wallet;
+        try { // TODO: Better error handling here
+            wallet = Wallet.getWalletFromPrivKeyFile(file, password);
+        } catch (e) {
+            return new Error(e);
+        }
         const address = wallet.getAddressString();
         dispatch({
             type: 'WALLET/OPEN',
