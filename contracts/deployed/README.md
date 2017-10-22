@@ -15,6 +15,9 @@
 - Contract Addr: 0xD459e10654a2387Fc6ab2040627febEbEa682C56
 - Contract owner: 0x43633c233d88A5cDbAFC9c4F72E24FA1039e6449
 
+#### Testnet Registry 
+ - Contract Addr: 0x20ea4049c154769264d8667d780ae9647c150f21
+
 ### Mainnet (deprecated)
 - Last Deployed Sun Jun 18 15:34:55 UTC 2017
 - TxHash: 0x70e0287fcecc2a0221c2d5303a7c97dd26a233cfc53316d531f28a502a119b14
