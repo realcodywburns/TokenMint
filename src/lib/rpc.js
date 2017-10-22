@@ -1,5 +1,5 @@
 const MarketApi = "https://coinmarketcap-nexuist.rhcloud.com/api/";
-const NodeApi = "https://mewapi.epool.io";
+const NodeApi = "https://ropsten.infura.io";
 const ServerApi = "http://localhost:8000/add";
 const Currency = "etc";
 
