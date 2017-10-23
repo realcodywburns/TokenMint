@@ -45,10 +45,10 @@ class RenderWallet extends React.Component {
           <Panel bsStyle="warning">
             <h4>Tokens</h4>
             <hr />
-            {this.props.tokens.valueSeq().map((val, tok) => {
-              return  (val > 0) && 
-                <span key={tok}>
-                  {val.toString(10)} {tok.toUpperCase()}
+            {this.props.tokens.entrySeq().map((tok) => {
+              return  (tok[1] > 0) && 
+                <span key={tok[0]}>
+                  {tok[1].toString(10)} {tok[0].toUpperCase()}<br />
                 </span>
               })}
           </Panel>
