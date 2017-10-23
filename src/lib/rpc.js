@@ -1,7 +1,6 @@
-const MarketApi = "https://coinmarketcap-nexuist.rhcloud.com/api/";
+const MarketApi = "https://api.coinmarketcap.com/v1/ticker/ethereum-classic/";
 const NodeApi = "https://mewapi.epool.io";
 const ServerApi = "http://localhost:8000/add";
-const Currency = "etc";
 
 const headers = {
     'Content-Type': 'application/json',
@@ -95,7 +94,7 @@ export class RpcApi {
     }
 
     getExchangeRates() {
-        return fetch(MarketApi + Currency, {
+        return fetch(MarketApi, {
             method: 'GET',
             headers: headers,
         }).then((response) => response.json());

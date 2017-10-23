@@ -30,7 +30,6 @@ class WalletForm extends React.Component {
       error: null,
       file: null,
       password: null,
-      showBalance: false,
       showRequirePass: false,
       showAccessButton: false,
     });
@@ -40,20 +39,22 @@ class WalletForm extends React.Component {
     if (this.state.showTextKey)
         this.props.openWallet(this.state.privKey, this.state.password)
           .then((result) => {
-            if (!result instanceof Error) {
+            if (result instanceof Error) {
+              this.setState({ error: result.toString() });
+            } else {
               this.setState({ showBalance: true });
               this.resetState();
-            } else
-              this.setState({ error: result });
+            }
           });
     else if (this.state.showRequirePass && this.state.showFileKey)
         this.props.openWalletFile(this.state.file, this.state.password)
           .then((result) => {
-            if (!result instanceof Error) {
-              this.setState({ showBalance: true });
-              this.resetState();
-            } else
+            if (result instanceof Error) {
               this.setState({ error: result.toString() });
+            } else {
+            this.setState({ showBalance: true });
+              this.resetState();
+            }
           });
   }
 
@@ -166,7 +167,7 @@ class WalletForm extends React.Component {
                 OPEN WALLET
               </Button>}
             {this.state.error && <Alert bsStyle="danger">{this.state.error}</Alert>}
-              {this.props.wallet && this.state.showBalance &&
+            {this.props.wallet && this.state.showBalance &&
                   <Alert bsStyle="success">Wallet successfully decrypted.</Alert>}
             </Col>
         </Row>
@@ -176,7 +177,7 @@ class WalletForm extends React.Component {
                 <ShowWallet showClose={true} closeWallet={this.closeWallet}/>
               </Col>
               <Col sm={6} md={8}>
-                <SendWallet/>
+                <SendWallet />
               </Col>
             </Row>
           }
