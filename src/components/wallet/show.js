@@ -63,7 +63,7 @@ class RenderWallet extends React.Component {
                 <span style={wrap}>{token.get("tokenAddress")}</span>
               </a>
               </ListGroupItem>
-              {(token.get("saleAddress").length === 42) && 
+              {token.get("saleAddress") && (token.get("saleAddress").length === 42) && 
               <ListGroupItem> 
                 <Link to={`/ico/${token.get("saleAddress")}`}>
                 <Button bsSize="small" bsStyle="info">Crowdsale</Button>
