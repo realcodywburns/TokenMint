@@ -41,7 +41,7 @@ class LaunchForm extends React.Component {
 
   handleToken = (e) => {
     const token = this.props.tokenList.get(e.target.value);
-    this.setState({ index: e.target.value, token});
+    this.setState({ index: token.index, token});
   }
 
   estimateGas = () => {
@@ -130,12 +130,12 @@ class LaunchForm extends React.Component {
           <FormGroup
             controlId="index"
           >
-            {this.props.tokenList.valueSeq().map((token, i) =>
+            {this.props.tokenList.valueSeq().map((token) =>
             <Radio 
               name="tokenIndex" 
               key={token.get("tokenAddress")} 
               onChange={this.handleToken} 
-              value={i}>
+              value={token.get("tokenAddress")}>
                <Panel 
                 bsStyle="info" 
                 header={<h5>{`${token.get("name")}(${token.get("symbol")})`}</h5>}>
@@ -227,7 +227,7 @@ class LaunchForm extends React.Component {
           close={modalSuccessClose}
           hash={this.state.hash}
         >
-          Congratulations! Once your transaction has been processed, you will find the crowdsale link in your <Button onClick={this.gotoWallet} bsStyle="info" bsSize="small">wallet.</Button> <br />
+          Congratulations! Once your transaction has been processed, you will find the crowdsale link in your <Button onClick={this.props.gotoWallet} bsStyle="info" bsSize="small">wallet.</Button> <br />
         </SuccessModal>          
       </Grid>
     );

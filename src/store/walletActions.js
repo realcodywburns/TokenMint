@@ -78,11 +78,10 @@ export function closeWallet() {
 export function getExchangeRates() {
     return (dispatch) => {
         rpc.getExchangeRates().then((result) => {
-            if (result.price) {
+            if (result[0]) {
                 const rates = {
-                    usd: result.price.usd.toFixed(6),
-                    eur: result.price.eur.toFixed(6),
-                    btc: result.price.btc.toFixed(6)
+                    usd: parseFloat(result[0].price_usd),
+                    btc: parseFloat(result[0].price_btc)
                 };
                 dispatch({
                     type: 'WALLET/RATES',

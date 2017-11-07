@@ -1,3 +1,4 @@
+const CorsProxy = "https://cors-anywhere.herokuapp.com/";
 const MarketApi = "https://api.coinmarketcap.com/v1/ticker/ethereum-classic/";
 const NodeApi = "https://mewapi.epool.io";
 const ServerApi = "http://localhost:8000/add";
@@ -94,7 +95,7 @@ export class RpcApi {
     }
 
     getExchangeRates() {
-        return fetch(MarketApi, {
+        return fetch(CorsProxy + MarketApi, {
             method: 'GET',
             headers: headers,
         }).then((response) => response.json());
