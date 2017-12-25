@@ -10,6 +10,7 @@ import '././DexNS_Interface.sol';
 
 contract IcoMachine {
     address public owner;
+    DexNS_Abstract_Interface dexns = DexNS_Abstract_Interface(0x101f1920e4cd9c7e2af056e2cb1954d0dd9647b9); // <= DexNS frontend
 
     struct Ico {
         address tokenAddress;
@@ -34,8 +35,9 @@ contract IcoMachine {
         uint256 initialSupply, 
         string tokenName,
         uint8 decimals,
-        string symbol ) 
+        string symbol )
     {
+        assert(dexns.registerAndUpdateName(symbol, msg.sender, msg.sender, "-ETC", false, false));
         address newToken = new Token(initialSupply, tokenName, decimals, symbol);
         uint count = tokenIndex[msg.sender];
         tokens[msg.sender][count] = Ico({
