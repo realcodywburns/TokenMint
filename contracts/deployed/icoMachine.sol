@@ -2,6 +2,7 @@ pragma solidity ^0.4.0;
 
 import "./ERC223.sol";
 import "./crowdsale.sol";
+import '././DexNS_Interface.sol';
 
 /* 
     ICO Machine creates new token contracts and launches sales
