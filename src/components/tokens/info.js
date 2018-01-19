@@ -4,23 +4,23 @@ import coin1 from '../../img/HotCoin/1.jpg';
 import coin2 from '../../img/HotCoin/2.jpg';
 import coin3 from '../../img/HotCoin/3.jpg';
 import coin4 from '../../img/HotCoin/4.jpg';
-
+import {getETC, icoCount} from '../../lib/counter.js';
 export const Information = (props) => {
-
+console.log(getETC);
     return (
       <Row>
         <Col sm={12}>
          <div className="col-md-3 col-sm-3 col-xs-6">
             <div className="alert alert-info back-widget-set text-center">
               <i className="fa fa-history fa-5x"></i>
-              <h3>0 <i className="fa fa-dot-circle-o"></i></h3>
+              <h3>{getETC.length} <i className="fa fa-dot-circle-o"></i></h3>
               Tokens Minted (ETC)
             </div>
           </div>
           <div className="col-md-3 col-sm-3 col-xs-6">
             <div className="alert alert-success back-widget-set text-center">
               <i className="fa fa-bars fa-5x"></i>
-              <h3> 0 </h3>
+              <h3> {icoCount.length} </h3>
               Live Crowdsales (ETC)
             </div>
           </div>

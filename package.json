@@ -25,7 +25,8 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "scryptsy": "^2.0.0"
+    "scryptsy": "^2.0.0",
+    "web3": "^0.20.4"
   },
   "optionalDependencies": {
     "fsevents": "^1.1.1"

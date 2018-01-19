@@ -10,6 +10,7 @@ import ManageWallet from './wallet/wallet';
 import ToSmodal from './info/ToS';
 import logo from '../img/logo.png';
 
+
 const Render = ({...props}) => (
   <Grid id="main">
       <Row>
