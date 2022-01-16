@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Panel } from 'react-bootstrap';
-import { FormGroup, FormControl, HelpBlock, ControlLabel, Button } from 'react-bootstrap';
+import { Row, Col, Card } from 'react-bootstrap';
+import { FormGroup, FormControl, FloatingLabel, Button } from 'react-bootstrap';
 import { BuyTokenModal, SuccessModal } from '../transaction/modals';
 import AltcoinButton from '../transaction/altcoin';
 import ShapeShift from '../transaction/shapeshift';
@@ -145,13 +145,13 @@ class RenderIco extends React.Component {
             <FormGroup
               controlId="amount"
             >
-              <ControlLabel>Number of Tokens to Buy</ControlLabel>
+              <Form.Label>Number of Tokens to Buy</Form.Label>
               <FormControl
                 type="number"
                 placeholder="1"
                 onChange={this.handleChange}
               />
-              <HelpBlock>{`Total cost: ${cost} ETC  ($${costUSD} USD).`} You will be able to withdraw your payment at any time before the funding goal is reached.</HelpBlock>
+              <FloatingLabel>{`Total cost: ${cost} ETC  ($${costUSD} USD).`} You will be able to withdraw your payment at any time before the funding goal is reached.</FloatingLabel>
               {this.props.wallet && this.props.ico &&
               <FormGroup>
                 <Button 

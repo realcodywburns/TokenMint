@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Tabs, Tab, Grid, Row, Col, Image, Nav, NavItem } from 'react-bootstrap';
+import { Tabs, Tab, Container, Row, Col, Image, Nav, NavItem } from 'react-bootstrap';
 import { gotoTab } from '../store/tabActions';
 import CreateToken from './tokens/create';
 import TokenList from './tokens/list';
@@ -11,7 +11,7 @@ import ToSmodal from './info/ToS';
 import logo from '../img/logo.png';
 
 const Render = ({...props}) => (
-  <Grid id="main">
+  <Container id="main">
       <Row>
           <Col md={2} sm={4} xs={6}>
               <Image responsive={true} onClick={props.goHome} src={logo} alt="TokenMint"  />
@@ -62,7 +62,7 @@ const Render = ({...props}) => (
       </Col>
   </Row>
   <ToSmodal />
-</Grid>
+</Container>
 
 );
 

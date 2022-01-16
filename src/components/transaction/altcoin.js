@@ -17,13 +17,15 @@ class RenderButton extends React.Component {
                 bsStyle="success"
                 title="PAY WITH...">
                 {this.props.coins.valueSeq().map((coin) => 
-                    <MenuItem 
+                    <Dropdown.Menu> 
+                     <Dropdown.Item
                       key={coin.get('symbol')} 
                       onClick={(e)=>this.props.getExchangeRate(coin)}
                     >
                         <Image src={coin.get('imageSmall')} /> 
                         {coin.get('name')}
-                    </MenuItem>)
+                    </Dropdown.Item>
+                    </Dropdown.Menu>)
                 }
             </DropdownButton>
         );

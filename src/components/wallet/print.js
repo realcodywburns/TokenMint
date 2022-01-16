@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Image } from 'react-bootstrap';
+import { Container, Image } from 'react-bootstrap';
 import QRCode from 'qrcode.react';
 import logo1 from '../../img/logo-1.png';
 import logo2 from '../../img/logo-2.png';
@@ -81,7 +81,7 @@ const PrintWallet = (props) => {
     const { address, privKey } = props;
 
     return (
-        <Grid style={print.container}>
+        <Container style={print.container}>
             <Image src={logo1} style={print.logo1} />
             <Image src={logo2} style={print.logo2} />
             <Image src={title} style={print.title} />
@@ -101,7 +101,7 @@ const PrintWallet = (props) => {
                 <p><strong>Your Address:</strong><br />{address}</p>          
                 <p><strong>Your Private Key:</strong><br />{privKey}</p>
             </div>
-        </Grid>
+        </Container>
     );
 }
 

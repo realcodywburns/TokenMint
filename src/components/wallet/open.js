@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dropzone from 'react-dropzone';
-import { Row, Col, Panel, Alert } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, Radio, Button } from 'react-bootstrap';
+import { Row, Col, Card, Alert } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ToggleButton, Button } from 'react-bootstrap';
 import { openWallet, openWalletFile } from '../../store/walletActions';
 import { Wallet } from '../../lib/wallet';
 import ShowWallet from './show';
@@ -101,7 +101,7 @@ class WalletForm extends React.Component {
 
   render() {
     return (
-      <Panel 
+      <Card 
         header="Please unlock your account to continue"
         footer="Note: Your private key is only used to sign transactions in the browser. It is never transmitted to the server, and we do not store any account information. "
         >
@@ -110,10 +110,10 @@ class WalletForm extends React.Component {
             <h4>Select the format of your private key.</h4>
             <Form>
               <FormGroup>
-                <Radio name="keyFormat" value="file" onChange={this.handleFormat}>
-                  JSON or Keystore File</Radio>
-                <Radio name="keyFormat" value="text" onChange={this.handleFormat}>
-                  Plain Text Private Key</Radio>
+                <ToggleButton name="keyFormat" value="file" onChange={this.handleFormat}>
+                  JSON or Keystore File</ToggleButton>
+                <ToggleButton name="keyFormat" value="text" onChange={this.handleFormat}>
+                  Plain Text Private Key</ToggleButton>
               </FormGroup>
             </Form>
           </Col>
@@ -181,7 +181,7 @@ class WalletForm extends React.Component {
               </Col>
             </Row>
           }
-      </Panel>
+      </Card>
     );
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { Row, Col, Accordion, Panel } from 'react-bootstrap';
+import { FormGroup,  FormControl, Button } from 'react-bootstrap';
+import { Row, Col, Accordion } from 'react-bootstrap';
 import { generateRegisterTransaction, estimateRegisterGas } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
 import { RegisterTxModal, SuccessModal } from '../transaction/modals';
@@ -96,12 +96,12 @@ class RegisterForm extends React.Component {
 
     return (
       <Accordion>
-      <Panel eventKey="0" header="Add Token to Registry">
+      <Accordion.Item eventKey="0" header="Add Token to Registry">
         <FormGroup
           controlId="address"
           validationState={required(this.state.address)}
         >
-          <ControlLabel>Token Contract Address</ControlLabel>
+          <Form.Label>Token Contract Address</Form.Label>
           <FormControl
             type="text"
             placeholder="0xb4bf8acc4f3db90d5c994b98cc80eef6869e1b64"
@@ -112,7 +112,7 @@ class RegisterForm extends React.Component {
           controlId="crowdsale"
           validationState={(this.state.crowdsale) ? address(this.state.crowdsale) : null}
         >
-          <ControlLabel>Crowdsale Address</ControlLabel>
+          <Form.Label>Crowdsale Address</Form.Label>
           <FormControl
             type="text"
             placeholder="0x59153bcf752b4e1ef294b370d635ce320bfdac08"
@@ -122,7 +122,7 @@ class RegisterForm extends React.Component {
         <FormGroup
           controlId="token"
         >
-          <ControlLabel>Token Name</ControlLabel>
+          <Form.Label>Token Name</Form.Label>
           <FormControl
             type="text"
             placeholder="TokenMint Coin"
@@ -132,7 +132,7 @@ class RegisterForm extends React.Component {
         <FormGroup
           controlId="symbol"
         >
-          <ControlLabel>Token Symbol</ControlLabel>
+          <Form.Label>Token Symbol</Form.Label>
           <FormControl
             type="text"
             placeholder="TOKN"
@@ -142,7 +142,7 @@ class RegisterForm extends React.Component {
         <FormGroup
           controlId="url"
         >
-          <ControlLabel>Web Page</ControlLabel>
+          <Form.Label>Web Page</Form.Label>
           <FormControl
             type="text"
             placeholder="https://ethereumclassic.org"
@@ -152,7 +152,7 @@ class RegisterForm extends React.Component {
         <FormGroup
           controlId="icon"
         >
-          <ControlLabel>Icon URL</ControlLabel>
+          <Form.Label>Icon URL</Form.Label>
           <FormControl
             type="text"
             placeholder="https://tinypic.com/1234"
@@ -162,7 +162,7 @@ class RegisterForm extends React.Component {
         <FormGroup
           controlId="blerb"
         >
-          <ControlLabel>More Info</ControlLabel>
+          <Form.Label>More Info</Form.Label>
           <FormControl
             componentClass="textarea"
             placeholder=""
@@ -202,7 +202,7 @@ class RegisterForm extends React.Component {
         >
           Congratulations! Once your token has been registered on the blockchain, it will be listed in the token browser. 
         </SuccessModal>
-      </Panel>
+      </Accordion.Item>
       </Accordion>
     );
   }

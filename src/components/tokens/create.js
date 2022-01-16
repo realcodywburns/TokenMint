@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, FormGroup, ControlLabel, FormControl, Button,Row, Col } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, Button,Row, Col } from 'react-bootstrap';
 import { generateTokenTransaction, estimateTokenGas, createToken } from '../../store/tokenActions';
 import { sendTransaction } from '../../store/transactionActions';
 import { gotoTab } from '../../store/tabActions';
@@ -104,7 +104,7 @@ class CreateTokenForm extends React.Component {
             controlId="token"
             validationState={required(this.state.token)}
           >
-            <ControlLabel>Token Name</ControlLabel>
+            <Form.Label>Token Name</Form.Label>
             <ToolPopup title="Pick a great name for your new token that is easy to remember.">
             <FormControl
               type="text"
@@ -118,7 +118,7 @@ class CreateTokenForm extends React.Component {
             controlId="totalSupply"
             validationState={required(this.state.totalSupply) || number(this.state.totalSupply)}
           >
-            <ControlLabel>Total Supply</ControlLabel>
+            <Form.Label>Total Supply</Form.Label>
             <ToolPopup title="This is the total amount of tokens that will ever exist.">
             <FormControl
               type="number"
@@ -133,7 +133,7 @@ class CreateTokenForm extends React.Component {
           <FormGroup
             controlId="symbol"
           >
-            <ControlLabel>Token Symbol (optional)</ControlLabel>
+            <Form.Label>Token Symbol (optional)</Form.Label>
             <ToolPopup  title="This is the 3-5 letter 'code' that users will use to identify your token on exchanges and in their wallet.">
             <FormControl
               type="text"
@@ -147,7 +147,7 @@ class CreateTokenForm extends React.Component {
           <FormGroup
             controlId="decimals"
           >
-            <ControlLabel>Decimal Places (optional)</ControlLabel>
+            <Form.Label>Decimal Places (optional)</Form.Label>
             <ToolPopup title="How many decimal places will the token have?">
             <FormControl
               type="number"

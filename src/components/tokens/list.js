@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Media, Button, Grid, Row, Col } from 'react-bootstrap';
+import { Card, Button, Container, Row, Col } from 'react-bootstrap';
 import RegisterToken from './register';
 import TOKENS from '../../TOKENS';
 import DefaultIcon from '../../img/default-icon.png';
@@ -19,21 +19,21 @@ class ListRender extends React.Component {
   render() {
 
     return (
-      <Grid>
+      <Container>
       <Row>
         <Col>
           <h2>TokenMint Tokens</h2>
           {TOKENS.map((token) => 
-            <Media key={token.address}>
-              <Media.Left align="top">
+            <Card key={token.address}>
+              <Card.Left align="top">
                 {token.icon && <img width={80} height={80} src={token.icon} alt={token.name} />}
                 {!token.icon && <img width={80} height={80} src={DefaultIcon} alt={token.name} />}
-              </Media.Left>
-              <Media.Body>
-                <Media.Heading>
+              </Card.Left>
+              <Card.Body>
+                <Card.Heading>
                 {token.name}
                     &nbsp; <small>({token.symbol})</small>
-                </Media.Heading>
+                </Card.Heading>
                 Token Contract: <a href={`https://gastracker.io/addr/${token.address}`} rel="noopener noreferrer"
                     target="_blank">
                   {token.address}</a><br />
@@ -43,8 +43,8 @@ class ListRender extends React.Component {
                     View Crowdsale
                     </Button>
                   </a> }
-              </Media.Body>
-            </Media>
+              </Card.Body>
+            </Card>
               )}
         </Col>
       </Row>
@@ -54,7 +54,7 @@ class ListRender extends React.Component {
           <RegisterToken />
         </Col>
       </Row>          
-    </Grid>
+    </Container>
     );
   }
 };

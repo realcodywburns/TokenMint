@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Panel, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { toFiat, toEther } from '../../lib/etherUnits';
 import { gotoTab } from '../../store/tabActions';
@@ -25,14 +25,14 @@ class RenderWallet extends React.Component {
 
   render() {
     return (        
-        <Panel>
+        <Card>
           
-          <Panel header="Account Address" bsStyle="success">
+          <Card header="Account Address" bsStyle="success">
             <span style={wrap}>
               {this.props.address}
             </span>
-          </Panel>
-          <Panel bsStyle="info">
+          </Card>
+          <Card bsStyle="info">
             <h4>Balance</h4>
             {this.props.balance || '?'} ETC
             <hr />
@@ -41,8 +41,8 @@ class RenderWallet extends React.Component {
               <span key={v.currency}>
                 {v.value} {v.currency.toUpperCase()}<br />
               </span>)}
-          </Panel>
-          <Panel bsStyle="warning">
+          </Card>
+          <Card bsStyle="warning">
             <h4>Tokens</h4>
             <hr />
             {this.props.tokens.entrySeq().map((tok) => {
@@ -51,7 +51,7 @@ class RenderWallet extends React.Component {
                   {tok[1].toString(10)} {tok[0].toUpperCase()}<br />
                 </span>
               })}
-          </Panel>
+          </Card>
           <ListGroup>
           {this.props.tokenList.valueSeq().map((token) => 
             <div key={token.get("tokenAddress")}>
@@ -73,7 +73,7 @@ class RenderWallet extends React.Component {
           </ListGroup>
 
           {this.props.showClose && <Button onClick={this.props.closeWallet}>Close Wallet</Button>}
-        </Panel>
+        </Card>
     );
   }
 }

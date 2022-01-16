@@ -1,6 +1,6 @@
 import React from 'react';
-import { Well, Modal, Button } from 'react-bootstrap';
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
+import { FormGroup, FormControl } from 'react-bootstrap';
 import { code } from '../../lib/styles';
 
 export const CreateTxModal = (props) => {
@@ -17,7 +17,7 @@ export const CreateTxModal = (props) => {
             <FormGroup
               controlId="gasLimit"
             >
-              <ControlLabel>Gas</ControlLabel>
+              <Form.Label>Gas</Form.Label>
               <FormControl
                 type="number"
                 defaultValue={gas}
@@ -28,12 +28,12 @@ export const CreateTxModal = (props) => {
           </Modal.Body>}
           {showTx && <Modal.Body>
               <FormGroup>
-                <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+                <Form.Label>Raw Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{rawTx}</Form.Text>  
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{signedTx}</Well>
+                <Form.Label>Signed Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{signedTx}</Form.Text>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
           </Modal.Body>}
@@ -55,7 +55,7 @@ export const LaunchICOModal = (props) => {
             <FormGroup
               controlId="gasLimit"
             >
-              <ControlLabel>Gas</ControlLabel>
+              <Form.Label>Gas</Form.Label>
               <FormControl
                 type="number"
                 defaultValue={gas}
@@ -66,12 +66,12 @@ export const LaunchICOModal = (props) => {
           </Modal.Body>}
           {showTx && <Modal.Body>
               <FormGroup>
-                <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+                <Form.Label>Raw Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{rawTx}</Form.Text>  
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{signedTx}</Well>
+                <Form.Label>Signed Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{signedTx}</Form.Text>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
           </Modal.Body>}
@@ -93,12 +93,12 @@ export const BuyTokenModal = (props) => {
           </Modal.Body>}
           {showTx && <Modal.Body>
               <FormGroup>
-                <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+                <Form.Label>Raw Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{rawTx}</Form.Text>  
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{signedTx}</Well>
+                <Form.Label>Signed Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{signedTx}</Form.Text>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
           </Modal.Body>}
@@ -120,12 +120,12 @@ export const SendTxModal = (props) => {
           </Modal.Body>}
           {showTx && <Modal.Body>
               <FormGroup>
-                <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+                <Form.Label>Raw Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{rawTx}</Form.Text>  
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{signedTx}</Well>
+                <Form.Label>Signed Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{signedTx}</Form.Text>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
           </Modal.Body>}
@@ -147,7 +147,7 @@ export const RegisterTxModal = (props) => {
             <FormGroup
               controlId="gasLimit"
             >
-              <ControlLabel>Gas</ControlLabel>
+              <Form.Label>Gas</Form.Label>
               <FormControl
                 type="number"
                 defaultValue={gas}
@@ -158,12 +158,12 @@ export const RegisterTxModal = (props) => {
           </Modal.Body>}
           {showTx && <Modal.Body>
               <FormGroup>
-                <ControlLabel>Raw Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{rawTx}</Well>  
+                <Form.Label>Raw Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{rawTx}</Form.Text>  
               </FormGroup>
               <FormGroup>
-                <ControlLabel>Signed Transaction</ControlLabel>
-                <Well bsSize="sm" style={code}>{signedTx}</Well>
+                <Form.Label>Signed Transaction</Form.Label>
+                <Form.Text bsSize="sm" style={code}>{signedTx}</Form.Text>
               </FormGroup>
             <Button bsStyle="primary" onClick={submitTx}>Submit</Button> 
           </Modal.Body>}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Panel, PageHeader } from 'react-bootstrap';
-import { ShareButtons, generateShareIcon } from 'react-share';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+//import { ShareButtons, generateShareIcon } from 'react-share';
 import TOKENS from '../../TOKENS';
 import BuyIco from './buy';
 import { toFiat, toEther } from '../../lib/etherUnits';
@@ -36,7 +36,7 @@ class RenderIco extends React.Component {
       toFiat(this.props.price, "ether", this.props.usdRate.rate) : "0.00";
 
     return (
-      <Grid>
+      <Container>
         <Row>
           <Col md={4} mdOffset={4}>
             <a href="/">
@@ -57,7 +57,7 @@ class RenderIco extends React.Component {
           </PageHeader>
         }
         {this.props.ico && 
-            <Panel bsStyle="info" 
+            <Card bsStyle="info" 
               header={`${this.props.amountRaised} ETC Raised ($${amountRaisedUSD})`} > 
           
               <Row>
@@ -74,13 +74,13 @@ class RenderIco extends React.Component {
                 <Col sm={4}>Number of Tokens Available</Col>
                 <Col sm={8}>{this.props.ico.get("initialSupply")} {this.props.ico.get("symbol")}</Col>
               </Row>*/}
-            </Panel>
+            </Card>
         }
 
         {!this.props.ico && 
-          <Panel>
+          <Card>
             <h1>Loading...</h1>
-          </Panel>}
+          </Card>}
 
         <BuyIco {...this.props} id={this.state.id} />
 
@@ -88,7 +88,7 @@ class RenderIco extends React.Component {
         {this.props.ico && <Row>
           <Col>
             <h3>More Info</h3>
-            <Panel footer={this.state.custom && <CustomAbout />}>
+            <Card footer={this.state.custom && <CustomAbout />}>
               <Row>
                 <Col sm={4}>Token Contract</Col>
                 <Col sm={8}>
@@ -109,16 +109,12 @@ class RenderIco extends React.Component {
                   </a>
                 </Col>
               </Row>
-              <ShareButtons.TwitterShareButton 
-                url={window.location.href}
-                title={`Check out ${this.props.ico.get("name")} on TokenMint!`}
-              >
-                <TwitterIcon size={32} />
-              </ShareButtons.TwitterShareButton>
-            </Panel>
+              
+              
+            </Card>
           </Col>
         </Row>}
-      </Grid>
+      </Container>
     );
 
   }

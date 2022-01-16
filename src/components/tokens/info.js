@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Carousel, Panel } from 'react-bootstrap';
+import { Row, Col, Carousel, Card } from 'react-bootstrap';
 import coin1 from '../../img/HotCoin/1.jpg';
 import coin2 from '../../img/HotCoin/2.jpg';
 import coin3 from '../../img/HotCoin/3.jpg';
@@ -56,20 +56,20 @@ export const Information = (props) => {
               </Carousel>
             </Col>
             <Col sm = {4}>
-            <Panel header={"Events"} bsStyle="primary">
+            <Card header={"Events"} bsStyle="primary">
             <div>
-              <Panel footer="Token Minter | Time 2:00 pm at 25th july" bsStyle="success">
+              <Card footer="Token Minter | Time 2:00 pm at 25th july" bsStyle="success">
 
               Greg Coin Minted!
-              </Panel>
+              </Card>
             </div>
             <div>
-              <Panel footer=" CrowdSale | Time 2:00 pm at 25th july" bsStyle="info">
+              <Card footer=" CrowdSale | Time 2:00 pm at 25th july" bsStyle="info">
 
               DontPanic Coin launched a crowdsale!
-            </Panel>
+            </Card>
             </div>
-            </Panel>
+            </Card>
         </Col>
 
       </Row>

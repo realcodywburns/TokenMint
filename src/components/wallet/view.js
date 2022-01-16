@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Panel} from 'react-bootstrap';
+import { Row, Col, Card} from 'react-bootstrap';
 import { Form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { viewWallet } from '../../store/walletActions';
 import ShowWallet from './show';
@@ -45,7 +45,7 @@ class WalletForm extends React.Component {
 
   render() {
     return (
-      <Panel>
+      <Card>
         {!this.state.showBalance && 
           <Row>
             <Col sm={12} md={6} lg={6}>
@@ -82,7 +82,7 @@ class WalletForm extends React.Component {
             </Col>
           </Row>
         }
-      </Panel>
+      </Card>
     );
   }
 }

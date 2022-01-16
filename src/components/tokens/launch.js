@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Panel } from 'react-bootstrap';
-import { Form, FormGroup, FormControl, Radio, ControlLabel, HelpBlock, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Form, FormGroup, FormControl, ToggleButton, FloatingLabel, Button } from 'react-bootstrap';
 import { LaunchICOModal, SuccessModal } from '../transaction/modals';
 import { generateIcoTransaction, estimateIcoGas, createIco } from '../../store/tokenActions';
 import OpenWallet from '../wallet/open';
@@ -105,7 +105,7 @@ class LaunchForm extends React.Component {
     let goalBTC = (this.state.fundingGoal && this.props.btcRate) ? toFiat(this.state.fundingGoal, "ether", this.props.btcRate.rate) : "0.00";
 
     return (
-      <Grid>
+      <Container>
         <Row>
           <Col>
           <h2>Start your Crowdsale!</h2>
@@ -131,12 +131,12 @@ class LaunchForm extends React.Component {
             controlId="index"
           >
             {this.props.tokenList.valueSeq().map((token) =>
-            <Radio 
+            <ToggleButton 
               name="tokenIndex" 
               key={token.get("tokenAddress")} 
               onChange={this.handleToken} 
               value={token.get("tokenAddress")}>
-               <Panel 
+               <Card 
                 bsStyle="info" 
                 header={<h5>{`${token.get("name")}(${token.get("symbol")})`}</h5>}>
                <Row>
@@ -153,8 +153,8 @@ class LaunchForm extends React.Component {
                 <Col sm={4}>Token Supply</Col>
                 <Col sm={8}>{token.get("initialSupply")}</Col>
               </Row>
-              </Panel>
-            </Radio>)}
+              </Card>
+            </ToggleButton>)}
           </FormGroup>
         </Row>}
         <hr />
@@ -163,36 +163,36 @@ class LaunchForm extends React.Component {
             controlId="price"
             validationState={number(this.state.price)}
           >
-            <ControlLabel>Price per Token (in ether)</ControlLabel>
+            <Form.Label>Price per Token (in ether)</Form.Label>
             <FormControl
               type="number"
               placeholder="1"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
-            <HelpBlock>{`$${priceUSD} USD`}<br />
-            {`${priceBTC} BTC`}</HelpBlock>
+            <FloatingLabel>{`$${priceUSD} USD`}<br />
+            {`${priceBTC} BTC`}</FloatingLabel>
           </FormGroup>
 
           <FormGroup
             controlId="fundingGoal"
             validationState={number(this.state.fundingGoal)}
           >
-            <ControlLabel>Funding Goal (sale will end when goal is reached)</ControlLabel>
+            <Form.Label>Funding Goal (sale will end when goal is reached)</Form.Label>
             <FormControl
               type="number"
               placeholder="100000000"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
-            <HelpBlock>{`$${goalUSD} USD`}<br />
-            {`${goalBTC} BTC`}</HelpBlock>
+            <FloatingLabel>{`$${goalUSD} USD`}<br />
+            {`${goalBTC} BTC`}</FloatingLabel>
           </FormGroup>
           <FormGroup
             controlId="premine"
             validationState={number(this.state.premine)}
           >
-            <ControlLabel>Premine (number of tokens to keep for yourself)</ControlLabel>
+            <Form.Label>Premine (number of tokens to keep for yourself)</Form.Label>
             <FormControl
               type="number"
               placeholder="0"
@@ -229,7 +229,7 @@ class LaunchForm extends React.Component {
         >
           Congratulations! Once your transaction has been processed, you will find the crowdsale link in your <Button onClick={this.props.gotoWallet} bsStyle="info" bsSize="small">wallet.</Button> <br />
         </SuccessModal>          
-      </Grid>
+      </Container>
     );
   }
 };

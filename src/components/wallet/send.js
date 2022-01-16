@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Panel} from 'react-bootstrap';
-import { FormGroup, MenuItem, InputGroup, DropdownButton, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import { Card} from 'react-bootstrap';
+import { FormGroup, InputGroup, DropdownButton, FormControl, Button } from 'react-bootstrap';
 import { loadCustomToken, generateSendTokenTransaction } from '../../store/tokenActions';
 import { sendTransaction, generateSendTransaction } from '../../store/transactionActions';
 import { SendTxModal, SuccessModal } from '../transaction/modals';
@@ -93,13 +93,13 @@ class RenderWallet extends React.Component {
         custom = this.props.custom.get(c);
 
     return (
-        <Panel header="Send ETC & Tokens" bsStyle="primary">
+        <Card header="Send ETC & Tokens" bsStyle="primary">
           
           <FormGroup
             controlId="to"
             validationState={address(this.state.to)}
           >
-            <ControlLabel>To Address</ControlLabel>
+            <Form.Label>To Address</Form.Label>
             <FormControl
               type="text"
               placeholder="0xe9a7e26bf5c05fe3bae272d4c940bd7158611ce9"
@@ -110,7 +110,7 @@ class RenderWallet extends React.Component {
           <FormGroup
             controlId="amount"
           >
-            <ControlLabel>Amount to Send</ControlLabel>
+            <Form.Label>Amount to Send</Form.Label>
             <InputGroup>
               <FormControl
                 type="number"
@@ -118,15 +118,15 @@ class RenderWallet extends React.Component {
                 onChange={this.handleChange}
               />
               <DropdownButton
-                role="menuitem"
+                role="Dropdown.Item"
                 componentClass={InputGroup.Button}
                 title={this.state.tokenUnit}
                 id="tokenUnit"
                 onSelect={this.changeToken}
               >
                 {/* TODO: List tokens from registry */}
-                <MenuItem id="ETC" key="etc">ETC</MenuItem>
-                <MenuItem id="Custom" key="custom">Custom</MenuItem>
+                <Dropdown.Item id="ETC" key="etc">ETC</Dropdown.Item>
+                <Dropdown.Item id="Custom" key="custom">Custom</Dropdown.Item>
               </DropdownButton>
             </InputGroup>
             <FormControl.Feedback />
@@ -134,7 +134,7 @@ class RenderWallet extends React.Component {
           {(this.state.tokenUnit !== 'ETC') && (!custom) && <FormGroup
             controlId="tokenAddress"
           >
-            <ControlLabel>Send Custom Token</ControlLabel>
+            <Form.Label>Send Custom Token</Form.Label>
             <InputGroup>
               <FormControl
                 type="text"
@@ -180,7 +180,7 @@ class RenderWallet extends React.Component {
             Next Step: <Button onClick={this.props.gotoIco} bsStyle="info" bsSize="small">Launch a Crowdsale</Button>
           </SuccessModal>
 
-        </Panel>
+        </Card>
     );
   }
 }
